@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}
+    Iniciar Sesión
+{% endblock %}
+
+{% block content %}
+    <div class="container center">
+        {%  if user.is_authenticated %}
+            Sesión iniciada como {{ user.username }}
+            <a href="/logout/">Cerrar Sesión</a>
+        {%  else %}
+        {%  if form.errors %}
+            Sus credenciales no son validas
+        {%  endif %}
+            <div class="row">
+                <form class="col s12" method="POST" >
+                    {%  csrf_token %}
+                        <div class="input-field">
+                            <i class="mdi-action-account-circle prefix"></i>
+                            <input type="text" name="username">
+                            <label for="username">Nombre de usuario</label>
+                        </div>
+                        <div class="input-field">
+                        <i class="mdi-action-input prefix"></i>
+                        <input type="password" name="password">
+                        <label for="password">Contraseña</label>
+                    </div>
+
+                    <button type="submit" class="btn waves-effect waves-light">
+                        Iniciar Sesión
+                        <i class="mdi-content-send right"></i>
+                    </button>
+                </form>
+            </div>
+
+        {%  endif %}
+    </div>
+{% endblock %}

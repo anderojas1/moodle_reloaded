@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}
+    Iniciar Sesión
+{% endblock %}
+
+{% block content %}
+    <div class="contenedor">
+        {%  if user.is_authenticated %}
+            <div class="info_usuario">
+                <p>
+                    Sesión iniciada como {{ user.username }}
+                    <a href="/logout/">Cerrar Sesión</a>
+                </p>
+            </div>
+            <div class="menu_opciones">
+                <ul>
+                    <li><a href="#">Ver Perfil</a></li>
+                    <li><a href="#">Mis Cursos</a></li>
+                    <li><a href="#">Buscar Cursos</a></li>
+                </ul>
+            </div>
+        {% else %}
+            <div class="no_sesion">
+                <p>
+                    No tiene permisos para ver esta página. Por favor <a href="/login">inicie sesión</a>
+                </p>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

@@ -1,10 +1,11 @@
 from django.shortcuts import render,render_to_response, HttpResponseRedirect
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, DetailView
 from .forms import UserForm
 from django.core.urlresolvers import reverse_lazy
-from moodle.models import LeaderTeacher
+from moodle.models import LeaderTeacher, Persona
 from moodle.forms import LeaderTeacherForm
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -46,7 +47,6 @@ class SignupLeaderTeacher(TemplateView):
 			return HttpResponseRedirect(reverse_lazy('index'))
 		else:
 			return render(request, self.template_name, self.get_context_data(**kwargs))
-
 
 class Perfil(TemplateView):
 	template_name = 'inicio/perfil.html'
