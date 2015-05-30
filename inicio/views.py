@@ -1,5 +1,6 @@
 from django.shortcuts import render,render_to_response, HttpResponseRedirect
 from django.views.generic import TemplateView, DetailView
+from django.http import HttpRequest, request
 from .forms import UserForm
 from django.core.urlresolvers import reverse_lazy
 from moodle.models import LeaderTeacher, Persona
@@ -50,3 +51,17 @@ class SignupLeaderTeacher(TemplateView):
 
 class Perfil(TemplateView):
 	template_name = 'inicio/perfil.html'
+	usuario_actual=''
+
+	def get_context_data(self, **kwargs):
+		self.usuario_actual = self.request.user
+		#id_grupo = User.objects.get(id=7).groups.all()
+		id_grupo = self.usuario_actual.groups.all()
+		try:
+			grupo = Group.objects.get(id=id_grupo).name
+		except Group.DoesNotExist:
+			grupo = 'otro'
+		#print (grupo)
+		print(grupo)
+		kwargs.update({grupo : grupo})
+		return kwargs

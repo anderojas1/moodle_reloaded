@@ -13,16 +13,25 @@
                 </p>
             </div>
             <div class="menu_opciones">
-                <ul>
-                    <li><a href="#">Ver Perfil</a></li>
-                    <li><a href="#">Mis Cursos</a></li>
-                    <li><a href="#">Buscar Cursos</a></li>
-                </ul>
+                {% if leader %}
+                    <ul>
+                        <li><a href="#">Mis Cursos</a></li>
+                        <li><a href="#">Buscar Cursos</a></li>
+                        <li><a href="#">Ver Perfil</a></li>
+                    </ul>
+                {% elif secretaria %}
+                    <ul>
+                        <li><a href="#">Ver profesores inscritos</a></li>
+                        <li><a href="#">Ver Perfil</a></li>
+                    </ul>
+                {% else %}
+                    <p>No tiene permisos para ver esta página</p>
+                {% endif %}
             </div>
         {% else %}
             <div class="no_sesion">
                 <p>
-                    No tiene permisos para ver esta página. Por favor <a href="/login">inicie sesión</a>
+                    No se permite el acceso de invitados. Por favor <a href="/login">inicie sesión</a>
                 </p>
             </div>
         {% endif %}
