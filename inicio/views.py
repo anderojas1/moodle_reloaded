@@ -7,6 +7,7 @@ from moodle.models import LeaderTeacher, Persona
 from moodle.forms import LeaderTeacherForm
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.decorators import login_required
+from moodle.funciones import VerificaUsuario
 
 # Create your views here.
 
@@ -54,14 +55,9 @@ class Perfil(TemplateView):
 	usuario_actual=''
 
 	def get_context_data(self, **kwargs):
+		context = super(Perfil, self).get_context_data(**kwargs)
 		self.usuario_actual = self.request.user
-		#id_grupo = User.objects.get(id=7).groups.all()
-		id_grupo = self.usuario_actual.groups.all()
-		try:
-			grupo = Group.objects.get(id=id_grupo).name
-		except Group.DoesNotExist:
-			grupo = 'otro'
-		#print (grupo)
-		print(grupo)
-		kwargs.update({grupo : grupo})
-		return kwargs
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.buscarGrupo(self.usuario_actual)
+		context[grupo] = grupo
+		return context

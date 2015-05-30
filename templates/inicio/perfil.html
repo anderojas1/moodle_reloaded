@@ -24,14 +24,25 @@
                         <li><a href="#">Ver profesores inscritos</a></li>
                         <li><a href="#">Ver Perfil</a></li>
                     </ul>
-                {% else %}
+                {% endif %}
+
+                {% if leader or secretaria %}
+                    {% block busqueda %}
+                    {% endblock %}
+                {% endif %}
+
+                {% if admin %}
+                    <p>
+                        Por favor ingrese a la interfaz principal de <a href= '/admin/'>administrador</a>
+                    </p>
+                {% elif otro %}
                     <p>No tiene permisos para ver esta página</p>
                 {% endif %}
             </div>
         {% else %}
             <div class="no_sesion">
                 <p>
-                    No se permite el acceso de invitados. Por favor <a href="/login">inicie sesión</a>
+                    No se permite el acceso de invitados. Por favor <a href="/login">inicie sesión</a> o <a href="/signup">regístrese</a>
                 </p>
             </div>
         {% endif %}

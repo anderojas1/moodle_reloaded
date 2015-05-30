@@ -16,6 +16,12 @@ class Persona(models.Model):
 	def __str__(self):
 		return self.usuario.first_name+" "+self.usuario.last_name
 
+	def get_sexo(self):
+		if self.sexo == 0:
+			return 'Masculino'
+		else:
+			return 'Femenino'
+
 class SecretariaEducacion(models.Model):
 
 	id = models.CharField(max_length=10, primary_key=True) # id es código

@@ -21,5 +21,6 @@ import moodle.urls
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include(inicio.urls)),
+    url(r'^campus/', include(moodle.urls)),    
     #url(r'^user/', include(moodle.urls)),
 )
