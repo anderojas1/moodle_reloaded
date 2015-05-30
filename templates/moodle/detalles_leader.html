@@ -1,0 +1,50 @@
+{% extends "inicio/perfil.html" %}
+{% block title %}
+    Información | {{persona.id}}
+{% endblock %}
+{% block busqueda %}
+    <div class="informacion">
+        <table class="datos_persona">
+            <tr>
+                <th>Dato</th>
+                <th>Informacion</th>
+            </tr>
+            <tr>
+                <td>Nombre</td>
+                <td>{{usuario.first_name}}</td>
+            </tr>
+            <tr>
+                <td>Apellidos</td>
+                <td>{{usuario.last_name}}</td>
+            </tr>
+            <tr>
+                <td>Cédula</td>
+                <td>{{persona.id}}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>{{usuario.email}}</td>
+            </tr>
+            <tr>
+                <td>Sexo</td>
+                <td>{{persona.get_sexo}}</td>
+            </tr>
+            <tr>
+                <td>Fecha de nacimiento</td>
+                <td>{{persona.fecha_nacimiento}}</td>
+            </tr>
+            <tr>
+                <td>Celular</td>
+                <td>{{persona.celular}}</td>
+            </tr>
+            <tr>
+                <td>Fijo</td>
+                <td>{{persona.fijo}}</td>
+            </tr>
+            <tr>
+                <td>Institución</td>
+                <td>{{institucion.nombre}}</td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}

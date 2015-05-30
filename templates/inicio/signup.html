@@ -29,7 +29,7 @@
     			{{userform.email}}<br />
     			{{leaderTeacherForm.institucion}}<br />
     			{{userform.username}}<br />
-    			{{userform.username.errors}}
+    			{{if userform.username.errors}}
     			{{userform.password}}<br />
     			<button type="submit" class="boton_enviar">Registrarse</button>
     	</form>

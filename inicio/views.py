@@ -1,10 +1,13 @@
 from django.shortcuts import render,render_to_response, HttpResponseRedirect
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, DetailView
+from django.http import HttpRequest, request
 from .forms import UserForm
 from django.core.urlresolvers import reverse_lazy
-from moodle.models import LeaderTeacher
+from moodle.models import LeaderTeacher, Persona
 from moodle.forms import LeaderTeacherForm
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
+from django.contrib.auth.decorators import login_required
+from moodle.funciones import VerificaUsuario
 
 # Create your views here.
 
@@ -47,6 +50,14 @@ class SignupLeaderTeacher(TemplateView):
 		else:
 			return render(request, self.template_name, self.get_context_data(**kwargs))
 
-
 class Perfil(TemplateView):
 	template_name = 'inicio/perfil.html'
+	usuario_actual=''
+
+	def get_context_data(self, **kwargs):
+		context = super(Perfil, self).get_context_data(**kwargs)
+		self.usuario_actual = self.request.user
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.buscarGrupo(self.usuario_actual)
+		context[grupo] = grupo
+		return context
