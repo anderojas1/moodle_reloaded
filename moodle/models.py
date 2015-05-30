@@ -45,6 +45,87 @@ class InstitucionEducativa(models.Model):
 class LeaderTeacher(Persona):
 
 	institucion = models.ForeignKey(InstitucionEducativa)
+	grado_estudio = models.CharField(max_length=60)
+
+
+class Curso(models.Model):
+	id = models.CharField(max_length=60, primary_key=True) #id es el codigo del curso
+	nombre = models.CharField(max_length=60)
+	descripcion = models.TextField(max_length=200)
+
+	def __str__(self):
+		return self.id
+
+class Area(models.Model):
+	id = models.CharField(max_length=60, primary_key=True)#id es el identificador de la area
+	nombre = models.CharField(max_length=60)
+	descripcion = models.TextField(max_length=200)
+	curso = models.ForeignKey(Curso)
+
+	def __str__(self):
+		return self.id
+
+class Cohorte(models.Model):
+	opt_semestre = ((0, 'Febrero-Junio'), (1, 'Agosto-Diciembre'))
+	id = models.CharField(max_length=60, primary_key=True) #identificador unico de cohorte
+	semestre = models.SmallIntegerField(choices  = opt_semestre)
+	fecha_inicio = models.DateField()
+	fecha_fin = models.DateField()
+
+	def __str__(self):
+		return self.id
+
+class Actividad(models.Model):
+	id = models.CharField(max_length=60, primary_key=True)#identificador unico de una actividad
+	descripcion = models.TextField(max_length=200)
+	titulo = models.CharField(max_length=60 )
+	fecha_fin = models.DateField()
+	fecha_inicio = models.DateField()
+	porcentaje = models.CharField(max_length=60)
+
+	def __str__(self):
+		return self.id
+
+class MinMaxFloat(models.FloatField):
+	def __init__(self, min_value=None, max_value=None, *args, **kwargs):
+		self.min_value, self.max_value = min_value, max_value
+		super(MinMaxFloat, self).__init__(*args, **kwargs)
+
+	def formfield(self, **kwargs):
+		defaults = {'min_value': self.min_value, 'max_value' : self.max_value}
+		defaults.update(kwargs)
+		return super(MinMaxFloat, self).formfield(**defaults)
+
+class RegistroNotas(models.Model):#antes se llamaba ternaria
+	actividad = models.ForeignKey(Actividad)
+	cohorte = models.ForeignKey(Cohorte)
+	leader_teacher = models.ForeignKey(LeaderTeacher)
+	nota = MinMaxFloat(min_value=1.0, max_value=5.0)
+
+	def __str__(self):
+		return self.nota
+
+class Matricula(models.Model):
+	opt_estado_matricula = ((0, 'Matriculado'), (1, 'No Matriculado'),(2, 'En Espera de Matricula'))
+	identificacion_leader_teacher = models.ForeignKey(LeaderTeacher) #models.CharField(max_length=60)
+	identificacion_curso = models.ForeignKey(Curso) #models.CharField(max_length=60)
+	estado_matricula = models.PositiveSmallIntegerField(choices=opt_estado_matricula)
+	nota_final_curso = models.CharField(max_length=60, default=0)
+
+class MasterTeacher(Persona):
+
+	cohorte = models.ForeignKey(Cohorte)
+	tiempo_experiencia = models.CharField(max_length=2)
+
+class HistorialAcademico(models.Model):
+	opt_tipo_estudio = ((0, 'Bachillerato'), (1, 'Pregrado'),(2, 'Posgrado'),(3, 'Especializacion'),(4, 'Maestria'),(5, 'Doctorado'))
+	titulo = models.CharField(max_length=100)
+	tipoEstudio = models.PositiveSmallIntegerField(choices=opt_tipo_estudio)
+
+
+
+
+
 
 	
 
