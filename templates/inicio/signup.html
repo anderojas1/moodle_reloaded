@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}
+    Registro | Usuario
+{% endblock %}
+
+{% block content %}
+<!--*************************************** Inicio Index *************************************** -->
+<div class="registro">
+	{% if user.is_authenticated %}
+        {% if user.is_anonymous %}
+        	Por favor active su cuenta
+        {% else %}
+            Sesión iniciada como {{ user.username }}
+            <a href="/logout/">Cerrar Sesión</a>
+        {% endif %}
+    {%  else %}
+    	<h2>Registro para nuevos usuarios</h2>
+		<form method="POST">
+			{%  csrf_token %}
+				{{userform.errors}}
+    			{{userform.first_name}}<br />
+    			{{userform.last_name}}<br />
+    			{{leaderTeacherForm.id}}<br />
+    			{{leaderTeacherForm.sexo}}<br />
+    			{{leaderTeacherForm.fecha_nacimiento}}<br />
+    			{{leaderTeacherForm.celular}}<br />
+    			{{leaderTeacherForm.fijo}}<br />
+    			{{leaderTeacherForm.id.errors}}
+    			{{userform.email}}<br />
+    			{{leaderTeacherForm.institucion}}<br />
+    			{{userform.username}}<br />
+    			{{userform.username.errors}}
+    			{{userform.password}}<br />
+    			<button type="submit" class="boton_enviar">Registrarse</button>
+    	</form>
+    {% endif %}
+</div>
+{% endblock %}
