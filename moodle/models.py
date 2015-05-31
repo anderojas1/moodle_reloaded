@@ -59,19 +59,20 @@ class LeaderTeacher(Persona):
 		print (self.id)
 		return ("detalles_leader", [self.id])
 
-class Curso(models.Model):
-	id = models.CharField(max_length=60, primary_key=True) #id es el codigo del curso
-	nombre = models.CharField(max_length=60)
-	descripcion = models.TextField(max_length=200)
-
-	def __str__(self):
-		return self.id
 
 class Area(models.Model):
 	id = models.CharField(max_length=60, primary_key=True)#id es el identificador de la area
 	nombre = models.CharField(max_length=60)
 	descripcion = models.TextField(max_length=200)
-	curso = models.ForeignKey(Curso)
+
+	def __str__(self):
+		return self.nombre
+
+class Curso(models.Model):
+	id = models.CharField(max_length=60, primary_key=True) #id es el codigo del curso
+	nombre = models.CharField(max_length=60)
+	descripcion = models.TextField(max_length=200)
+	area = models.ForeignKey(Area)
 
 	def __str__(self):
 		return self.id
