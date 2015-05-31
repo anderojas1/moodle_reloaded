@@ -21,8 +21,10 @@
                     </ul>
                 {% elif secretaria %}
                     <ul>
-                        <li><a href="#">Ver profesores inscritos</a></li>
+                        <li><a href="/campus/secretaria/docentes-inscritos">Ver profesores inscritos</a></li>
                         <li><a href="{{perfil.get_absolute_url}}">Ver Perfil</a></li>
+                        {% block busqueda_secretaria %}
+                        {% endblock %}
                     </ul>
                 {% endif %}
 

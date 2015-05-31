@@ -81,15 +81,15 @@ class Perfil(TemplateView):
 			usuario = User.objects.get(id=secretaria.usuario_id)
 
 		elif grupo == 'admin':
-			pass
+			usuario = None
 
-		else:
+		elif grupo == 'leader' or grupo == 'master':
 			usuario = User.objects.get(id=persona.usuario_id)
 			
 		if 'usuario' not in context:
 			context['usuario'] = usuario
 
-		if usuario.id == self.usuario_actual.id:
+		if usuario is not None and usuario.id == self.usuario_actual.id:
 			context['editar'] = 'editable'
 
 		return context

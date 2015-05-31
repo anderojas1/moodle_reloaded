@@ -31,6 +31,10 @@ class SecretariaEducacion(models.Model):
 	def __str__(self):
 		return self.nombre
 
+	@models.permalink
+	def get_search_url(self):
+		return ("ver_docentes_inscritos", [self.id])
+
 class InstitucionEducativa(models.Model):
 
 	opt_zona = ((0, 'Urbana'), (1, 'Urbana Marginal'), (2, 'Rural'), (3, 'Rural de Difícil Acceso'))
@@ -56,7 +60,6 @@ class LeaderTeacher(Persona):
 
 	@models.permalink
 	def get_absolute_url(self):
-		print (self.id)
 		return ("detalles_leader", [self.id])
 
 

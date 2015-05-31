@@ -1,5 +1,5 @@
 from django.contrib.auth.models import Group
-from .models import Persona, LeaderTeacher, SecretariaEducacion
+from .models import Persona, LeaderTeacher, SecretariaEducacion, InstitucionEducativa
 
 class VerificaUsuario():
 
@@ -18,6 +18,19 @@ class VerificaUsuario():
 		return persona
 
 	def buscarSecretaria(self, usuario):
-		print (usuario.id)
 		secretaria = SecretariaEducacion.objects.get(usuario_id=usuario.id)
 		return secretaria
+
+class BuscarDocentes():
+
+	def buscarDocentesInscritos(self, secretaria):
+		instituciones = InstitucionEducativa.objects.filter(secretaria_id=secretaria.id)
+		docentes = LeaderTeacher.objects.filter(institucion_id__in=instituciones)
+		#print (docentes)
+
+		#************************
+		#return nuevo arreglo con metodo de filtro con iterador
+		#*************************
+
+	#Aquí el método
+	#Retorna el nuevo arreglo

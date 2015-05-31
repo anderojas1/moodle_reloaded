@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.models import Group, User
 from .models import LeaderTeacher, Persona, InstitucionEducativa
 from django.views.generic import TemplateView
-from .funciones import VerificaUsuario
+from .funciones import VerificaUsuario, BuscarDocentes
 
 # Create your views here.
 
@@ -40,4 +40,23 @@ class LeaderDetalles(TemplateView):
 		grupo = ver_grupo.buscarGrupo(usuario_actual)
 
 		context[grupo] = grupo
+		return context
+
+class BuscarLeaderTeacher(TemplateView):
+	template_name = 'moodle/buscar_docentes.html'
+	docentes = None
+	secretaria = None
+
+	def get_context_data(self, **kwargs):
+		context = super(BuscarLeaderTeacher, self).get_context_data(**kwargs)
+		usuario_actual = self.request.user
+
+		buscar_secretaria = VerificaUsuario()
+		self.secretaria = buscar_secretaria.buscarSecretaria(usuario_actual)
+
+		buscar_docentes = BuscarDocentes()
+		buscar_docentes.buscarDocentesInscritos(self.secretaria)
+
+		context['secretaria'] = self.secretaria
+
 		return context
