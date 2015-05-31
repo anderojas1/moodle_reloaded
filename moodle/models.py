@@ -78,7 +78,11 @@ class Curso(models.Model):
 	area = models.ForeignKey(Area)
 
 	def __str__(self):
-		return self.id
+		return self.nombre
+
+	@models.permalink
+	def get_absolute_url(self):
+		return ("detalles_curso", [self.id])
 
 class Cohorte(models.Model):
 	opt_semestre = ((0, 'Febrero-Junio'), (1, 'Agosto-Diciembre'))

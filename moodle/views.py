@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.models import Group, User
-from .models import LeaderTeacher, Persona, InstitucionEducativa
+from .models import LeaderTeacher, Persona, InstitucionEducativa, Curso, Area
 from django.views.generic import TemplateView
 from .funciones import VerificaUsuario, BuscarDocentes
 
@@ -58,5 +58,44 @@ class BuscarLeaderTeacher(TemplateView):
 		buscar_docentes.buscarDocentesInscritos(self.secretaria)
 
 		context['secretaria'] = self.secretaria
+		context['docentes'] = self.docentes
+
+		return context
+
+class CursoDetalles(TemplateView):
+	template_name = 'moodle/detalles_curso.html'
+	curso = None
+	usuario_actual = None
+
+	def get_context_data(self, **kwargs):
+		context = super(CursoDetalles, self).get_context_data(**kwargs)
+		self.usuario_actual = self.request.user
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.buscarGrupo(self.usuario_actual)
+		context[grupo] = grupo
+
+		self.curso = Curso.objects.get(id=context['id_curso'])
+		context['curso'] = self.curso
+
+		area = Area.objects.get(id=self.curso.area_id)
+		context['area'] = area
+
+		return context
+
+class BuscarCursos(TemplateView):
+	template_name = 'moodle/buscar_cursos.html'
+	cursos = []
+	usuario_actual = None
+
+	def get_context_data(self, **kwargs):
+		context = super(BuscarCursos, self).get_context_data(**kwargs)
+
+		self.usuario_actual = self.request.user
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.buscarGrupo(self.usuario_actual)
+		context[grupo] = grupo
+
+		self.cursos = Curso.objects.all()
+		context['cursos'] = self.cursos
 
 		return context

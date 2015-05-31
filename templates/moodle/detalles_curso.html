@@ -1,0 +1,32 @@
+{% extends "inicio/perfil.html" %}
+{% block title %}
+Curso {{curso.nombre}}
+{% endblock %}
+{% block info_curso %}
+<div class="informacion">
+	<h2>Información de curso {{curso.nombre}}</h2>
+	<table class="datos">
+		<tr>
+			<th>Dato</th>
+			<th>Información</th>
+		</tr>
+		<tr>
+			<td>Área</td>
+			<td>{{area.nombre}}</td>
+		</tr>
+		<tr>
+			<td>Nombre</td>
+			<td>{{curso.nombre}}</td>
+		</tr>
+		<tr>
+			<td>Descripción</td>
+			<td>{{curso.descripcion}}</td>
+		</tr>
+	</table>
+</div>
+<div class="adicional">
+	{% if user %}
+	<a href="#">Matricularse</a>
+	{% endif %}
+</div>
+{% endblock %}

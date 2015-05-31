@@ -1,0 +1,18 @@
+{% extends "inicio/perfil.html" %}
+{% block title %}
+Búsqueda de Cursos
+{% endblock %}
+{% block buscar_cursos %}
+	<table = "todos">
+		<tr>
+			<th>Nombre</th>
+			<th>Detalles</th>
+		</tr>
+		{% for curso in cursos %}
+		<tr>
+			<td>{{curso.nombre}}</td>
+			<td><a href="{{curso.get_absolute_url}}">Ver Información</a></td>
+		</tr>
+		{% endfor %}
+	</table>
+{% endblock %}
