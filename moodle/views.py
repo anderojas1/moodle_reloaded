@@ -32,9 +32,8 @@ class LeaderDetalles(TemplateView):
 		self.institucion = InstitucionEducativa.objects.get(nombre=self.leader.institucion)
 		if 'institucion' not in context:
 			context['institucion'] = self.institucion
-		print(self.institucion.id)
 
-		if self.usuario == usuario_actual:
+		if self.usuario.id == usuario_actual.id:
 			context['editar'] = 'editable'
 
 		ver_grupo = VerificaUsuario()

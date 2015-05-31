@@ -59,5 +59,37 @@ class Perfil(TemplateView):
 		self.usuario_actual = self.request.user
 		ver_grupo = VerificaUsuario()
 		grupo = ver_grupo.buscarGrupo(self.usuario_actual)
+		persona = ''
+		secretaria = ''
+		usuario = ''
+		if grupo == 'leader':
+			persona = ver_grupo.buscarPersona(self.usuario_actual)
+			perfil = LeaderTeacher.objects.get(id=persona.id)
+			context['perfil'] = perfil
+
+		elif grupo == 'master':
+			persona = ver_grupo.buscarPersona(self.usuario_actual)
+			perfil = MasterTeacher.objects.get(id=persona.id)
+			context['perfil'] = perfil
+		elif grupo == 'secretaria':
+			secretaria = ver_grupo.buscarSecretaria(self.usuario_actual)
+			context['perfil'] = secretaria
+
 		context[grupo] = grupo
+
+		if grupo == 'secretaria':
+			usuario = User.objects.get(id=secretaria.usuario_id)
+
+		elif grupo == 'admin':
+			pass
+
+		else:
+			usuario = User.objects.get(id=persona.usuario_id)
+			
+		if 'usuario' not in context:
+			context['usuario'] = usuario
+
+		if usuario.id == self.usuario_actual.id:
+			context['editar'] = 'editable'
+
 		return context

@@ -17,20 +17,22 @@
                     <ul>
                         <li><a href="#">Mis Cursos</a></li>
                         <li><a href="#">Buscar Cursos</a></li>
-                        <li><a href="#">Ver Perfil</a></li>
+                        <li><a href="{{perfil.get_absolute_url}}">Ver Perfil</a></li>
                     </ul>
                 {% elif secretaria %}
                     <ul>
                         <li><a href="#">Ver profesores inscritos</a></li>
-                        <li><a href="#">Ver Perfil</a></li>
+                        <li><a href="{{perfil.get_absolute_url}}">Ver Perfil</a></li>
                     </ul>
                 {% endif %}
 
-                {% if leader or secretaria %}
+                {% if leader and editar or secretaria %}
                     {% block busqueda %}
                     {% endblock %}
+                {% elif leader %}
+                    {% block restricted %}
+                    {% endblock %}
                 {% endif %}
-
                 {% if admin %}
                     <p>
                         Por favor ingrese a la interfaz principal de <a href= '/admin/'>administrador</a>
