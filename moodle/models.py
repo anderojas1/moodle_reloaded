@@ -59,7 +59,6 @@ class LeaderTeacher(Persona):
 		print (self.id)
 		return ("detalles_leader", [self.id])
 
-
 class Curso(models.Model):
 	id = models.CharField(max_length=60, primary_key=True) #id es el codigo del curso
 	nombre = models.CharField(max_length=60)
