@@ -83,6 +83,7 @@ class Cohorte(models.Model):
 	semestre = models.SmallIntegerField(choices  = opt_semestre)
 	fecha_inicio = models.DateField()
 	fecha_fin = models.DateField()
+	curso = models.ForeignKey(Curso)
 
 	def __str__(self):
 		return self.id
