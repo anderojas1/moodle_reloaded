@@ -5,6 +5,7 @@ class VerificaUsuario():
 
 	def buscarGrupo(self, usuario):
 		id_grupo = usuario.groups.all()
+		print(id_grupo)
 		try:
 			grupo = Group.objects.get(id=id_grupo).name
 		except Group.DoesNotExist:
