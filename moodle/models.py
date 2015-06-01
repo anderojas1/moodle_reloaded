@@ -91,6 +91,7 @@ class Cohorte(models.Model):
 	fecha_inicio = models.DateField()
 	fecha_fin = models.DateField()
 	curso = models.ForeignKey(Curso)
+	master = models.ForeignKey(MasterTeacher)
 
 	def __str__(self):
 		return self.id
@@ -134,7 +135,7 @@ class Matricula(models.Model):
 
 class MasterTeacher(Persona):
 
-	cohorte = models.ForeignKey(Cohorte)
+	#cohorte = models.ForeignKey(Cohorte)
 	tiempo_experiencia = models.CharField(max_length=2)
 
 class HistorialAcademico(models.Model):
