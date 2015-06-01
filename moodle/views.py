@@ -125,3 +125,33 @@ class BuscarCursos(TemplateView):
 		context['cursos'] = self.cursos
 
 		return context
+
+class ListarNota(TemplateView):
+	template_name = 'app/listar_nota.html'
+	notas = None
+	criterioBusqueda = ''
+
+	def get_context_data(self, **kwargs):
+		context = super(ListarNota, self).get_context_data(**kwargs)
+		self.criterioBusqueda = self.kwargs.get('busqueda', '')
+		print (iri_to_uri(urlquote(self.criterioBusqueda)))
+		reporte = Ternaria.objects.filter(leader_teacher__cedula = str(self.criterioBusqueda)).values('nota', 'actividad__titulo')
+		self.notas = reporte
+		if 'notas' not in context:
+			context['notas'] = self.notas
+		if 'criterioBusqueda' not in context:
+			context['criterioBusqueda'] = self.criterioBusqueda
+
+		return context
+
+	def post(self, request, *args, **kwargs):
+		busqueda = None
+		try:
+			busqueda = request.POST.get('search', None)
+		except KeyError:
+			busqueda = None
+
+		if busqueda is not None:
+			return HttpResponseRedirect('ternaria/buscar/' + iri_to_uri(urlquote(busqueda)))
+
+		return HttpResponseRedirect('ternaria')
