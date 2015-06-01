@@ -59,9 +59,10 @@ class Perfil(TemplateView):
 		self.usuario_actual = self.request.user
 		ver_grupo = VerificaUsuario()
 		grupo = ver_grupo.buscarGrupo(self.usuario_actual)
+		print (grupo)
 		persona = ''
 		secretaria = ''
-		usuario = ''
+		usuario = None
 		if grupo == 'leader':
 			persona = ver_grupo.buscarPersona(self.usuario_actual)
 			perfil = LeaderTeacher.objects.get(id=persona.id)

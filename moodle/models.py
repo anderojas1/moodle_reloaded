@@ -84,18 +84,6 @@ class Curso(models.Model):
 	def get_absolute_url(self):
 		return ("detalles_curso", [self.id])
 
-class Cohorte(models.Model):
-	opt_semestre = ((0, 'Febrero-Junio'), (1, 'Agosto-Diciembre'))
-	id = models.CharField(max_length=60, primary_key=True) #identificador unico de cohorte
-	semestre = models.SmallIntegerField(choices  = opt_semestre)
-	fecha_inicio = models.DateField()
-	fecha_fin = models.DateField()
-	curso = models.ForeignKey(Curso)
-	master = models.ForeignKey(MasterTeacher)
-
-	def __str__(self):
-		return self.id
-
 class Actividad(models.Model):
 	id = models.CharField(max_length=60, primary_key=True)#identificador unico de una actividad
 	descripcion = models.TextField(max_length=200)
@@ -117,15 +105,6 @@ class MinMaxFloat(models.FloatField):
 		defaults.update(kwargs)
 		return super(MinMaxFloat, self).formfield(**defaults)
 
-class RegistroNotas(models.Model):#antes se llamaba ternaria
-	actividad = models.ForeignKey(Actividad)
-	cohorte = models.ForeignKey(Cohorte)
-	leader_teacher = models.ForeignKey(LeaderTeacher)
-	nota = MinMaxFloat(min_value=1.0, max_value=5.0)
-
-	def __str__(self):
-		return self.nota
-
 class Matricula(models.Model):
 	opt_estado_matricula = ((0, 'Matriculado'), (1, 'No Matriculado'),(2, 'En Espera de Matricula'))
 	identificacion_leader_teacher = models.ForeignKey(LeaderTeacher) #models.CharField(max_length=60)
@@ -137,6 +116,27 @@ class MasterTeacher(Persona):
 
 	#cohorte = models.ForeignKey(Cohorte)
 	tiempo_experiencia = models.CharField(max_length=2)
+
+class Cohorte(models.Model):
+	opt_semestre = ((0, 'Febrero-Junio'), (1, 'Agosto-Diciembre'))
+	id = models.CharField(max_length=60, primary_key=True) #identificador unico de cohorte
+	semestre = models.SmallIntegerField(choices  = opt_semestre)
+	fecha_inicio = models.DateField()
+	fecha_fin = models.DateField()
+	curso = models.ForeignKey(Curso)
+	master = models.ForeignKey(MasterTeacher)
+
+	def __str__(self):
+		return self.id
+
+class RegistroNotas(models.Model):#antes se llamaba ternaria
+	actividad = models.ForeignKey(Actividad)
+	cohorte = models.ForeignKey(Cohorte)
+	leader_teacher = models.ForeignKey(LeaderTeacher)
+	nota = MinMaxFloat(min_value=1.0, max_value=5.0)
+
+	def __str__(self):
+		return self.nota
 
 class HistorialAcademico(models.Model):
 	opt_tipo_estudio = ((0, 'Bachillerato'), (1, 'Pregrado'),(2, 'Posgrado'),(3, 'Especializacion'),(4, 'Maestria'),(5, 'Doctorado'))
