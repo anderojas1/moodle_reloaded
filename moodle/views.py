@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth.models import Group, User
-from .models import LeaderTeacher, Persona, InstitucionEducativa, Curso, Area
+from .models import LeaderTeacher, Persona, InstitucionEducativa, Curso, Area, Matricula
 from django.views.generic import TemplateView
+from django.core.exceptions import ObjectDoesNotExist
 from .funciones import VerificaUsuario, BuscarDocentes
 
 # Create your views here.
@@ -66,12 +67,12 @@ class CursoDetalles(TemplateView):
 	template_name = 'moodle/detalles_curso.html'
 	curso = None
 	usuario_actual = None
+	ver_grupo = VerificaUsuario()
 
 	def get_context_data(self, **kwargs):
 		context = super(CursoDetalles, self).get_context_data(**kwargs)
 		self.usuario_actual = self.request.user
-		ver_grupo = VerificaUsuario()
-		grupo = ver_grupo.buscarGrupo(self.usuario_actual)
+		grupo = self.ver_grupo.buscarGrupo(self.usuario_actual)
 		context[grupo] = grupo
 
 		self.curso = Curso.objects.get(id=context['id_curso'])
@@ -81,6 +82,31 @@ class CursoDetalles(TemplateView):
 		context['area'] = area
 
 		return context
+
+	def post(self, request, *args, **kwargs):
+		context = super(CursoDetalles, self).get_context_data(**kwargs)
+		leader = self.ver_grupo.buscarLeaderTeacher(self.request.user)
+		self.curso = Curso.objects.get(id=context['id_curso'])
+		try:
+			verificar = Matricula.objects.get(identificacion_leader_teacher=leader.id, 
+				identificacion_curso=self.curso.id)
+			context['exito'] = 'Usted ya se matriculó a este curso'
+		except ObjectDoesNotExist:
+			matricula = Matricula(identificacion_leader_teacher=leader, identificacion_curso=self.curso,
+				estado_matricula=2)
+			matricula.save()
+			context['exito'] = 'Se ha realizado la matrícula exitosamente'
+		
+		self.usuario_actual = self.request.user
+		grupo = self.ver_grupo.buscarGrupo(self.usuario_actual)
+		context[grupo] = grupo
+
+		self.curso = Curso.objects.get(id=context['id_curso'])
+		context['curso'] = self.curso
+
+		area = Area.objects.get(id=self.curso.area_id)
+		context['area'] = area
+		return render(request, self.template_name, context)
 
 class BuscarCursos(TemplateView):
 	template_name = 'moodle/buscar_cursos.html'

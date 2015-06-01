@@ -25,8 +25,14 @@ Curso {{curso.nombre}}
 	</table>
 </div>
 <div class="adicional">
-	{% if user %}
-	<a href="#">Matricularse</a>
+	{% if leader %}
+	<form method="POST">
+		{%  csrf_token %}
+		<button type="submit" formmethod="post">Matricularme</button>
+	</form>
+	{% endif %}
+	{% if exito %}
+		<p class="info_matricula">{{exito}}</p>
 	{% endif %}
 </div>
 {% endblock %}

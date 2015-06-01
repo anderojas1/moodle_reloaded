@@ -21,6 +21,11 @@ class VerificaUsuario():
 		secretaria = SecretariaEducacion.objects.get(usuario_id=usuario.id)
 		return secretaria
 
+	def buscarLeaderTeacher(self, usuario):
+		persona = self.buscarPersona(usuario)
+		leader = LeaderTeacher.objects.get(id=persona.id)
+		return leader
+
 class BuscarDocentes():
 
 	def buscarDocentesInscritos(self, secretaria):
