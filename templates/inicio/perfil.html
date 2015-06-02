@@ -44,7 +44,9 @@
                     {% elif otro %}
                         <p>No tiene permisos para ver esta página</p>
                     {% elif master %}
-                        <li><a href="#">Mis Cursos</a></li>
+                        <li><a href="{{perfil.get_absolute_url}}">Mis Cursos</a></li>
+                        {% block cohortes_busqueda %}
+                        {% endblock %}
                         {% block cohortes %}
                         {% endblock %}
                     {% endif %}

@@ -2,17 +2,18 @@
 {% block title %}
     Cohortes asignadas | {{usuario.first_name}}
 {% endblock %}
-{% block busqueda_cohortes %}
+{% block cohortes %}
 	<div class="resultado_busqueda">
 		<h2>Cohortes Asignadas</h2>
 		<table>
 			<tr>
-				<th>Master Teacher</th>
+				<th>Cohorte</th>
 				<th>Curso</th>
 			</tr>
-		{% for cohorte in cohortes %}
+		{% for curso_cohorte in cursos_cohortes %}
 			<tr>
-				<td>{{cohorte.id}}</td>
+				<td><a href="{{curso_cohorte.0.id}}">{{curso_cohorte.0.id}}</a></td>
+				<td>{{curso_cohorte.1.nombre}}</td>
 			</tr>
 		{% endfor %}
 		</table>

@@ -116,6 +116,9 @@ class MasterTeacher(Persona):
 
 	#cohorte_id = models.ForeignKey(Cohorte)
 	tiempo_experiencia = models.CharField(max_length=2)
+	@models.permalink
+	def get_absolute_url(self):
+		return ("cursos", [self.id])
 
 class Cohorte(models.Model):
 	opt_semestre = ((0, 'Febrero-Junio'), (1, 'Agosto-Diciembre'))
@@ -128,6 +131,10 @@ class Cohorte(models.Model):
 
 	def __str__(self):
 		return self.id
+
+	@models.permalink
+	def get_absolute_url(self):
+		return ("detalles_cohorte", [self.id])
 
 class RegistroNotas(models.Model):#antes se llamaba ternaria
 	actividad = models.ForeignKey(Actividad)

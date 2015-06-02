@@ -60,15 +60,12 @@ class BuscarLeaderTeacher(TemplateView):
 		print(len(matriculas))
 		curso_docente = [[0 for x in range(2)] for x in range(len(matriculas))]
 		for i, matricula in enumerate (matriculas):
-			print(len(curso_docente))
-			print(len(curso_docente[0]))
 			docente = LeaderTeacher.objects.get(id = matricula.get().identificacion_leader_teacher_id)
 			curso = Curso.objects.get(id = matricula.get().identificacion_curso_id)
 			curso_docente[i][0] = docente
 			curso_docente[i][1] = curso
 			#docentes.append(docente)
-			#cursos.append(curso)
-		print (curso_docente)
+			#cursos.append(curso
 		context['secretaria'] = self.secretaria
 		context['curso_docentes'] = curso_docente
 
@@ -252,12 +249,42 @@ class MasterCursos(TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super(MasterCursos, self).get_context_data(**kwargs)
 		self.usuario = self.request.user
+		persona = Persona.objects.get(id=kwargs['id_persona'])
+		master = MasterTeacher.objects.get(id=persona.id)
+		context['master'] = master
 
 		buscar_cohortes = CohorteMasterTeacher()
-		self.cohortes = buscar_cohortes.buscar(self.usuario)
+		self.cohortes = buscar_cohortes.buscar(master)
 		context['cohortes'] = self.cohortes
 		context['usuario'] = self.usuario
+		context['persona'] = persona
 
-		#print(self.cohortes)
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.buscarGrupo(self.usuario)
+
+		context[grupo] = grupo
+
+		cursos_cohortes = [[0 for x in range(2)] for x in range(len(self.cohortes))]
+
+		for i, cohorte in enumerate (self.cohortes):
+			curso = Curso.objects.get(id=cohorte.curso_id)
+			cursos_cohortes[i][0] = cohorte
+			cursos_cohortes[i][1] = curso
+		context['cursos_cohortes'] = cursos_cohortes
+		print(cursos_cohortes)
+
+		return context
+
+class MasterCohorte(TemplateView):
+
+	template_name = 'moodle/detalles_cohorte.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(MasterCohorte, self).get_context_data(**kwargs)
+		usuario = self.request.user
+		persona = Persona.objects.get(id=kwargs['id_persona'])
+		master = MasterTeacher.objects.get(id=persona.id)
+		context['master'] = master
+		context['persona'] = persona
 
 		return context

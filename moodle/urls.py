@@ -1,6 +1,7 @@
 from django.conf.urls import include, url, patterns
 from django.contrib import admin
 from .views import LeaderDetalles, BuscarLeaderTeacher, TipoReportes, CursoDetalles, BuscarCursos, ListarNota, MatricularLeaderTeacher, MasterDetalles, MasterCursos
+from .views import MasterCohorte
 
 leader_urls = patterns ('',
     url(r'^(?P<id_persona>\d+)/$', LeaderDetalles.as_view(), name="detalles_leader"),
@@ -23,7 +24,8 @@ curso_urls = patterns ('',
 
 master_urls = patterns ('',
     url(r'^(?P<id_persona>\d+)/$', MasterDetalles.as_view(), name="detalles_master"),
-    url(r'^(?P<id_persona>\d+)/cursos$', MasterCursos.as_view(), name="cursos"),
+    url(r'^(?P<id_persona>\d+)/cursos/$', MasterCursos.as_view(), name="cursos"),
+    url(r'^(?P<id_persona>\d+)/cursos/(?P<id_cohorte>\d+)/$', MasterCohorte.as_view(), name="detalles_cohorte"),
     #url(r'^buscar$', BuscarMaster.as_view(), name="master_cursos"),
 )
 

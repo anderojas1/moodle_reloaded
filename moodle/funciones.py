@@ -94,10 +94,10 @@ class BuscarDocentes():
 		instituciones = InstitucionEducativa.objects.filter(secretaria_id=secretaria.id)
 		docentes = LeaderTeacher.objects.filter(institucion_id__in=instituciones)
 		#print (docentes)
-
-		#************************
-		iterador = IteradorMatricula(docentes)
 		docentesMatriculados = []
+		#************************
+		"""iterador = IteradorMatricula(docentes)
+		
 
 		if(iterador.actual() != None):
 			matriculado = Matricula.objects.filter(identificacion_leader_teacher=iterador.actual().id, estado_matricula=2)
@@ -105,9 +105,13 @@ class BuscarDocentes():
 				docentesMatriculados.append(matriculado)
 
 		while (iterador.haySiguiente()):
-			print("asd")
 			matriculado = Matricula.objects.filter(identificacion_leader_teacher=iterador.actual().id, estado_matricula=2)
 			if(len(matriculado)!=0):
+				docentesMatriculados.append(matriculado)"""
+
+		for docente in docentes:
+			matriculado = Matricula.objects.filter(identificacion_leader_teacher=docente.id, estado_matricula=2)
+			if len(matriculado) > 0:
 				docentesMatriculados.append(matriculado)
 		return docentesMatriculados
 
@@ -158,7 +162,7 @@ class MatricularLeaderTeacherCohorte():
 			print("no hay nada")
 			masterT = MasterTeacher.objects.get(id=1124124)
 			print (masterT)
-			cohorte = Cohorte(id=str(len(Cohorte.objects.all())),semestre=1, fecha_inicio='2015-08-20',
+			cohorte = Cohorte(id=str(len(Cohorte.objects.all())+1),semestre=1, fecha_inicio='2015-08-20',
 				fecha_fin='2015-10-20', curso = cursos, master = masterT)
 			cohorte.save()
 			matricula = Leader_Cohorte(cohorte_id=cohorte, leader_id=leader)
@@ -176,7 +180,6 @@ class MatricularLeaderTeacherCohorte():
 
 class CohorteMasterTeacher:
 
-	def buscar(self, usuario):
-		persona = Persona.objects.get(usuario_id=usuario.id)
-		cohortes = Cohorte.objects.filter(master=persona.id)
+	def buscar(self, master):
+		cohortes = Cohorte.objects.filter(master=master.id)
 		return cohortes
