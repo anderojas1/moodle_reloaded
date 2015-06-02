@@ -1,5 +1,5 @@
 from django.contrib.auth.models import Group
-from .models import Persona, LeaderTeacher, SecretariaEducacion, InstitucionEducativa, Matricula
+from .models import Persona, LeaderTeacher, SecretariaEducacion, InstitucionEducativa, Matricula, RegistroNotas
 
 class VerificaUsuario():
 
@@ -113,3 +113,18 @@ class BuscarDocentes():
 			if(len(matriculado)!=0):
 				docentesMatriculados.append(matriculado)
 		return docentesMatriculados
+
+	def buscarLeaderMatriculado(self):
+
+		leaders = LeaderTeacher.objects.filter(id = Matricula.objects.filter(estado_matricula = 0 ))
+
+		return leaders
+
+#************************CLASE QUE REGISTRA LAS NOTAS DE UN ESTUDIANTE**********************
+
+class RegistrarNota():
+
+	def registrarNota(self, act, cohor, leader, nota_):
+		registro = RegistroNotas(actividad = act.id, cohorte = cohor.id, leader_teacher = leader.id, nota = nota_)
+		registro.save()
+
