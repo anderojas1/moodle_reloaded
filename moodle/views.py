@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth.models import Group, User
-from .models import LeaderTeacher, Persona, InstitucionEducativa, Curso, Area, Matricula
+from .models import LeaderTeacher, Persona, InstitucionEducativa, Curso, Area, Matricula, MasterTeacher, Cohorte
 from django.views.generic import TemplateView
 from django.core.exceptions import ObjectDoesNotExist
-from .funciones import VerificaUsuario, BuscarDocentes, MatricularLeaderTeacherCohorte
+from .funciones import VerificaUsuario, BuscarDocentes, MatricularLeaderTeacherCohorte, CohorteMasterTeacher
 
 # Create your views here.
 
@@ -212,3 +212,52 @@ class TipoReportes(TemplateView):
 	def post(self, request,*args,**kwargs):
 		print(kwargs)
 		return render(request, self.template_name, self.get_context_data(**kwargs))
+
+class MasterDetalles(TemplateView):
+	template_name = 'moodle/detalles_master.html'
+	persona = None
+	master = None
+	usuario = None
+
+	def get_context_data(self, **kwargs):
+		context = super(MasterDetalles, self).get_context_data(**kwargs)
+		usuario_actual = self.request.user
+
+		self.persona = Persona.objects.get(pk=self.kwargs['id_persona'])
+		if 'persona' not in context:
+			context['persona'] = self.persona
+
+		self.master = MasterTeacher.objects.get(id=self.kwargs['id_persona'])
+		if 'master' not in context:
+			context['master'] = self.master
+
+		self.usuario = User.objects.get(id=self.persona.usuario_id)
+		if 'usuario' not in context:
+			context['usuario'] = self.usuario
+
+		if self.usuario.id == usuario_actual.id:
+			context['editar'] = 'editable'
+
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.buscarGrupo(usuario_actual)
+
+		context[grupo] = grupo
+		return context
+
+class MasterCursos(TemplateView):
+	template_name = 'moodle/cohorte_master.html'
+	cohortes = None
+	usuario = None
+
+	def get_context_data(self, **kwargs):
+		context = super(MasterCursos, self).get_context_data(**kwargs)
+		self.usuario = self.request.user
+
+		buscar_cohortes = CohorteMasterTeacher()
+		self.cohortes = buscar_cohortes.buscar(self.usuario)
+		context['cohortes'] = self.cohortes
+		context['usuario'] = self.usuario
+
+		#print(self.cohortes)
+
+		return context

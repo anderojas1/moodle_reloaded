@@ -1,6 +1,6 @@
 from django.conf.urls import include, url, patterns
 from django.contrib import admin
-from .views import LeaderDetalles, BuscarLeaderTeacher, TipoReportes, CursoDetalles, BuscarCursos, ListarNota, MatricularLeaderTeacher
+from .views import LeaderDetalles, BuscarLeaderTeacher, TipoReportes, CursoDetalles, BuscarCursos, ListarNota, MatricularLeaderTeacher, MasterDetalles, MasterCursos
 
 leader_urls = patterns ('',
     url(r'^(?P<id_persona>\d+)/$', LeaderDetalles.as_view(), name="detalles_leader"),
@@ -21,9 +21,16 @@ curso_urls = patterns ('',
     url(r'^buscar$', BuscarCursos.as_view(), name="buscar_cursos"),
 )
 
+master_urls = patterns ('',
+    url(r'^(?P<id_persona>\d+)/$', MasterDetalles.as_view(), name="detalles_master"),
+    url(r'^(?P<id_persona>\d+)/cursos$', MasterCursos.as_view(), name="cursos"),
+    #url(r'^buscar$', BuscarMaster.as_view(), name="master_cursos"),
+)
+
 
 urlpatterns = patterns ('',
 	url(r'^leader/', include(leader_urls)),
+    url(r'^master/', include(master_urls)),
 	url(r'^secretaria/', include(secretaria_urls)),
 	url(r'^admin/', include(admin_urls)),
 	url(r'^curso/', include(curso_urls)),

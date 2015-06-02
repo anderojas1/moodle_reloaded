@@ -114,7 +114,7 @@ class Matricula(models.Model):
 
 class MasterTeacher(Persona):
 
-	#cohorte = models.ForeignKey(Cohorte)
+	#cohorte_id = models.ForeignKey(Cohorte)
 	tiempo_experiencia = models.CharField(max_length=2)
 
 class Cohorte(models.Model):

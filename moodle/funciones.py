@@ -1,5 +1,5 @@
 from django.contrib.auth.models import Group
-from .models import Persona, LeaderTeacher, SecretariaEducacion, InstitucionEducativa, Matricula, RegistroNotas
+from .models import Persona, LeaderTeacher, SecretariaEducacion, InstitucionEducativa, Matricula, RegistroNotas, MasterTeacher
 from .models import Persona, Curso, Cohorte, LeaderTeacher, SecretariaEducacion, InstitucionEducativa, Matricula, Cohorte, Leader_Cohorte
 from .models import MasterTeacher
 
@@ -169,3 +169,14 @@ class MatricularLeaderTeacherCohorte():
 		print (matricula_curso.estado_matricula)
 		matricula_curso.estado_matricula = 0;
 		matricula_curso.save(update_fields=['estado_matricula'])
+
+############################################################################
+##				Cohortes de MasterTeacher
+############################################################################
+
+class CohorteMasterTeacher:
+
+	def buscar(self, usuario):
+		persona = Persona.objects.get(usuario_id=usuario.id)
+		cohortes = Cohorte.objects.filter(master=persona.id)
+		return cohortes
