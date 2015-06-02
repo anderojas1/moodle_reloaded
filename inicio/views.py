@@ -3,7 +3,7 @@ from django.views.generic import TemplateView, DetailView
 from django.http import HttpRequest, request
 from .forms import UserForm
 from django.core.urlresolvers import reverse_lazy
-from moodle.models import LeaderTeacher, Persona
+from moodle.models import LeaderTeacher, Persona, MasterTeacher
 from moodle.forms import LeaderTeacherForm
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.decorators import login_required

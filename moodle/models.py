@@ -144,9 +144,6 @@ class HistorialAcademico(models.Model):
 	tipoEstudio = models.PositiveSmallIntegerField(choices=opt_tipo_estudio)
 
 
-
-
-
-
-	
-
+class Leader_Cohorte(models.Model):
+	cohorte_id = models.ForeignKey(Cohorte)
+	leader_id = models.ForeignKey(LeaderTeacher)

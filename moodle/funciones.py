@@ -1,5 +1,10 @@
 from django.contrib.auth.models import Group
+<<<<<<< HEAD
 from .models import Persona, LeaderTeacher, SecretariaEducacion, InstitucionEducativa, Matricula, RegistroNotas
+=======
+from .models import Persona, Curso, Cohorte, LeaderTeacher, SecretariaEducacion, InstitucionEducativa, Matricula, Cohorte, Leader_Cohorte
+from .models import MasterTeacher
+>>>>>>> 180e9116c7d0f24f0bfb85cc6bc7dbfeea3360fa
 
 class VerificaUsuario():
 
@@ -31,8 +36,8 @@ class VerificaUsuario():
 class Iterador():
 	__index = 0
 
-	def haySiguiente(self, arregloDocentes):
-		if((self.__index + 1) < len(arregloDocentes)):
+	def haySiguiente(self, arregloMatricula):
+		if((self.__index + 1) < len(arregloMatricula)):
 			return True
 		else:
 			return False
@@ -43,45 +48,44 @@ class Iterador():
 		else:
 			return False
 
-	def actual(self, arregloDocentes):
-		return arregloDocentes[self.__index]
+	def actual(self, arregloMatricula):
+		return arregloMatricula[self.__index]
 
-	def siguiente(self, arregloDocentes):
+	def siguiente(self, arregloMatricula):
 		if self.haySiguiente():
 			self.__index = self.__index + 1
-		return arregloDocentes[self.__index]
+		return arregloMatricula[self.__index]
 
-	def anterior(self, arregloDocentes):
+	def anterior(self, arregloMatricula):
 		if self.hayAnterior():
 			self.__index = self.__index - 1
-		return arregloDocentes[self.__index]
+		return arregloMatricula[self.__index]
 
-	def primero(self, arregloDocentes):
+	def primero(self, arregloMatricula):
 		self.__index = 0
-		return arregloDocentes[self.__index]
+		return arregloMatricula[self.__index]
 
-class IteradorDocentes():
-	__listaDocentes = []
-	iterador = Iterador()
+class IteradorMatricula():
+	__listaMatriculas = []
+	__iterador = Iterador()
 
-	def __init__(self, listaDocentes):
-		self.__listaDocentes = listaDocentes
+	def __init__(self, listaMatriculas):
+		self.__listaMatriculas = listaMatriculas
 
 	def actual(self):
-		self.iterador.actual(self.__listaDocentes)
+		return self.__iterador.actual(self.__listaMatriculas)
 
 	def siguiente(self):
-		self.iterador.siguiente(self.__listaDocentes)
+		return self.__iterador.siguiente(self.__listaMatriculas)
 
 	def anterior(self):
-		self.iterador.anterior(self.__listaDocentes)
+		return self.__iterador.anterior(self.__listaMatriculas)
 
 	def primero(self):
-		self.iterador.primero(self.__listaDocentes)
+		return self.__iterador.primero(self.__listaMatriculas)
 
 	def haySiguiente(self):
-		print(self.__listaDocentes)
-		self.iterador.haySiguiente(self.__listaDocentes)
+		return self.__iterador.haySiguiente(self.__listaMatriculas)
 
 #****************FINAL Funciones extra para BuscarDocentes FINAL*****************
 
@@ -89,31 +93,28 @@ class IteradorDocentes():
 class BuscarDocentes():
 
 	def buscarDocentesInscritos(self, secretaria):
+
 		instituciones = InstitucionEducativa.objects.filter(secretaria_id=secretaria.id)
 		docentes = LeaderTeacher.objects.filter(institucion_id__in=instituciones)
 		#print (docentes)
 
 		#************************
-		"""iterador = IteradorDocentes(docentes)
-		if iterador is None:
-			print (iterador)
-		print(docentes)
+		iterador = IteradorMatricula(docentes)
 		docentesMatriculados = []
 
-		iterador.haySiguiente()
-		"""
-		docentesMatriculados = []
-		for matriculado in docentes:
+		if(iterador.actual() != None):
+			matriculado = Matricula.objects.filter(identificacion_leader_teacher=iterador.actual().id, estado_matricula=2)
+			if(len(matriculado)!=0):
+				docentesMatriculados.append(matriculado)
 
-			matriculado = Matricula.objects.filter(identificacion_leader_teacher=matriculado.id, estado_matricula=2)
-			#print("entro")
-			#print(len(matriculado))
-			#print(matriculado)
-			print(type(matriculado))
+		while (iterador.haySiguiente()):
+			print("asd")
+			matriculado = Matricula.objects.filter(identificacion_leader_teacher=iterador.actual().id, estado_matricula=2)
 			if(len(matriculado)!=0):
 				docentesMatriculados.append(matriculado)
 		return docentesMatriculados
 
+<<<<<<< HEAD
 	def buscarLeaderMatriculado(self):
 
 		leaders = LeaderTeacher.objects.filter(id = Matricula.objects.filter(estado_matricula = 0 ))
@@ -127,4 +128,50 @@ class RegistrarNota():
 	def registrarNota(self, act, cohor, leader, nota_):
 		registro = RegistroNotas(actividad = act.id, cohorte = cohor.id, leader_teacher = leader.id, nota = nota_)
 		registro.save()
+=======
+############################################################################
+##				Matricular Leader teacher
+############################################################################
+
+class MatricularLeaderTeacherCohorte():
+
+	def matricular(self, leader, cursos):
+
+		cohortes = Cohorte.objects.filter(curso=cursos.id)
+
+		if len(cohortes) > 0:
+			flag = True
+			#print("algo")
+			for cohorte in cohortes:
+				num_matriculados = Leader_Cohorte.objects.filter(cohorte_id=cohorte.id)
+				if len(num_matriculados) < 30:
+					matricula = Leader_Cohorte(cohorte_id=cohorte, leader_id=leader)
+					matricula.save()
+					break
+
+				else:
+					masterT = MasterTeacher.objects.get(id=1124124)
+					cohorte = Cohorte(id=str(len(Cohorte.objects.all())),semestre=1, fecha_inicio='2015-08-20',
+						fecha_fin='2015-10-20', curso = cursos, master = masterT)
+					cohorte.save()
+					matricula = Leader_Cohorte(cohorte_id=cohorte, leader_id=leader)
+					matricula.save()
+					flag = False
+					break
+		else:
+			print("no hay nada")
+			masterT = MasterTeacher.objects.get(id=1124124)
+			print (masterT)
+			cohorte = Cohorte(id=str(len(Cohorte.objects.all())),semestre=1, fecha_inicio='2015-08-20',
+				fecha_fin='2015-10-20', curso = cursos, master = masterT)
+			cohorte.save()
+			matricula = Leader_Cohorte(cohorte_id=cohorte, leader_id=leader)
+			matricula.save()
+
+		matricula_curso = Matricula.objects.get(identificacion_leader_teacher=leader.id,
+			identificacion_curso=cursos.id)
+		print (matricula_curso.estado_matricula)
+		matricula_curso.estado_matricula = 0;
+		matricula_curso.save(update_fields=['estado_matricula'])
+>>>>>>> 180e9116c7d0f24f0bfb85cc6bc7dbfeea3360fa
 

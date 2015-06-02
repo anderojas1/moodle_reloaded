@@ -12,8 +12,9 @@
 			</tr>
 		{% for curso_docente in curso_docentes %}
 			<tr>
-				<td><a href="#"></a>{{curso_docente.0.id}}</td>
-				<td>{{curso_docente.1.nombre}}</td>
+				<td><a href="{{curso_docente.0.get_absolute_url}}">{{curso_docente.0.id}}</a></td>
+				<td><a href="{{curso_docente.1.get_absolute_url}}">{{curso_docente.1.nombre}}</a></td>
+				<td><a href="{{curso_docente.0.id}}_{{curso_docente.1.id}}">Matricular</a></td>
 			</tr>
 		{% endfor %}
 		</table>
