@@ -62,25 +62,26 @@ class Iterador():
 
 class IteradorDocentes():
 	__listaDocentes = []
-	__iterador = Iterador()
+	iterador = Iterador()
 
 	def __init__(self, listaDocentes):
-		self.listaDocentes = listaDocentes
+		self.__listaDocentes = listaDocentes
 
 	def actual(self):
-		iterador.actual(self.__listaDocentes)
+		self.iterador.actual(self.__listaDocentes)
 
 	def siguiente(self):
-		iterador.siguiente(self.__listaDocentes)
+		self.iterador.siguiente(self.__listaDocentes)
 
 	def anterior(self):
-		iterador.anterior(self.__listaDocentes)
+		self.iterador.anterior(self.__listaDocentes)
 
 	def primero(self):
-		iterador.primero(self.__listaDocentes)
+		self.iterador.primero(self.__listaDocentes)
 
 	def haySiguiente(self):
-		iterador.haySiguiente(self.__listaDocentes)
+		print(self.__listaDocentes)
+		self.iterador.haySiguiente(self.__listaDocentes)
 
 #****************FINAL Funciones extra para BuscarDocentes FINAL*****************
 
@@ -93,14 +94,22 @@ class BuscarDocentes():
 		#print (docentes)
 
 		#************************
-		iterador = IteradorDocentes(docentes)
-
+		"""iterador = IteradorDocentes(docentes)
+		if iterador is None:
+			print (iterador)
+		print(docentes)
 		docentesMatriculados = []
 
-		while(iterador.haySiguiente()):
-			matriculado = Matricula.objects.filter(identificacion_leader_teacher=iterador.actual().id)
-			if(len(matriculado)!=0):
-				docentesMatriculados.append(iterador.actual())
-			iterador.siguiente()
+		iterador.haySiguiente()
+		"""
+		docentesMatriculados = []
+		for matriculado in docentes:
 
+			matriculado = Matricula.objects.filter(identificacion_leader_teacher=matriculado.id, estado_matricula=2)
+			#print("entro")
+			#print(len(matriculado))
+			#print(matriculado)
+			print(type(matriculado))
+			if(len(matriculado)!=0):
+				docentesMatriculados.append(matriculado)
 		return docentesMatriculados

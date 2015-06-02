@@ -56,10 +56,19 @@ class BuscarLeaderTeacher(TemplateView):
 		self.secretaria = buscar_secretaria.buscarSecretaria(usuario_actual)
 
 		buscar_docentes = BuscarDocentes()
-		buscar_docentes.buscarDocentesInscritos(self.secretaria)
-
+		matriculas = buscar_docentes.buscarDocentesInscritos(self.secretaria)
+		print(matriculas)
+		curso_docente = [[0 for x in range(len(matriculas))] for x in range(2)]
+		for i, matricula in enumerate (matriculas):
+			docente = LeaderTeacher.objects.get(id = matricula.get().identificacion_leader_teacher_id)
+			curso = Curso.objects.get(id = matricula.get().identificacion_curso_id)
+			curso_docente[i][0] = docente
+			curso_docente[i][1] = curso
+			#docentes.append(docente)
+			#cursos.append(curso)
+		print (curso_docente)
 		context['secretaria'] = self.secretaria
-		context['docentes'] = self.docentes
+		context['curso_docentes'] = curso_docente
 
 		return context
 

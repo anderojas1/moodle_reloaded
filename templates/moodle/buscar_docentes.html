@@ -5,5 +5,17 @@
 {% block busqueda_secretaria %}
 	<div class="resultado_busqueda">
 		<h2>Docentes inscritos</h2>
+		<table>
+			<tr>
+				<th>Leader Teacher</th>
+				<th>Curso</th>
+			</tr>
+		{% for curso_docente in curso_docentes %}
+			<tr>
+				<td><a href="#"></a>{{curso_docente.0.id}}</td>
+				<td>{{curso_docente.1.nombre}}</td>
+			</tr>
+		{% endfor %}
+		</table>
 	</div>
 {% endblock %}
