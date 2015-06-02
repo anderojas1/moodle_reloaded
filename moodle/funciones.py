@@ -32,8 +32,8 @@ class VerificaUsuario():
 class Iterador():
 	__index = 0
 
-	def haySiguiente(self, arregloDocentes):
-		if((self.__index + 1) < len(arregloDocentes)):
+	def haySiguiente(self, arregloMatricula):
+		if((self.__index + 1) < len(arregloMatricula)):
 			return True
 		else:
 			return False
@@ -44,45 +44,44 @@ class Iterador():
 		else:
 			return False
 
-	def actual(self, arregloDocentes):
-		return arregloDocentes[self.__index]
+	def actual(self, arregloMatricula):
+		return arregloMatricula[self.__index]
 
-	def siguiente(self, arregloDocentes):
+	def siguiente(self, arregloMatricula):
 		if self.haySiguiente():
 			self.__index = self.__index + 1
-		return arregloDocentes[self.__index]
+		return arregloMatricula[self.__index]
 
-	def anterior(self, arregloDocentes):
+	def anterior(self, arregloMatricula):
 		if self.hayAnterior():
 			self.__index = self.__index - 1
-		return arregloDocentes[self.__index]
+		return arregloMatricula[self.__index]
 
-	def primero(self, arregloDocentes):
+	def primero(self, arregloMatricula):
 		self.__index = 0
-		return arregloDocentes[self.__index]
+		return arregloMatricula[self.__index]
 
-class IteradorDocentes():
-	__listaDocentes = []
-	iterador = Iterador()
+class IteradorMatricula():
+	__listaMatriculas = []
+	__iterador = Iterador()
 
-	def __init__(self, listaDocentes):
-		self.__listaDocentes = listaDocentes
+	def __init__(self, listaMatriculas):
+		self.__listaMatriculas = listaMatriculas
 
 	def actual(self):
-		self.iterador.actual(self.__listaDocentes)
+		return self.__iterador.actual(self.__listaMatriculas)
 
 	def siguiente(self):
-		self.iterador.siguiente(self.__listaDocentes)
+		return self.__iterador.siguiente(self.__listaMatriculas)
 
 	def anterior(self):
-		self.iterador.anterior(self.__listaDocentes)
+		return self.__iterador.anterior(self.__listaMatriculas)
 
 	def primero(self):
-		self.iterador.primero(self.__listaDocentes)
+		return self.__iterador.primero(self.__listaMatriculas)
 
 	def haySiguiente(self):
-		print(self.__listaDocentes)
-		self.iterador.haySiguiente(self.__listaDocentes)
+		return self.__iterador.haySiguiente(self.__listaMatriculas)
 
 #****************FINAL Funciones extra para BuscarDocentes FINAL*****************
 
@@ -90,26 +89,23 @@ class IteradorDocentes():
 class BuscarDocentes():
 
 	def buscarDocentesInscritos(self, secretaria):
+
 		instituciones = InstitucionEducativa.objects.filter(secretaria_id=secretaria.id)
 		docentes = LeaderTeacher.objects.filter(institucion_id__in=instituciones)
 		#print (docentes)
 
 		#************************
-		"""iterador = IteradorDocentes(docentes)
-		if iterador is None:
-			print (iterador)
-		print(docentes)
+		iterador = IteradorMatricula(docentes)
 		docentesMatriculados = []
 
-		iterador.haySiguiente()
-		"""
-		docentesMatriculados = []
-		for matriculado in docentes:
+		if(iterador.actual() != None):
+			matriculado = Matricula.objects.filter(identificacion_leader_teacher=iterador.actual().id, estado_matricula=2)
+			if(len(matriculado)!=0):
+				docentesMatriculados.append(matriculado)
 
-			matriculado = Matricula.objects.filter(identificacion_leader_teacher=matriculado.id, estado_matricula=2)
-			#print("entro")
-			#print(len(matriculado))
-			#print(matriculado)
+		while (iterador.haySiguiente()):
+			print("asd")
+			matriculado = Matricula.objects.filter(identificacion_leader_teacher=iterador.actual().id, estado_matricula=2)
 			if(len(matriculado)!=0):
 				docentesMatriculados.append(matriculado)
 		return docentesMatriculados
