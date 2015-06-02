@@ -190,3 +190,7 @@ class MatricularLeaderTeacher(TemplateView):
 		matricularLeader = MatricularLeaderTeacherCohorte()
 		matricularLeader.matricular(leader, curso)
 		return context
+
+class TipoReportes(TemplateView):
+
+	template_name = 'moodle/reportes.html'

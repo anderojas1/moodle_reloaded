@@ -37,6 +37,8 @@
                     {% endif %}
                     {% if admin %}
                             <li><a href="/campus/admin/reportes">Ver Reportes</a></li>
+                            {% block reportes %}
+                            {% endblock %}
                     {% elif otro %}
                         <p>No tiene permisos para ver esta página</p>
                     {% elif master %}

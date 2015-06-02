@@ -1,6 +1,6 @@
 from django.conf.urls import include, url, patterns
 from django.contrib import admin
-from .views import LeaderDetalles, BuscarLeaderTeacher, CursoDetalles, BuscarCursos, ListarNota, MatricularLeaderTeacher
+from .views import LeaderDetalles, BuscarLeaderTeacher, TipoReportes, CursoDetalles, BuscarCursos, ListarNota, MatricularLeaderTeacher
 
 leader_urls = patterns ('',
     url(r'^(?P<id_persona>\d+)/$', LeaderDetalles.as_view(), name="detalles_leader"),
@@ -13,7 +13,7 @@ secretaria_urls = patterns ('',
 )
 
 admin_urls = patterns ('',
-    url(r'^reportes$', BuscarLeaderTeacher.as_view(), name="admin_reportes"),
+    url(r'^reportes$', TipoReportes.as_view(), name="admin_reportes"),
 )
 
 curso_urls = patterns ('',
