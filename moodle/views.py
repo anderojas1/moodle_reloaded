@@ -3,7 +3,7 @@ from django.contrib.auth.models import Group, User
 from .models import LeaderTeacher, Persona, InstitucionEducativa, Curso, Area, Matricula
 from django.views.generic import TemplateView
 from django.core.exceptions import ObjectDoesNotExist
-from .funciones import VerificaUsuario, BuscarDocentes
+from .funciones import VerificaUsuario, BuscarDocentes, MatricularLeaderTeacherCohorte
 
 # Create your views here.
 
@@ -57,9 +57,11 @@ class BuscarLeaderTeacher(TemplateView):
 
 		buscar_docentes = BuscarDocentes()
 		matriculas = buscar_docentes.buscarDocentesInscritos(self.secretaria)
-		print(matriculas)
-		curso_docente = [[0 for x in range(len(matriculas))] for x in range(2)]
+		print(len(matriculas))
+		curso_docente = [[0 for x in range(2)] for x in range(len(matriculas))]
 		for i, matricula in enumerate (matriculas):
+			print(len(curso_docente))
+			print(len(curso_docente[0]))
 			docente = LeaderTeacher.objects.get(id = matricula.get().identificacion_leader_teacher_id)
 			curso = Curso.objects.get(id = matricula.get().identificacion_curso_id)
 			curso_docente[i][0] = docente
@@ -164,3 +166,27 @@ class ListarNota(TemplateView):
 			return HttpResponseRedirect('ternaria/buscar/' + iri_to_uri(urlquote(busqueda)))
 
 		return HttpResponseRedirect('ternaria')
+
+class MatricularLeaderTeacher(TemplateView):
+	template_name = 'moodle/matricular_leader.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(MatricularLeaderTeacher, self).get_context_data(**kwargs)
+		print(kwargs)
+		self.usuario_actual = self.request.user
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.buscarGrupo(self.usuario_actual)
+		context[grupo] = grupo
+
+		curso = Curso.objects.get(id=kwargs['id_curso'])
+		context['curso'] = curso
+
+		leader = LeaderTeacher.objects.get(id=kwargs['id_persona'])
+		context['profesor'] = leader
+		persona = Persona.objects.get(id=kwargs['id_persona'])
+		usuario = User.objects.get(id=persona.usuario_id)
+		context['nombre'] = usuario
+
+		matricularLeader = MatricularLeaderTeacherCohorte()
+		matricularLeader.matricular(leader, curso)
+		return context

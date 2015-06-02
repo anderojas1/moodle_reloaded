@@ -1,5 +1,6 @@
 from django.contrib.auth.models import Group
-from .models import Persona, LeaderTeacher, SecretariaEducacion, InstitucionEducativa, Matricula
+from .models import Persona, Curso, Cohorte, LeaderTeacher, SecretariaEducacion, InstitucionEducativa, Matricula, Cohorte, Leader_Cohorte
+from .models import MasterTeacher
 
 class VerificaUsuario():
 
@@ -109,7 +110,52 @@ class BuscarDocentes():
 			#print("entro")
 			#print(len(matriculado))
 			#print(matriculado)
-			print(type(matriculado))
 			if(len(matriculado)!=0):
 				docentesMatriculados.append(matriculado)
 		return docentesMatriculados
+
+############################################################################
+##				Matricular Leader teacher
+############################################################################
+
+class MatricularLeaderTeacherCohorte():
+
+	def matricular(self, leader, cursos):
+
+		cohortes = Cohorte.objects.filter(curso=cursos.id)
+
+		if len(cohortes) > 0:
+			flag = True
+			#print("algo")
+			for cohorte in cohortes:
+				num_matriculados = Leader_Cohorte.objects.filter(cohorte_id=cohorte.id)
+				if len(num_matriculados) < 30:
+					matricula = Leader_Cohorte(cohorte_id=cohorte, leader_id=leader)
+					matricula.save()
+					break
+
+				else:
+					masterT = MasterTeacher.objects.get(id=1124124)
+					cohorte = Cohorte(id=str(len(Cohorte.objects.all())),semestre=1, fecha_inicio='2015-08-20',
+						fecha_fin='2015-10-20', curso = cursos, master = masterT)
+					cohorte.save()
+					matricula = Leader_Cohorte(cohorte_id=cohorte, leader_id=leader)
+					matricula.save()
+					flag = False
+					break
+		else:
+			print("no hay nada")
+			masterT = MasterTeacher.objects.get(id=1124124)
+			print (masterT)
+			cohorte = Cohorte(id=str(len(Cohorte.objects.all())),semestre=1, fecha_inicio='2015-08-20',
+				fecha_fin='2015-10-20', curso = cursos, master = masterT)
+			cohorte.save()
+			matricula = Leader_Cohorte(cohorte_id=cohorte, leader_id=leader)
+			matricula.save()
+
+		matricula_curso = Matricula.objects.get(identificacion_leader_teacher=leader.id,
+			identificacion_curso=cursos.id)
+		print (matricula_curso.estado_matricula)
+		matricula_curso.estado_matricula = 0;
+		matricula_curso.save(update_fields=['estado_matricula'])
+

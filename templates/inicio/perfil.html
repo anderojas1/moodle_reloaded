@@ -24,6 +24,8 @@
                         <li><a href="{{perfil.get_absolute_url}}">Ver Perfil</a></li>
                         {% block busqueda_secretaria %}
                         {% endblock %}
+                        {% block matricular %}
+                        {% endblock %}
                     {% endif %}
 
                     {% if leader and editar or secretaria or admin %}
@@ -37,6 +39,10 @@
                             <li><a href="/campus/admin/reportes">Ver Reportes</a></li>
                     {% elif otro %}
                         <p>No tiene permisos para ver esta página</p>
+                    {% elif master %}
+                        <li><a href="#">Mis Cursos</a></li>
+                        {% block cohortes %}
+                        {% endblock %}
                     {% endif %}
                 </ul>
             </div>
