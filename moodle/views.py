@@ -194,3 +194,21 @@ class MatricularLeaderTeacher(TemplateView):
 class TipoReportes(TemplateView):
 
 	template_name = 'moodle/reportes.html'
+	value = ''
+
+	def get_context_data(self, **kwargs):
+		context = super(TipoReportes, self).get_context_data(**kwargs)
+
+		self.usuario_actual = self.request.user
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.buscarGrupo(self.usuario_actual)
+		context[grupo] = grupo
+
+		departamentos = InstitucionEducativa.objects.values('departamento').distinct()
+		context['departamentos'] = departamentos
+
+		return context
+
+	def post(self, request,*args,**kwargs):
+		print(kwargs)
+		return render(request, self.template_name, self.get_context_data(**kwargs))

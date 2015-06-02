@@ -1,4 +1,5 @@
 from django.contrib.auth.models import Group
+from .models import Persona, LeaderTeacher, SecretariaEducacion, InstitucionEducativa, Matricula, RegistroNotas
 from .models import Persona, Curso, Cohorte, LeaderTeacher, SecretariaEducacion, InstitucionEducativa, Matricula, Cohorte, Leader_Cohorte
 from .models import MasterTeacher
 
@@ -110,6 +111,20 @@ class BuscarDocentes():
 				docentesMatriculados.append(matriculado)
 		return docentesMatriculados
 
+	def buscarLeaderMatriculado(self):
+
+		leaders = LeaderTeacher.objects.filter(id = Matricula.objects.filter(estado_matricula = 0 ))
+
+		return leaders
+
+#************************CLASE QUE REGISTRA LAS NOTAS DE UN ESTUDIANTE**********************
+
+class RegistrarNota():
+
+	def registrarNota(self, act, cohor, leader, nota_):
+		registro = RegistroNotas(actividad = act.id, cohorte = cohor.id, leader_teacher = leader.id, nota = nota_)
+		registro.save()
+
 ############################################################################
 ##				Matricular Leader teacher
 ############################################################################
@@ -154,4 +169,3 @@ class MatricularLeaderTeacherCohorte():
 		print (matricula_curso.estado_matricula)
 		matricula_curso.estado_matricula = 0;
 		matricula_curso.save(update_fields=['estado_matricula'])
-

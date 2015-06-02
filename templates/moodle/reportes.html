@@ -4,6 +4,20 @@ Reportes
 {% endblock %}
 {% block reportes %}
 	<div class="reportes">
-		
+		<p>
+			<li>Estudiantes por departamento</li>
+		</p>
+		<form method="POST">
+			{% csrf_token %}
+			<select id="value">
+				{% for depart in departamentos %}
+				<option>{{depart.departamento}}</option>
+				{% endfor %}
+			</select>
+			<button type="submit">Buscar</button>
+		</form>
 	</div>
+	{% block resultado_reporte %}
+
+	{% endblock %}
 {% endblock %}
