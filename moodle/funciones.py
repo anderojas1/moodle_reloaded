@@ -50,7 +50,7 @@ class Iterador():
 		return arregloMatricula[self.__index]
 
 	def siguiente(self, arregloMatricula):
-		if self.haySiguiente():
+		if self.haySiguiente(arregloMatricula):
 			self.__index = self.__index + 1
 		return arregloMatricula[self.__index]
 
@@ -97,7 +97,7 @@ class BuscarDocentes():
 		#print (docentes)
 		docentesMatriculados = []
 		#************************
-		"""iterador = IteradorMatricula(docentes)
+		iterador = IteradorMatricula(docentes)
 		
 
 		if(iterador.actual() != None):
@@ -108,12 +108,13 @@ class BuscarDocentes():
 		while (iterador.haySiguiente()):
 			matriculado = Matricula.objects.filter(identificacion_leader_teacher=iterador.actual().id, estado_matricula=2)
 			if(len(matriculado)!=0):
-				docentesMatriculados.append(matriculado)"""
+				docentesMatriculados.append(matriculado)
+			iterador.siguiente()
 
-		for docente in docentes:
+		'''for docente in docentes:
 			matriculado = Matricula.objects.filter(identificacion_leader_teacher=docente.id, estado_matricula=2)
 			if len(matriculado) > 0:
-				docentesMatriculados.append(matriculado)
+				docentesMatriculados.append(matriculado)'''
 		return docentesMatriculados
 
 #************************CLASE QUE REGISTRA LAS NOTAS DE UN ESTUDIANTE**********************
