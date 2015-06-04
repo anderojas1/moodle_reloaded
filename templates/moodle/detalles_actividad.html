@@ -1,0 +1,45 @@
+{% extends "inicio/perfil.html" %}
+{% block title %}
+    Información |  {{actividad.id}}
+{% endblock %}
+{% block actividades %}
+    <div class="informacion">
+        <table class="datos">
+            <tr>
+                <th>Dato</th>
+                <th>Informacion</th>
+            </tr>
+            <tr>
+                <td>Titulo</td>
+                <td>{{actividad.titulo}}</td>
+            </tr>
+            <tr>
+                <td>Descripcion</td>
+                <td>{{actividad.descripcion}}</td>
+            </tr>
+            <tr>
+                <td>Fecha de Inicio</td>
+                <td>{{actividad.fecha_inicio}}</td>
+            </tr>
+            <tr>
+                <td>Fecha de Entrega</td>
+                <td>{{actividad.fecha_fin}}</td>
+            </tr>
+            <tr>
+                <td>Porcentaje</td>
+                <td>{{actividad.porcentaje}}</td>
+            </tr>
+        </table>
+    </div class="herramientas">
+    {% if editar %}
+    <div>
+        <a href="#">Editar Perfil</a>
+    </div>
+    {% else %}
+    {% block restricted %}
+    <div>
+        <p>Usted no tiene permisos para ver esta página. <a href="/login/profile/"> Regresar </a></p>
+    </div>
+    {% endblock %}
+    {% endif %}
+{% endblock %}

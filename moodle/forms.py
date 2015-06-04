@@ -1,7 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from .models import LeaderTeacher
-
+from .models import LeaderTeacher, Curso, RegistroNotas, Actividad
 
 class LeaderTeacherForm(ModelForm):
 
@@ -38,3 +37,108 @@ class LeaderTeacherForm(ModelForm):
 
 		if cedula_exist:
 			self.add_error('id', 'La cédula ' + cedula + ' ya se encuentra registrada')
+
+class Buscar(forms.Form):
+	opciones = (('Amazonas', 'Amazonas'), ('Caqueta', 'Caqueta'), ('Cauca', 'Cauca'), ('Huila', 'Huila'),
+		('Nariño', 'Nariño'),('Putumayo', 'Putumayo'), ('Tolima', 'Tolima'),('Valle del Cauca', 'Valle del Cauca'))
+	departamento = forms.ChoiceField(label='departamento', choices=opciones)
+
+"""class CursosMayorAsistentes(forms.Form):
+	cursos = Curso.objects.all()
+	todos = ()
+	for curso in cursos:
+		tupla = (curso.nombre, curso.nombre)
+		todos += tupla
+
+	print (todos)
+	cursos = form.ChoiceField(label='cursos', choices=todos)"""
+
+class NotasPorEstudiante(forms.Form):
+	cedula = forms.CharField(label= 'cedula', max_length=15)
+
+class EstudiantesCurso(forms.Form):
+	curso = forms.CharField(label= 'curso', max_length=100)
+
+class EstudiantesDepartamentoCurso(forms.Form):
+	curso = forms.CharField(label= 'curso', max_length=100)
+	opciones = (('Amazonas', 'Amazonas'), ('Caqueta', 'Caqueta'), ('Cauca', 'Cauca'), ('Huila', 'Huila'),
+		('Nariño', 'Nariño'),('Putumayo', 'Putumayo'), ('Tolima', 'Tolima'),('Valle del Cauca', 'Valle del Cauca'))
+	departamento = forms.ChoiceField(label='departamento', choices=opciones)
+
+############################################################################
+##				Nuevo codigo
+############################################################################
+#from .models import RegistroNotas, Actividad
+#+------------------------------------------+
+#+					COHORTE					+
+#+------------------------------------------+
+
+class RegistroNotasForm(ModelForm):
+
+	class Meta:
+		model = RegistroNotas
+		fields = ['actividad', 'cohorte', 'leader_teacher', 'nota']
+		widgets = {
+			'actividad': forms.TextInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'text',
+				'placeholder': 'Actividad',
+				}),
+			'cohorte': forms.TextInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'text',
+				'placeholder': 'Cohorte',
+				}),
+			'leader_teacher': forms.DateInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'date',
+				'placeholder': 'Leader Teacher',
+				}),
+			'nota': forms.DateInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'date',
+				'placeholder': 'Nota',
+				})
+		}
+		
+#+------------------------------------------+
+#+				ACTIVIDAD					+
+#+------------------------------------------+
+
+class ActividadForm(ModelForm):
+
+	class Meta:
+		model = Actividad
+		fields = ['id', 'descripcion', 'titulo', 'fecha_fin', 'fecha_inicio', 'porcentaje']
+		widgets = {
+			'id': forms.TextInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'text',
+				'placeholder': 'Identificacion Actividad',
+				}),
+			'descripcion': forms.TextInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'text',
+				'placeholder': 'Descripcion Actividad',
+				}),
+			'titulo': forms.TextInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'text',
+				'placeholder': 'Titulo Actividad',
+				}),
+			'fecha_fin': forms.DateInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'date',
+				'placeholder': 'Fecha de Fin dd/mm/aa',
+				}),
+			'fecha_inicio': forms.DateInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'date',
+				'placeholder': 'Fecha de Inicio dd/mm/aa',
+				}),
+			'porcentaje': forms.TextInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'text',
+				'placeholder': 'Porcentaje de la Actividad',
+				}),
+		}

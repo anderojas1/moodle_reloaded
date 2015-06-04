@@ -1,0 +1,29 @@
+{% extends "inicio/perfil.html" %}
+{% block title %}
+Reportes
+{% endblock %}
+
+{% block resultado_reporte %}
+		<table>
+		{% if res_leader %}
+		<tr>
+			<th>
+				Identificación
+			</th>
+			<th>
+				Información
+			</th>
+		</tr>
+			{% for leader in res_leader %}
+			<tr>
+				<td>
+					{{leader.id}}
+				</td>
+				<td>
+					<a href="{{leader.get_absolute_url}}">Detalles</a>
+				</td>
+			</tr>
+			{% endfor %}
+		{% endif %}
+		</table>
+{% endblock %}

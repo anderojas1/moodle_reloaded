@@ -7,17 +7,122 @@ Reportes
 		<p>
 			<li>Estudiantes por departamento</li>
 		</p>
+		<!--<form method="POST">
+			{% csrf_token %}
+			{{departamento}}
+			<button class="enviar" type="submit">Buscar</button>
+		</form>-->
+		<p>
+			<li>Cursos con mayor número de asistentes</li>
+		</p>
+		<!--<form method="POST">
+			{% csrf_token %}
+			<button class="enviar">Cursos con más asistentes</button>
+		</form>-->
+		<p>
+			<li>Notas por estudiante</li>
+		</p>
+			<!--<form method="POST">
+				{% csrf_token %}
+				{{notas_estudiante}}
+				<button class="enviar" type="submit">Ver notas</button>
+			</form>-->
+		<p>
+			<li>Estudiantes que aprobaron un curso</li>
+		</p>
 		<form method="POST">
 			{% csrf_token %}
-			<select id="value">
-				{% for depart in departamentos %}
-				<option>{{depart.departamento}}</option>
-				{% endfor %}
-			</select>
-			<button type="submit">Buscar</button>
+			{{estudiantes_curso}}
+			<button type="submit" class="enviar">Ver Estudiantes</button>
 		</form>
+		<p>
+			<li>Estudiantes de un curso por departamento</li>
+		</p>
+		<!--<form method="POST">
+			{% csrf_token %}
+			{{estud_dpto_curso}}
+			<button type="submit" class="enviar">Ver Estudiantes</button>
+		</form>-->
 	</div>
+{% endblock %}
 	{% block resultado_reporte %}
-
-	{% endblock %}
+		<table>
+		{% if res_leader %}
+		<tr>
+			<th>
+				Identificación
+			</th>
+			<th>
+				Información
+			</th>
+		</tr>
+			{% for leader in res_leader %}
+			<tr>
+				<td>
+					{{leader.id}}
+				</td>
+				<td>
+					<a href="{{leader.get_absolute_url}}">Detalles</a>
+				</td>
+			</tr>
+			{% endfor %}
+		{% elif notas %}
+		<tr>
+			<th>
+				Actividad
+			</th>
+			<th>
+				Nota
+			</th>
+		</tr>
+		{% for nota in notas %}
+		<tr>
+			<td>
+				{{nota.actividad}}
+			</td>
+			<td>
+				{{nota.nota}}
+			</td>
+		</tr>
+		{% endfor %}
+		{% elif aprobados %}
+		<tr>
+			<th>
+				Curso
+			</th>
+			<th>
+				Leader
+			</th>
+			<th>
+				Nota
+			</th>
+		</tr>
+		{% for item in aprobados %}
+		<tr>
+			<td>
+				{{item.identificacion_curso}}
+			</td>
+			<td>
+				{{item.identificacion_leader_teacher}}
+			</td>
+			<td>
+				{{item.nota_final_curso}}
+			</td>
+		</tr>
+		{% endfor %}
+		{% elif estu_dpto_curso %}
+		<tr>
+			<th>
+				Estudiante
+			</th>
+		</tr>
+		{% for estudiante in estu_dpto_curso %}
+		<tr>
+			<td>
+				{{estudiante}}
+			</td>
+		</tr>
+		{% endfor %}
+		{% endif %}
+		</table>
 {% endblock %}

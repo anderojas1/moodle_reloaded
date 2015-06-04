@@ -2,6 +2,7 @@ from django.contrib.auth.models import Group
 from .models import Persona, LeaderTeacher, SecretariaEducacion, InstitucionEducativa, Matricula, RegistroNotas, MasterTeacher
 from .models import Persona, Curso, Cohorte, LeaderTeacher, SecretariaEducacion, InstitucionEducativa, Matricula, Cohorte, Leader_Cohorte
 from .models import MasterTeacher
+from .models import Actividad, RegistroNotas
 
 class VerificaUsuario():
 
@@ -115,12 +116,6 @@ class BuscarDocentes():
 				docentesMatriculados.append(matriculado)
 		return docentesMatriculados
 
-	def buscarLeaderMatriculado(self):
-
-		leaders = LeaderTeacher.objects.filter(id = Matricula.objects.filter(estado_matricula = 0 ))
-
-		return leaders
-
 #************************CLASE QUE REGISTRA LAS NOTAS DE UN ESTUDIANTE**********************
 
 class RegistrarNota():
@@ -183,3 +178,17 @@ class CohorteMasterTeacher:
 	def buscar(self, master):
 		cohortes = Cohorte.objects.filter(master=master.id)
 		return cohortes
+
+#+------------------------------+
+#+		codigo nuevo			+
+#+------------------------------+
+
+class CalculaNotaLeader:
+
+	def calcular(self, master):
+		nota = 0
+		registros = RegistroNotas.objects.filter(leader_teacher=master.id)
+		for registro in registros:
+			actividad = Actividad.objects.get(id=registro.actividad)
+			nota = nota + (registro.nota * (int(actividad.porcentaje) / 100))
+		return nota

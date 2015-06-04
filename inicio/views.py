@@ -8,6 +8,7 @@ from moodle.forms import LeaderTeacherForm
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.decorators import login_required
 from moodle.funciones import VerificaUsuario
+from inicio.Correo import Correo
 
 # Create your views here.
 
@@ -37,8 +38,19 @@ class SignupLeaderTeacher(TemplateView):
 			leader = leaderTeacherForm.save(commit=False)
 			leader.usuario = user
 			leader.save()
+
+			#print(user.email)
+			#print(user.first_name)
+
 			grupo = Group.objects.get(name='leader')
 			user.groups.add(grupo)
+
+			#Enviar Correo
+			#objMensaje = Correo("ciersurcolombia@gmail.com", "univalle", "ciersurcolombia@gmail.com")
+			#objMensaje.enviarMensaje(user.email, user.first_name)
+
+			
+
 			# return reverse_lazy('index')
 		return render(request, self.template_name, self.get_context_data(**kwargs))
 

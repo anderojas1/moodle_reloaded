@@ -4,6 +4,11 @@ from .models import LeaderTeacher, Persona, InstitucionEducativa, Curso, Area, M
 from django.views.generic import TemplateView
 from django.core.exceptions import ObjectDoesNotExist
 from .funciones import VerificaUsuario, BuscarDocentes, MatricularLeaderTeacherCohorte, CohorteMasterTeacher
+from .forms import Buscar, NotasPorEstudiante, EstudiantesCurso, EstudiantesDepartamentoCurso
+from .reportes import BuscarReportes
+from .funciones import CalculaNotaLeader
+from .models import Actividad
+from .forms import ActividadForm
 
 # Create your views here.
 
@@ -191,24 +196,74 @@ class MatricularLeaderTeacher(TemplateView):
 class TipoReportes(TemplateView):
 
 	template_name = 'moodle/reportes.html'
-	value = ''
 
 	def get_context_data(self, **kwargs):
 		context = super(TipoReportes, self).get_context_data(**kwargs)
+		departamentoForm = Buscar()
+		context['departamento'] = departamentoForm
+		"""cursoForm = CursosMayorAsistentes()
+		context['cursos_mas'] = cursoForm"""
+		notasForm = NotasPorEstudiante()
+		context['notas_estudiante'] = notasForm
+
+		cursoGanadoForm = EstudiantesCurso()
+		context['estudiantes_curso'] = cursoGanadoForm
+
+		estudiantesDptoCurso = EstudiantesDepartamentoCurso()
+		context['estud_dpto_curso'] = estudiantesDptoCurso
 
 		self.usuario_actual = self.request.user
 		ver_grupo = VerificaUsuario()
 		grupo = ver_grupo.buscarGrupo(self.usuario_actual)
 		context[grupo] = grupo
 
-		departamentos = InstitucionEducativa.objects.values('departamento').distinct()
-		context['departamentos'] = departamentos
-
 		return context
 
 	def post(self, request,*args,**kwargs):
-		print(kwargs)
-		return render(request, self.template_name, self.get_context_data(**kwargs))
+		context = super(TipoReportes, self).get_context_data(**kwargs)
+		########## De departamentos ############
+
+		#departamentoForm = Buscar(request.POST)
+		"""if departamentoForm.is_valid():			
+			criterio = departamentoForm.cleaned_data.get('departamento')
+			busqueda = BuscarReportes()
+			resultado = busqueda.reportes(criterio, 0)
+			print(resultado)
+			context['res_leader'] = resultado"""
+
+		########### De notas por estudiante ############
+
+		"""notasForm = NotasPorEstudiante(request.POST)
+		if notasForm.is_valid:
+			criterio = notasForm.cleaned_data.get('cedula')
+			busqueda = BuscarReportes()
+			resultado = busqueda.reportes(criterio, 2)
+			context['notas'] = resultado"""
+
+		########### DE ESTUDIANTES QUE HAN APROBADO UN CURSO ################
+
+		cursoGanadoForm = EstudiantesCurso(request.POST)
+		if cursoGanadoForm.is_valid():
+			criterio = cursoGanadoForm.cleaned_data.get('curso')
+			busqueda = BuscarReportes()
+			resultado = busqueda.reportes(criterio, 3)
+			context['aprobados'] = resultado
+			print (resultado)
+
+		############ DE ESTUDIANTES DE UN CURSO POR DEPARTAMENTO ################
+		"""estudiantesDptoCurso = EstudiantesDepartamentoCurso(request.POST)
+		if estudiantesDptoCurso.is_valid():
+			criterio1 = estudiantesDptoCurso.cleaned_data.get('curso')
+			criterio2 = estudiantesDptoCurso.cleaned_data.get('departamento')
+			busqueda = BuscarReportes()
+			resultado = busqueda.reportes2(criterio1, criterio2)
+			context['estu_dpto_curso'] = resultado"""
+
+		self.usuario_actual = self.request.user
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.buscarGrupo(self.usuario_actual)
+		context[grupo] = grupo
+		return render(request, self.template_name, context)
 
 class MasterDetalles(TemplateView):
 	template_name = 'moodle/detalles_master.html'
@@ -288,3 +343,45 @@ class MasterCohorte(TemplateView):
 		context['persona'] = persona
 
 		return context
+
+############################################################################
+##				Nuevo codigo
+############################################################################
+class ActividadDetalles(TemplateView):
+	template_name = 'moodle/detalles_actividad.html'
+	actividad = None
+	usuario_actual = None
+
+	def get_context_data(self, **kwargs):
+		context = super(ActividadDetalles, self).get_context_data(**kwargs)
+		self.usuario_actual = self.request.user
+
+		self.actividad = Actividad.objects.get(id=self.kwargs['id_actividad'])
+		if 'actividad' not in context:
+			context['actividad'] = self.actividad
+
+		ver_grupo = VerificaUsuario()
+
+		print(self.usuario_actual.username)
+
+		grupo = ver_grupo.buscarGrupo(self.usuario_actual)
+
+		context[grupo] = grupo
+		return context
+
+class ActividadFormulario(TemplateView):
+	template_name = 'moodle/formulario_actividad.html'
+	actividadForm = ActividadForm(prefix='actividad')
+
+	def get_context_data(self, **kwargs):
+		context = super(ActividadFormulario, self).get_context_data(**kwargs)
+		if 'actividadForm' not in context:
+			context['actividadForm'] = self.actividadForm
+		return context
+
+	def post(self, request,*args,**kwargs):
+		actividadForm = ActividadForm(request.POST, prefix='actividad')
+		if actividadForm.is_valid():
+			actividad = actividadForm.save(commit=False)
+			actividad.save()
+		return render(request, self.template_name, self.get_context_data(**kwargs))		

@@ -154,3 +154,10 @@ class HistorialAcademico(models.Model):
 class Leader_Cohorte(models.Model):
 	cohorte_id = models.ForeignKey(Cohorte)
 	leader_id = models.ForeignKey(LeaderTeacher)
+
+
+"""class BuscarDepartamento (models.Model):
+	departamentos = (('Nariño'),('Valle del Cauca'))
+
+	departamento = models.CharField(max_length=50, choices=departamentos)
+	busqueda = models.CharField(max_length=50)"""
