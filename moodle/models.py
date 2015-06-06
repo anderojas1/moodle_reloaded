@@ -74,6 +74,7 @@ class Curso(models.Model):
     nombre = models.CharField(max_length=60)
     descripcion = models.TextField(max_length=200)
     area = models.ForeignKey(Area)
+    estado = models.BooleanField(default=True)
 
     def __str__(self):
         return self.nombre

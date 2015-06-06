@@ -11,7 +11,9 @@ from .models import Actividad, Curso
 from .forms import ActividadForm, CursoForm
 from .models import Actividad, NivelEscolar
 from .forms import ActividadForm, NivelEscolarForm
-
+from django.views.generic.edit import DeleteView
+from django.core.urlresolvers import reverse_lazy
+from django.shortcuts import redirect
 
 # Create your views here.
 
@@ -141,6 +143,15 @@ class BuscarCursos(TemplateView):
 		context['cursos'] = self.cursos
 
 		return context
+
+	def post(self, request, *args, **kwargs):
+		context = super(BuscarCursos, self).get_context_data(**kwargs)
+		self.usuario_actual = self.request.user
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.buscarGrupo(self.usuario_actual)
+		context[grupo] = grupo
+		print("entró a crear curso")
+		return redirect('/campus/admin/registro/curso')
 
 class ListarNota(TemplateView):
 	template_name = 'app/listar_nota.html'
@@ -423,6 +434,15 @@ class RegistrarCurso(TemplateView):
 		grupo = ver_grupo.verGrupo(self.request.user)
 		context[grupo] = grupo
 
+		return render(request, self.template_name, context)
+
+class BorrarCurso(DeleteView):
+	model = Curso
+	sucess_url = reverse_lazy('profile')
+
+	def post(self, request, *args, **kwargs):
+		context = super(GuardarNivelEscolar, self).get_context_data(**kwargs)
+		print(kwargs)
 		return render(request, self.template_name, context)
 
 class GuardarNivelEscolar(TemplateView):

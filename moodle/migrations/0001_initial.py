@@ -2,8 +2,8 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-from django.conf import settings
 import moodle.models
+from django.conf import settings
 
 
 class Migration(migrations.Migration):
@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Actividad',
             fields=[
-                ('id', models.CharField(primary_key=True, max_length=60, serialize=False)),
+                ('id', models.CharField(primary_key=True, serialize=False, max_length=60)),
                 ('descripcion', models.TextField(max_length=200)),
                 ('titulo', models.CharField(max_length=60)),
                 ('fecha_fin', models.DateField()),
@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Area',
             fields=[
-                ('id', models.CharField(primary_key=True, max_length=60, serialize=False)),
+                ('id', models.CharField(primary_key=True, serialize=False, max_length=60)),
                 ('nombre', models.CharField(max_length=60)),
                 ('descripcion', models.TextField(max_length=200)),
             ],
@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Cohorte',
             fields=[
-                ('id', models.CharField(primary_key=True, max_length=60, serialize=False)),
+                ('id', models.CharField(primary_key=True, serialize=False, max_length=60)),
                 ('semestre', models.SmallIntegerField(choices=[(0, 'Febrero-Junio'), (1, 'Agosto-Diciembre')])),
                 ('fecha_inicio', models.DateField()),
                 ('fecha_fin', models.DateField()),
@@ -44,24 +44,34 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Curso',
             fields=[
-                ('id', models.CharField(primary_key=True, max_length=60, serialize=False)),
+                ('id', models.CharField(primary_key=True, serialize=False, max_length=60)),
                 ('nombre', models.CharField(max_length=60)),
                 ('descripcion', models.TextField(max_length=200)),
+                ('estado', models.BooleanField(default=True)),
                 ('area', models.ForeignKey(to='moodle.Area')),
             ],
         ),
         migrations.CreateModel(
             name='HistorialAcademico',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
-                ('titulo', models.CharField(max_length=100)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
+                ('titulo', models.CharField(null=True, max_length=100, blank=True)),
                 ('tipoEstudio', models.PositiveSmallIntegerField(choices=[(0, 'Bachillerato'), (1, 'Pregrado'), (2, 'Posgrado'), (3, 'Especializacion'), (4, 'Maestria'), (5, 'Doctorado')])),
+                ('institucionAcre', models.CharField(null=True, max_length=100, blank=True)),
+                ('fecha_realizacion', models.DateField(null=True, blank=True)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='HistorialLaboral',
+            fields=[
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
+                ('tiempolaborado', models.CharField(max_length=2)),
             ],
         ),
         migrations.CreateModel(
             name='InstitucionEducativa',
             fields=[
-                ('id', models.CharField(primary_key=True, max_length=10, serialize=False)),
+                ('id', models.CharField(primary_key=True, serialize=False, max_length=10)),
                 ('nombre', models.CharField(max_length=100)),
                 ('municipio', models.CharField(max_length=50)),
                 ('departamento', models.CharField(max_length=50)),
@@ -71,28 +81,43 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='Leader_Cohorte',
+            fields=[
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
+                ('cohorte_id', models.ForeignKey(to='moodle.Cohorte')),
+            ],
+        ),
+        migrations.CreateModel(
             name='Matricula',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
                 ('estado_matricula', models.PositiveSmallIntegerField(choices=[(0, 'Matriculado'), (1, 'No Matriculado'), (2, 'En Espera de Matricula')])),
                 ('nota_final_curso', models.CharField(default=0, max_length=60)),
                 ('identificacion_curso', models.ForeignKey(to='moodle.Curso')),
             ],
         ),
         migrations.CreateModel(
+            name='NivelEscolar',
+            fields=[
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
+                ('nombre', models.SmallIntegerField(choices=[(0, 'Transicion'), (1, 'Educacion Inicial'), (2, 'Educacion basica primaria'), (3, 'Educacion basica secundaria'), (4, 'Educacion media'), (5, 'Nivel Superior')])),
+                ('soporte', models.FileField(upload_to='Documentos_Soporte')),
+            ],
+        ),
+        migrations.CreateModel(
             name='Persona',
             fields=[
-                ('id', models.CharField(primary_key=True, max_length=15, serialize=False)),
+                ('id', models.CharField(primary_key=True, serialize=False, max_length=15)),
                 ('sexo', models.SmallIntegerField(choices=[(0, 'Masculino'), (1, 'Femenino')])),
                 ('fecha_nacimiento', models.DateField()),
                 ('celular', models.IntegerField()),
-                ('fijo', models.IntegerField(blank=True, null=True)),
+                ('fijo', models.IntegerField(null=True, blank=True)),
             ],
         ),
         migrations.CreateModel(
             name='RegistroNotas',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
                 ('nota', moodle.models.MinMaxFloat()),
                 ('actividad', models.ForeignKey(to='moodle.Actividad')),
                 ('cohorte', models.ForeignKey(to='moodle.Cohorte')),
@@ -101,7 +126,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='SecretariaEducacion',
             fields=[
-                ('id', models.CharField(primary_key=True, max_length=10, serialize=False)),
+                ('id', models.CharField(primary_key=True, serialize=False, max_length=10)),
                 ('nombre', models.CharField(max_length=50)),
                 ('usuario', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
             ],
@@ -109,7 +134,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='LeaderTeacher',
             fields=[
-                ('persona_ptr', models.OneToOneField(primary_key=True, to='moodle.Persona', auto_created=True, parent_link=True, serialize=False)),
+                ('persona_ptr', models.OneToOneField(primary_key=True, to='moodle.Persona', parent_link=True, serialize=False, auto_created=True)),
                 ('grado_estudio', models.CharField(max_length=60)),
             ],
             bases=('moodle.persona',),
@@ -117,7 +142,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='MasterTeacher',
             fields=[
-                ('persona_ptr', models.OneToOneField(primary_key=True, to='moodle.Persona', auto_created=True, parent_link=True, serialize=False)),
+                ('persona_ptr', models.OneToOneField(primary_key=True, to='moodle.Persona', parent_link=True, serialize=False, auto_created=True)),
                 ('tiempo_experiencia', models.CharField(max_length=2)),
             ],
             bases=('moodle.persona',),
@@ -131,6 +156,16 @@ class Migration(migrations.Migration):
             model_name='institucioneducativa',
             name='secretaria',
             field=models.ForeignKey(to='moodle.SecretariaEducacion'),
+        ),
+        migrations.AddField(
+            model_name='historiallaboral',
+            name='nivelEscolar',
+            field=models.ForeignKey(to='moodle.NivelEscolar'),
+        ),
+        migrations.AddField(
+            model_name='historialacademico',
+            name='persona',
+            field=models.ForeignKey(to='moodle.Persona', null=True),
         ),
         migrations.AddField(
             model_name='cohorte',
@@ -151,6 +186,11 @@ class Migration(migrations.Migration):
             model_name='leaderteacher',
             name='institucion',
             field=models.ForeignKey(to='moodle.InstitucionEducativa'),
+        ),
+        migrations.AddField(
+            model_name='leader_cohorte',
+            name='leader_id',
+            field=models.ForeignKey(to='moodle.LeaderTeacher'),
         ),
         migrations.AddField(
             model_name='cohorte',

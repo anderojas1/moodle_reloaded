@@ -3,16 +3,31 @@
 Búsqueda de Cursos
 {% endblock %}
 {% block buscar_cursos %}
-	<table = "todos">
+<div class="table-responsive">
+	<table class="table table-hover">
 		<tr>
 			<th>Nombre</th>
 			<th>Detalles</th>
+			{% if admin %}
+			<th>Borrar</th>
+			{% endif %}
 		</tr>
 		{% for curso in cursos %}
 		<tr>
 			<td>{{curso.nombre}}</td>
 			<td><a href="{{curso.get_absolute_url}}">Ver Información</a></td>
+			{% if admin %}
+			<td><a href="{{curso.get_absolute_url}}delete">Eliminar</a></td>
+			{% endif %}
 		</tr>
 		{% endfor %}
 	</table>
+</div>
+{% if admin %}
+<br />
+<form method="POST">
+	{% csrf_token %}
+	<button type="submit">Añadir Curso</button>
+</form>
+{% endif %}
 {% endblock %}
