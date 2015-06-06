@@ -1,6 +1,6 @@
 from django.conf.urls import include, url, patterns
 from django.contrib import admin
-from .views import LeaderDetalles, BuscarLeaderTeacher, TipoReportes, CursoDetalles, BuscarCursos, ListarNota, MatricularLeaderTeacher, MasterDetalles, MasterCursos
+from .views import LeaderDetalles, BuscarLeaderTeacher, TipoReportes, CursoDetalles, BuscarCursos, ListarNota, MatricularLeaderTeacher, MasterDetalles, CohortesCursos
 from .views import MasterCohorte, ActividadDetalles, ActividadFormulario
 from .views import RegistrarCurso
 from .views import MasterCohorte, ActividadDetalles, ActividadFormulario, GuardarNivelEscolar
@@ -24,6 +24,8 @@ registrar_urls = patterns ('',
 admin_urls = patterns ('',
     url(r'^reportes$', TipoReportes.as_view(), name="admin_reportes"),
     url(r'^registro/', include(registrar_urls)),
+    url(r'^cohortes/', CohortesCursos.as_view(), name="cursos"),
+
 )
 
 curso_urls = patterns ('',
@@ -35,7 +37,7 @@ curso_urls = patterns ('',
 
 master_urls = patterns ('',
     url(r'^(?P<id_persona>\d+)/$', MasterDetalles.as_view(), name="detalles_master"),
-    url(r'^(?P<id_persona>\d+)/cursos/$', MasterCursos.as_view(), name="cursos"),
+    url(r'^(?P<id_persona>\d+)/cursos/$', CohortesCursos.as_view(), name="cursos"),
     url(r'^(?P<id_persona>\d+)/cursos/(?P<id_cohorte>\d+)/$', MasterCohorte.as_view(), name="detalles_cohorte"),
     url(r'^actividad/(?P<id_actividad>\d+)/$', ActividadDetalles.as_view(), name="detalles_actividad"), #Nuevo!
     url(r'^registrar_actividad$', ActividadFormulario.as_view(), name="registrar_actividad") #Nuevo!

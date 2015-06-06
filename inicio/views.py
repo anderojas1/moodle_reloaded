@@ -49,8 +49,6 @@ class SignupLeaderTeacher(TemplateView):
 			#objMensaje = Correo("ciersurcolombia@gmail.com", "univalle", "ciersurcolombia@gmail.com")
 			#objMensaje.enviarMensaje(user.email, user.first_name)
 
-			
-
 			# return reverse_lazy('index')
 		return render(request, self.template_name, self.get_context_data(**kwargs))
 

@@ -15,33 +15,76 @@
         {% endif %}
     {%  else %}
     	<h2>Registro para nuevos usuarios</h2>
-		<form method="POST">
+		<form method="POST" class="form-horizontal">
             {%  csrf_token %}
             {{userform.errors}}
             <div class="form-group">
-    			<label for="exampleInputName2" class="col-sm-2 control-label">Nombre</label>
+    			<label for="inputName3" class="col-sm-2 control-label">Nombre</label>
                 <div class="col-sm-10">
                     {{userform.first_name}}
                 </div>
             </div>
             <div class="form-group">
-                <label for="exampleInputName2" class="col-sm-2 control-label">Apellidos</label>
+                <label for="inputName3" class="col-sm-2 control-label">Apellidos</label>
                 <div class="col-sm-10">
                     {{userform.last_name}}
                 </div>
             </div>
-    			{{userform.last_name}}<br />
-    			{{leaderTeacherForm.id}}<br />
-    			{{leaderTeacherForm.sexo}}<br />
-    			{{leaderTeacherForm.fecha_nacimiento}}<br />
-    			{{leaderTeacherForm.celular}}<br />
-    			{{leaderTeacherForm.fijo}}<br />
-    			{{leaderTeacherForm.id.errors}}
-    			{{userform.email}}<br />
-    			{{leaderTeacherForm.institucion}}<br />
-    			{{userform.username}}<br />
-    			{{userform.username.errors}}
-    			{{userform.password}}<br />
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label">Cédula</label>
+                <div class="col-sm-10">
+                    {{leaderTeacherForm.id}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label">Sexo</label>
+                <div class="col-sm-10">
+                    {{leaderTeacherForm.sexo}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label">Fecha de nacimiento</label>
+                <div class="col-sm-10">
+                    {{leaderTeacherForm.fecha_nacimiento}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label">Celular</label>
+                <div class="col-sm-10">
+                    {{leaderTeacherForm.celular}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label">Fijo</label>
+                <div class="col-sm-10">
+                    {{leaderTeacherForm.fijo}}
+                </div>
+            </div>
+    		{{leaderTeacherForm.errors}}
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-2 control-label">Correo electrónico</label>
+                <div class="col-sm-10">
+                    {{userform.email}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label">Institución Educativa</label>
+                <div class="col-sm-10">
+                    {{leaderTeacherForm.institucion}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label">Usuario</label>
+                <div class="col-sm-10">
+                    {{userform.username}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-2 control-label">Contraseña</label>
+                <div class="col-sm-10">
+                    {{userform.password}}
+                </div>
+            </div>
     			<button type="submit" class="boton_enviar">Registrarse</button>
             </div>
     	</form>

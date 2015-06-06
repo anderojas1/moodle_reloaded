@@ -310,28 +310,34 @@ class MasterDetalles(TemplateView):
 		context[grupo] = grupo
 		return context
 
-class MasterCursos(TemplateView):
-	template_name = 'moodle/cohorte_master.html'
+class CohortesCursos(TemplateView):
+	template_name = 'moodle/cohortes.html'
 	cohortes = None
 	usuario = None
 
 	def get_context_data(self, **kwargs):
-		context = super(MasterCursos, self).get_context_data(**kwargs)
+		context = super(CohortesCursos, self).get_context_data(**kwargs)
 		self.usuario = self.request.user
-		persona = Persona.objects.get(id=kwargs['id_persona'])
-		master = MasterTeacher.objects.get(id=persona.id)
-		context['master'] = master
-
-		buscar_cohortes = CohorteMasterTeacher()
-		self.cohortes = buscar_cohortes.buscar(master)
-		context['cohortes'] = self.cohortes
-		context['usuario'] = self.usuario
-		context['persona'] = persona
 
 		ver_grupo = VerificaUsuario()
 		grupo = ver_grupo.buscarGrupo(self.usuario)
 
 		context[grupo] = grupo
+
+		if grupo == 'master':
+			persona = Persona.objects.get(id=kwargs['id_persona'])#if master
+			master = MasterTeacher.objects.get(id=persona.id)#if master
+			context['master'] = master#if master
+
+			buscar_cohortes = CohorteMasterTeacher()#if master
+			self.cohortes = buscar_cohortes.buscar(master)#if master
+			context['persona'] = persona#if master
+
+		elif grupo == 'admin':
+			self.cohortes = Cohorte.objects.all()
+
+		context['cohortes'] = self.cohortes
+		context['usuario'] = self.usuario
 
 		cursos_cohortes = [[0 for x in range(2)] for x in range(len(self.cohortes))]
 

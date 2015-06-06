@@ -9,8 +9,8 @@ class Persona(models.Model):
     id = models.CharField(max_length=15, primary_key=True) # id es cedula
     sexo = models.SmallIntegerField(choices=opt_sexo)
     fecha_nacimiento = models.DateField()
-    celular = models.IntegerField()
-    fijo = models.IntegerField(blank=True, null=True)
+    celular = models.BigIntegerField()
+    fijo = models.BigIntegerField(blank=True, null=True)
     usuario = models.OneToOneField(User)
 
     def __str__(self):
@@ -122,11 +122,11 @@ class MasterTeacher(Persona):
 class Cohorte(models.Model):
     opt_semestre = ((0, 'Febrero-Junio'), (1, 'Agosto-Diciembre'))
     id = models.CharField(max_length=60, primary_key=True) #identificador unico de cohorte
-    semestre = models.SmallIntegerField(choices  = opt_semestre)
-    fecha_inicio = models.DateField()
-    fecha_fin = models.DateField()
+    semestre = models.SmallIntegerField(choices  = opt_semestre, null=True)
+    fecha_inicio = models.DateField(null=True)
+    fecha_fin = models.DateField(null=True)
     curso = models.ForeignKey(Curso)
-    master = models.ForeignKey(MasterTeacher)
+    master = models.ForeignKey(MasterTeacher, null=True)
 
     def __str__(self):
         return self.id
