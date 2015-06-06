@@ -139,7 +139,7 @@ class BuscarCursos(TemplateView):
 		grupo = ver_grupo.buscarGrupo(self.usuario_actual)
 		context[grupo] = grupo
 
-		self.cursos = Curso.objects.all()
+		self.cursos = Curso.objects.all().exclude(estado=False)
 		context['cursos'] = self.cursos
 
 		return context
@@ -436,14 +436,28 @@ class RegistrarCurso(TemplateView):
 
 		return render(request, self.template_name, context)
 
-class BorrarCurso(DeleteView):
-	model = Curso
-	sucess_url = reverse_lazy('profile')
+class BorrarCurso(TemplateView):
+	template_name = 'moodle/curso_confirm_delete.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(BorrarCurso, self).get_context_data(**kwargs)
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.verGrupo(self.request.user)
+		context[grupo] = grupo
+		curso = Curso.objects.get(id=kwargs['id_curso'])
+		context['curso'] = curso
+
+		return context
 
 	def post(self, request, *args, **kwargs):
-		context = super(GuardarNivelEscolar, self).get_context_data(**kwargs)
-		print(kwargs)
-		return render(request, self.template_name, context)
+		context = super(BorrarCurso, self).get_context_data(**kwargs)
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.verGrupo(self.request.user)
+		context[grupo] = grupo
+		curso = Curso.objects.get(id=kwargs['id_curso'])
+		curso.estado = False
+		curso.save(update_fields=['estado'])
+		return redirect('/campus/curso/buscar')
 
 class GuardarNivelEscolar(TemplateView):
 

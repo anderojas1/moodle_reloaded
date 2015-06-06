@@ -1,0 +1,10 @@
+{% extends "inicio/perfil.html" %}
+{% block title %}
+	Eliminar {{curso}}
+{% endblock %}
+{% block info_curso %}
+<form action="" method="post">{% csrf_token %}
+    <p>¿Realmente desea eliminar el curso "{{ curso }}"?</p>
+    <button type="submit">Sí, eliminar</button>
+</form>
+{% endblock %}
