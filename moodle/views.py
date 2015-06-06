@@ -7,8 +7,8 @@ from .funciones import VerificaUsuario, BuscarDocentes, MatricularLeaderTeacherC
 from .forms import Buscar, NotasPorEstudiante, EstudiantesCurso, EstudiantesDepartamentoCurso
 from .reportes import BuscarReportes
 from .funciones import CalculaNotaLeader
-from .models import Actividad
-from .forms import ActividadForm
+from .models import Actividad, Curso
+from .forms import ActividadForm, CursoForm
 
 # Create your views here.
 
@@ -384,4 +384,40 @@ class ActividadFormulario(TemplateView):
 		if actividadForm.is_valid():
 			actividad = actividadForm.save(commit=False)
 			actividad.save()
-		return render(request, self.template_name, self.get_context_data(**kwargs))		
+		return render(request, self.template_name, self.get_context_data(**kwargs))	
+
+
+##################### CLASE REGISTRAR CURSO #########################################
+
+
+class RegistrarCurso(TemplateView):
+	template_name = 'moodle/registro/reg_curso.html'
+	curso_form = CursoForm()
+
+	def get_context_data(self, **kwargs):
+		context = super(RegistrarCurso, self).get_context_data(**kwargs)
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.verGrupo(self.request.user)
+		context[grupo] = grupo
+
+		context['form'] = self.curso_form
+
+		return context
+
+	def post(self, request, *args, **kwargs):
+		context = super(RegistrarCurso, self).get_context_data(**kwargs)
+		curso_form = CursoForm(request.POST)
+		print("guardando...")
+
+		if curso_form.is_valid():
+			id_curso = curso_form.cleaned_data.get('id')
+			print(id_curso)
+			curso_form.save()
+			context['exito'] = 'OK'
+			context['curso'] = Curso.objects.get(id=id_curso)
+
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.verGrupo(self.request.user)
+		context[grupo] = grupo
+
+		return render(request, self.template_name, context)

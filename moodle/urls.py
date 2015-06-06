@@ -2,6 +2,7 @@ from django.conf.urls import include, url, patterns
 from django.contrib import admin
 from .views import LeaderDetalles, BuscarLeaderTeacher, TipoReportes, CursoDetalles, BuscarCursos, ListarNota, MatricularLeaderTeacher, MasterDetalles, MasterCursos
 from .views import MasterCohorte, ActividadDetalles, ActividadFormulario
+from .views import RegistrarCurso
 
 leader_urls = patterns ('',
     url(r'^(?P<id_persona>\d+)/$', LeaderDetalles.as_view(), name="detalles_leader"),
@@ -13,8 +14,13 @@ secretaria_urls = patterns ('',
     url(r'^(?P<id_persona>\d+)_(?P<id_curso>\d+)/$', MatricularLeaderTeacher.as_view(), name="matricular_docente"),
 )
 
+registrar_urls = patterns ('',
+    url(r'^curso/$', RegistrarCurso.as_view(), name="registrar_curso"),
+)
+
 admin_urls = patterns ('',
     url(r'^reportes$', TipoReportes.as_view(), name="admin_reportes"),
+    url(r'^registro/', include(registrar_urls)),
 )
 
 curso_urls = patterns ('',

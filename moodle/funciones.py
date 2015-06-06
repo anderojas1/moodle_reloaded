@@ -29,6 +29,8 @@ class VerificaUsuario():
 		persona = self.buscarPersona(usuario)
 		leader = LeaderTeacher.objects.get(id=persona.id)
 		return leader
+	def verGrupo(self, usuario):
+		return self.buscarGrupo(usuario)
 
 #****************Funciones extra para BuscarDocentes*****************
 class Iterador():

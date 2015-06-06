@@ -1,13 +1,13 @@
 from django.forms import ModelForm
 from django import forms
-from .models import LeaderTeacher, Curso, RegistroNotas, Actividad
+from .models import LeaderTeacher, Curso, RegistroNotas, Actividad, Curso
 
 class LeaderTeacherForm(ModelForm):
 
 	class Meta:
 		model = LeaderTeacher
 		fields = ['id', 'sexo', 'fecha_nacimiento', 'celular', 'fijo', 'institucion']
-		widgets = {
+		"""widgets = {
 			'id': forms.TextInput(attrs={
 				'class': 'campos_formularios',
 				'type': 'text',
@@ -28,7 +28,7 @@ class LeaderTeacherForm(ModelForm):
 				'type': 'text',
 				'placeholder': 'Teléfono Fijo',
 				}),
-		}
+		}"""
 
 	def clean(self):
 
@@ -141,4 +141,34 @@ class ActividadForm(ModelForm):
 				'type': 'text',
 				'placeholder': 'Porcentaje de la Actividad',
 				}),
+		}
+
+################# CLASE CURSOFORM ###########################
+
+class CursoForm (ModelForm):
+
+	 class Meta():
+	 	
+	 	model = Curso
+	 	fields = ['id', 'nombre', 'area', 'descripcion']
+	 	widgets = {
+			'id': forms.TextInput(attrs={
+				'id': 'inputName3',
+				'class': 'form-control',
+				'type': 'text',
+				'placeholder': 'Identificación Curso',
+			}),
+			'nombre': forms.TextInput(attrs={
+				'id': 'inputName3',
+				'class': 'form-control',
+				'type': 'text',
+				'placeholder': 'Nombre Curso',
+			}),
+			'descripcion': forms.TextInput(attrs={
+				'id': 'inputName3',
+				'class': 'form-control',
+				'type': 'textarea',
+				'placeholder': 'Descripción Curso',
+			}),
+			#'area': forms.SelectInput
 		}

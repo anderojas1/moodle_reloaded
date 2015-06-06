@@ -11,7 +11,7 @@ class UserForm(ModelForm):
         fields = ['first_name', 'last_name', 'email', 'username', 'password']
         widgets = {
         	'first_name': forms.TextInput(attrs = {
-        		'class': 'campos_formularios',
+        		'class': "col-sm-2 control-label",
         		'type': 'text',
         		'placeholder': 'Nombres'
         	}),
