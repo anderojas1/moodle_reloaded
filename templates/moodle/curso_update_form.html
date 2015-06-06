@@ -1,0 +1,31 @@
+{% extends "inicio/perfil.html" %}
+{% block title %}
+	Curso {{curso.nombre}}
+{% endblock %}
+{% block edit_curso %}
+<div class="registro">
+	<form action="" method="post" class="form-horizontal">
+		{% csrf_token %}
+		<div class="form-group">
+			<label for="inputName3" class="col-sm-2 control-label">Nombre</label>
+			<div class="col-sm-10">
+    			{{ form.nombre }}
+    		</div>
+    	</div>
+    	<div class="form-group">
+			<label for="inputName3" class="col-sm-2 control-label">Descripción</label>
+			<div class="col-sm-10">
+    			{{ form.descripcion }}
+    		</div>
+    	</div>
+    	<div class="form-group">
+			<label for="inputName3" class="col-sm-2 control-label">Área</label>
+			<div class="col-sm-10">
+    			{{ form.area }}
+    		</div>
+    	</div>
+    	<br />
+    	<input type="submit" value="Update" />
+	</form>
+</div>
+{% endblock %}

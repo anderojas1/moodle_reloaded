@@ -11,7 +11,7 @@ from .models import Actividad, Curso
 from .forms import ActividadForm, CursoForm
 from .models import Actividad, NivelEscolar
 from .forms import ActividadForm, NivelEscolarForm
-from django.views.generic.edit import DeleteView
+from django.views.generic.edit import DeleteView, UpdateView
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import redirect
 
@@ -458,6 +458,22 @@ class BorrarCurso(TemplateView):
 		curso.estado = False
 		curso.save(update_fields=['estado'])
 		return redirect('/campus/curso/buscar')
+
+
+class UpdateDatosCurso(UpdateView):
+	model = Curso
+	fields = ['nombre', 'descripcion', 'area']
+	template_name_suffix = '_update_form'
+
+	def get_context_data(self, **kwargs):
+		context = super(UpdateDatosCurso, self).get_context_data(**kwargs)
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.verGrupo(self.request.user)
+		context[grupo] = grupo
+		print (kwargs)
+
+		return context
+
 
 class GuardarNivelEscolar(TemplateView):
 

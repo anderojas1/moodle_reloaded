@@ -4,7 +4,7 @@ from .views import LeaderDetalles, BuscarLeaderTeacher, TipoReportes, CursoDetal
 from .views import MasterCohorte, ActividadDetalles, ActividadFormulario
 from .views import RegistrarCurso
 from .views import MasterCohorte, ActividadDetalles, ActividadFormulario, GuardarNivelEscolar
-from .views import BorrarCurso
+from .views import BorrarCurso, UpdateDatosCurso
 
 
 leader_urls = patterns ('',
@@ -30,6 +30,7 @@ curso_urls = patterns ('',
     url(r'^(?P<id_curso>\d+)/$', CursoDetalles.as_view(), name="detalles_curso"),
     url(r'^buscar$', BuscarCursos.as_view(), name="buscar_cursos"),
     url(r'^(?P<id_curso>\d+)/delete$', BorrarCurso.as_view(), name="borrar_curso"),
+    url(r'^(?P<pk>\d+)/update$', UpdateDatosCurso.as_view(), name="update_curso"),
 )
 
 master_urls = patterns ('',

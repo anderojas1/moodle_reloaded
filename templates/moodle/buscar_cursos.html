@@ -10,6 +10,7 @@ Búsqueda de Cursos
 			<th>Nombre</th>
 			<th>Detalles</th>
 			{% if admin %}
+			<th>Editar</th>
 			<th>Borrar</th>
 			{% endif %}
 		</tr>
@@ -18,6 +19,7 @@ Búsqueda de Cursos
 			<td>{{curso.nombre}}</td>
 			<td><a href="{{curso.get_absolute_url}}">Ver Información</a></td>
 			{% if admin %}
+			<td><a href="{{curso.get_absolute_url}}update">Modificar</a></td>
 			<td><a href="{{curso.get_absolute_url}}delete">Eliminar</a></td>
 			{% endif %}
 		</tr>
