@@ -3,6 +3,8 @@ from django.contrib import admin
 from .views import LeaderDetalles, BuscarLeaderTeacher, TipoReportes, CursoDetalles, BuscarCursos, ListarNota, MatricularLeaderTeacher, MasterDetalles, MasterCursos
 from .views import MasterCohorte, ActividadDetalles, ActividadFormulario
 from .views import RegistrarCurso
+from .views import MasterCohorte, ActividadDetalles, ActividadFormulario, GuardarNivelEscolar
+
 
 leader_urls = patterns ('',
     url(r'^(?P<id_persona>\d+)/$', LeaderDetalles.as_view(), name="detalles_leader"),
@@ -37,6 +39,11 @@ master_urls = patterns ('',
     #url(r'^buscar$', BuscarMaster.as_view(), name="master_cursos"),
 )
 
+nivel_escolar_urls = patterns ('',
+    url(r'^(?P<id_persona>\d+)/$', GuardarNivelEscolar.as_view(), name="guardar_nivel_escolar")
+
+)
+
 
 urlpatterns = patterns ('',
 	url(r'^leader/', include(leader_urls)),
@@ -44,4 +51,5 @@ urlpatterns = patterns ('',
 	url(r'^secretaria/', include(secretaria_urls)),
 	url(r'^admin/', include(admin_urls)),
 	url(r'^curso/', include(curso_urls)),
+    url(r'^nivel_escolar/', include(nivel_escolar_urls))
 )

@@ -9,6 +9,9 @@ from .reportes import BuscarReportes
 from .funciones import CalculaNotaLeader
 from .models import Actividad, Curso
 from .forms import ActividadForm, CursoForm
+from .models import Actividad, NivelEscolar
+from .forms import ActividadForm, NivelEscolarForm
+
 
 # Create your views here.
 
@@ -421,3 +424,34 @@ class RegistrarCurso(TemplateView):
 		context[grupo] = grupo
 
 		return render(request, self.template_name, context)
+
+class GuardarNivelEscolar(TemplateView):
+
+	template_name = 'moodle/guardar_nivel_escolar.html'
+	nivelEscolarForm = NivelEscolarForm(prefix='nivel_escolar')
+
+	def get_context_data(self, **kwargs):
+		context = super(GuardarNivelEscolar, self).get_context_data(**kwargs)
+		if 'nivelEscolarForm' not in context:
+			context['nivelEscolarForm'] = self.nivelEscolarForm
+		return context
+
+	def post(self, request, *args, **kwargs):
+		nivelEscolarForm = NivelEscolarForm(request.POST)
+		if nivelEscolarForm.is_valid():
+			obj = NivelEscolar.get_objects(nombre = nivelEscolarForm.cleaned_data.get("nombre")).exists()
+
+			if obj == False:
+				nivelEscolarForm.save()
+			else:
+				pass
+
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.buscarGrupo(request.user)
+		context = super(GuardarNivelEscolar, self).get_context_data(**kwargs)
+		context[grupo] = grupo
+
+		if grupo == 'leader':
+			return render(request, 'detalles_leader')
+		else:
+			return render(request, 'detalles_master')

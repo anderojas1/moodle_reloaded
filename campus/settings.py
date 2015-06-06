@@ -87,6 +87,9 @@ DATABASES = {
     }
 }
 
+MEDIA_ROOT = 'Documentos/media/'
+MEDIA_URL = '/media/'
+
 LOGIN_REDIRECT_URL = 'profile/'
 
 # Internationalization
