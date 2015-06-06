@@ -9,8 +9,8 @@ from .reportes import BuscarReportes
 from .funciones import CalculaNotaLeader
 from .models import Actividad, Curso
 from .forms import ActividadForm, CursoForm
-from .models import Actividad, NivelEscolar
-from .forms import ActividadForm, NivelEscolarForm
+from .models import Actividad, #NivelEscolar
+from .forms import ActividadForm, #NivelEscolarForm
 from django.views.generic.edit import DeleteView, UpdateView
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import redirect
@@ -481,7 +481,7 @@ class UpdateDatosCurso(UpdateView):
 
 		return context
 
-
+''' EN REVISION
 class GuardarNivelEscolar(TemplateView):
 
 	template_name = 'moodle/guardar_nivel_escolar.html'
@@ -512,3 +512,4 @@ class GuardarNivelEscolar(TemplateView):
 			return render(request, 'detalles_leader')
 		else:
 			return render(request, 'detalles_master')
+			'''

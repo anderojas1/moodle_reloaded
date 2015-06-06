@@ -144,6 +144,7 @@ class RegistroNotas(models.Model):#antes se llamaba ternaria
     def __str__(self):
         return self.nota
 
+''' EN REVISION
 class HistorialAcademico(models.Model):
     opt_tipo_estudio = ((0, 'Bachillerato'), (1, 'Pregrado'),(2, 'Posgrado'),(3, 'Especializacion'),(4, 'Maestria'),(5, 'Doctorado'))
     titulo = models.CharField(max_length=100, null=True, blank=True)
@@ -151,20 +152,24 @@ class HistorialAcademico(models.Model):
     institucionAcre = models.CharField(max_length = 100, null=True, blank=True)
     fecha_realizacion = models.DateField(null=True, blank=True)
     persona = models.ForeignKey(Persona, null = True)
+    '''
 
 class Leader_Cohorte(models.Model):
     cohorte_id = models.ForeignKey(Cohorte)
     leader_id = models.ForeignKey(LeaderTeacher)
 
 
-
+''' EN REVISION
 class NivelEscolar(models.Model):
     NIVELES = ((0,'Transicion'), (1,'Educacion Inicial'), (2, 'Educacion basica primaria'),
                (3, 'Educacion basica secundaria'), (4, 'Educacion media'),
                (5, 'Nivel Superior'))
     nombre = models.SmallIntegerField(choices = NIVELES)
     soporte = models.FileField(upload_to='Documentos_Soporte')
+    '''
 
+''' EN REVISION
 class HistorialLaboral(models.Model):
     tiempolaborado = models.CharField(max_length = 2)
     nivelEscolar = models.ForeignKey(NivelEscolar)
+    '''
