@@ -62,8 +62,6 @@
                     </ul>
                     {% block cohortes_busqueda %}
                     {% endblock %}
-                    {% block cohortes %}
-                    {% endblock %}
                     {% block actividades %}
                     {% endblock %}
                 {% endif %}
@@ -72,6 +70,10 @@
             {% endblock %}
             {% block info_curso %}
             {% endblock %}
+            {% if admin or master %}
+                {% block cohortes %}
+                {% endblock %}
+            {% endif %}
         {% else %}
             <div class="no_sesion">
                 <p>

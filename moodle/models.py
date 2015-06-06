@@ -126,7 +126,7 @@ class Cohorte(models.Model):
     fecha_inicio = models.DateField(null=True)
     fecha_fin = models.DateField(null=True)
     curso = models.ForeignKey(Curso)
-    master = models.ForeignKey(MasterTeacher, null=True)
+    master = models.ForeignKey(MasterTeacher, null=True, blank=True)
 
     def __str__(self):
         return self.id

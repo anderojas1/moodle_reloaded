@@ -335,6 +335,7 @@ class CohortesCursos(TemplateView):
 
 		elif grupo == 'admin':
 			self.cohortes = Cohorte.objects.all()
+			print(self.cohortes)
 
 		context['cohortes'] = self.cohortes
 		context['usuario'] = self.usuario

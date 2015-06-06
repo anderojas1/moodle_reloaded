@@ -1,6 +1,10 @@
 {% extends "inicio/perfil.html" %}
 {% block title %}
-    Cohortes asignadas | {{usuario.first_name}}
+    {% if leader %}
+    	Cohortes asignadas | {{usuario.first_name}}
+    {% elif admin %}
+    	Cohortes de cursos
+    {% endif %}
 {% endblock %}
 {% block cohortes %}
 <h2>Cohortes Asignadas</h2>

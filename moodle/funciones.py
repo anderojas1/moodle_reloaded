@@ -148,18 +148,15 @@ class MatricularLeaderTeacherCohorte():
 					break
 
 				else:
-					masterT = MasterTeacher.objects.get(id=1124124)
-					cohorte = Cohorte(id=str(len(Cohorte.objects.all())),semestre=1, fecha_inicio='2015-08-20',
-						fecha_fin='2015-10-20', curso = cursos, master = masterT)
+					cohorte = Cohorte(id=str(len(Cohorte.objects.all())),semestre=None, fecha_inicio=None,
+						fecha_fin=None, curso = cursos)
 					cohorte.save()
 					matricula = Leader_Cohorte(cohorte_id=cohorte, leader_id=leader)
 					matricula.save()
 					flag = False
 					break
 		else:
-			print("no hay nada")
-			masterT = MasterTeacher.objects.get(id=1124124)
-			print (masterT)
+			
 			cohorte = Cohorte(id=str(len(Cohorte.objects.all())+1),semestre=None, fecha_inicio=None,
 				fecha_fin=None, curso = cursos, master = None)
 			cohorte.save()
