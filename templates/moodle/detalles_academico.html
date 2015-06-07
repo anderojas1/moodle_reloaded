@@ -1,0 +1,19 @@
+{% extends "inicio/perfil.html" %}
+{% block title %}
+    Historial academico | {{usuario_actual.first_name}}
+{% endblock %}
+{% block busqueda_academico %}
+    <div class="resultado_busqueda">
+        <h2>Historial academico</h2>
+        <table>
+        {% for academico in academicos %}
+            <tr>
+                <td>{{academico.0.titulo}}</td>
+                <td>{{academico.1.tipoEstudio}}</td>
+                <td>{{academico.2.fechaRealizacion}}</td>
+                <td>{{academico.3.institucionAcree}}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+{% endblock %}

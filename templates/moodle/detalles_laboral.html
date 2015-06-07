@@ -1,0 +1,19 @@
+{% extends "inicio/perfil.html" %}
+{% block title %}
+    Historial laboral | {{usuario_actual.first_name}}
+{% endblock %}
+{% block busqueda_laboral %}
+    <div class="resultado_busqueda">
+        <h2>Historial academico</h2>
+        <table>
+        {% for laboral in laborales %}
+            <tr>
+                <td>{{laboral.0.tiempoLaborado}}</td>
+                <td>{{laboral.1.nivelesEscolares}}</td>
+                <td>{{laboral.2.areasDesempenio}}</td>
+                <td>{{laboral.3.gradosLaborales}}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+{% endblock %}

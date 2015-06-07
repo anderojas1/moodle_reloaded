@@ -6,6 +6,7 @@ from .views import RegistrarCurso
 from .views import BorrarCurso, UpdateDatosCurso, CohortesCursos, UpdateCohorte, ActividadesCohortes
 from .views import DetallesCohorte, ActividadDetalles, ActividadFormulario, RegistrarDemograficos
 from .views import AgregarHistoriaAcademico, AgregarHistoriaLaboral, AgregarSoporteLaboral
+from .views import DetallesHistorialAcademico, DetallesHistorialLaboral, DetallesHistorialSoporte
 
 leader_urls = patterns ('',
     url(r'^(?P<id_persona>\d+)/$', LeaderDetalles.as_view(), name="detalles_leader"),
@@ -65,7 +66,13 @@ historial_prueba = patterns('',
     url(r'^(?P<id_persona>\d+)/laboral/$', AgregarHistoriaLaboral.as_view(), name="agregar_laboral"),
     url(r'^(?P<id_persona>\d+)/academico/$', AgregarHistoriaAcademico.as_view(), name="agregar_academico"),
     url(r'^(?P<id_persona>\d+)/soporte/$', AgregarSoporteLaboral.as_view(), name="agregar_soporte"),
+    url(r'^(?P<id_persona>\d+)/academico_detalles/$', DetallesHistorialAcademico.as_view(), name="academico_detalles"),
+    url(r'^(?P<id_persona>\d+)/laboral_detalles/$', DetallesHistorialLaboral.as_view(), name="laboral_detalles"),
+    url(r'^(?P<id_persona>\d+)/soporte_detalles/$', DetallesHistorialSoporte.as_view(), name="soporte_detalles"),
+
 )
+
+
 
 
 urlpatterns = patterns ('',

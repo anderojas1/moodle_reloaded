@@ -235,4 +235,4 @@ class HistorialAcademico(models.Model):
     persona = models.OneToOneField(Persona)
 
     def __str__(self):
-        return self.titulo + "-" + self.fechaRealizacion
+        return self.titulo + "-" + str(self.fechaRealizacion)

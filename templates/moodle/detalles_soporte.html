@@ -1,0 +1,18 @@
+{% extends "inicio/perfil.html" %}
+{% block title %}
+    Historial soporte laboral | {{usuario_actual.first_name}}
+{% endblock %}
+{% block busqueda_soporte %}
+    <div class="resultado_busqueda">
+        <h2>Historial soporte</h2>
+        <table>
+        {% for soporte in soportes %}
+            <tr>
+                <td>{{soporte.0.tiempo}}</td>
+                <td>{{soporte.1.nombreInsti}}</td>
+                <td>{{soporte.2.docSoporte}}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+{% endblock %}

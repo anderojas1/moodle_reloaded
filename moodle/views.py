@@ -71,7 +71,6 @@ class BuscarLeaderTeacher(TemplateView):
 
 		buscar_docentes = BuscarDocentes()
 		matriculas = buscar_docentes.buscarDocentesInscritos(self.secretaria)
-		print(len(matriculas))
 		curso_docente = [[0 for x in range(2)] for x in range(len(matriculas))]
 		for i, matricula in enumerate (matriculas):
 			docente = LeaderTeacher.objects.get(id = matricula.get().identificacion_leader_teacher_id)
@@ -497,7 +496,6 @@ class ActividadDetalles(TemplateView):
 		self.actividad = Actividad.objects.get(id=self.kwargs['id_actividad'])
 		if 'actividad' not in context:
 			context['actividad'] = self.actividad
-			print(self.actividad.titulo)
 
 		ver_grupo = VerificaUsuario()
 		grupo = ver_grupo.buscarGrupo(self.usuario_actual)
@@ -749,5 +747,108 @@ class AgregarSoporteLaboral(TemplateView):
 			soporteLaboralForm.save()
 		return render(request, self.template_name, self.get_context_data(**kwargs))	
 
+class DetallesHistorialAcademico(TemplateView):
+	template_name = 'moodle/detalles_academico.html'
+	academicos = None
+	usuario_actual = None
+	personaX = None
 
+	def get_context_data(self, **kwargs):
+		context = super(DetallesHistorialAcademico, self).get_context_data(**kwargs)
+		self.usuario_actual = self.request.user
 
+		self.personaX = Persona.objects.get(id=self.kwargs['id_persona'])
+		self.academicos = HistorialAcademico.objects.filter(persona=self.personaX)
+		if 'academicos' not in context:
+			context['academicos'] = self.academicos
+
+		if 'usuario_actual' not in context:
+			context['usuario_actual'] = self.usuario_actual
+
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.buscarGrupo(self.usuario_actual)
+		context[grupo] = grupo
+
+		if grupo=='master':
+			persona = Persona.objects.get(id=kwargs['id_persona'])
+			master = MasterTeacher.objects.get(id=persona.id)
+			context['master'] = master
+			context['persona'] = persona
+		if grupo=='leader':
+			persona = Persona.objects.get(id=kwargs['id_persona'])
+			leader = LeaderTeacher.objects.get(id=persona.id)
+			context['leader'] = leader
+			context['persona'] = persona
+		return context
+
+class DetallesHistorialLaboral(TemplateView):
+	template_name = 'moodle/detalles_laboral.html'
+	laborales = None
+	usuario_actual = None
+	personaX = None
+
+	def get_context_data(self, **kwargs):
+		context = super(DetallesHistorialLaboral, self).get_context_data(**kwargs)
+		self.usuario_actual = self.request.user
+
+		self.personaX = Persona.objects.get(id=self.kwargs['id_persona'])
+		self.laborales = HistorialLaboral.objects.filter(persona=self.personaX)
+		if 'laborales' not in context:
+			context['laborales'] = self.laborales
+
+		if 'usuario_actual' not in context:
+			context['usuario_actual'] = self.usuario_actual
+
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.buscarGrupo(self.usuario_actual)
+		context[grupo] = grupo
+
+		if grupo=='master':
+			persona = Persona.objects.get(id=kwargs['id_persona'])
+			master = MasterTeacher.objects.get(id=persona.id)
+			context['master'] = master
+			context['persona'] = persona
+		if grupo=='leader':
+			persona = Persona.objects.get(id=kwargs['id_persona'])
+			leader = LeaderTeacher.objects.get(id=persona.id)
+			context['leader'] = leader
+			context['persona'] = persona
+		return context
+
+class DetallesHistorialSoporte(TemplateView):
+	template_name = 'moodle/detalles_soporte.html' 
+	laborales = None
+	soportes = None
+	usuario_actual = None
+	personaX = None
+
+	def get_context_data(self, **kwargs):
+		context = super(DetallesHistorialSoporte, self).get_context_data(**kwargs)
+		self.usuario_actual = self.request.user
+
+		self.personaX = Persona.objects.get(id=self.kwargs['id_persona'])
+		self.laborales = HistorialLaboral.objects.filter(persona=self.personaX)
+		for laboral in self.laborales:
+			soportesTemporal = SoporteLaboralNuevo.objects.filter(id=laboral.soporteLaboral.id)
+			soportes.append(soportesTemporal)
+		if 'soportes' not in context:
+			context['soportes'] = self.soportes
+
+		if 'usuario_actual' not in context:
+			context['usuario_actual'] = self.usuario_actual
+
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.buscarGrupo(self.usuario_actual)
+		context[grupo] = grupo
+
+		if grupo=='master':
+			persona = Persona.objects.get(id=kwargs['id_persona'])
+			master = MasterTeacher.objects.get(id=persona.id)
+			context['master'] = master
+			context['persona'] = persona
+		if grupo=='leader':
+			persona = Persona.objects.get(id=kwargs['id_persona'])
+			leader = LeaderTeacher.objects.get(id=persona.id)
+			context['leader'] = leader
+			context['persona'] = persona
+		return context
