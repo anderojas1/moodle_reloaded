@@ -480,10 +480,6 @@ class ActividadesCohortes(TemplateView):
 
 		return context
 
-
-############################################################################
-##				Nuevo codigo
-############################################################################
 class ActividadDetalles(TemplateView):
 	template_name = 'moodle/detalles_actividad.html'
 	actividad = None
@@ -745,7 +741,11 @@ class AgregarSoporteLaboral(TemplateView):
 		soporteLaboralForm = SoporteLaboralNuevoform(request.POST)
 		if soporteLaboralForm.is_valid():
 			soporteLaboralForm.save()
-		return render(request, self.template_name, self.get_context_data(**kwargs))	
+		return render(request, self.template_name, self.get_context_data(**kwargs))
+
+#############################################################################################
+##				Vistas en detalles por revisar (errores en los htmls correspondientes)
+#############################################################################################
 
 class DetallesHistorialAcademico(TemplateView):
 	template_name = 'moodle/detalles_academico.html'

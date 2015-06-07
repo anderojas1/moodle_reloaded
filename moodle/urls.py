@@ -66,14 +66,11 @@ historial_prueba = patterns('',
     url(r'^(?P<id_persona>\d+)/laboral/$', AgregarHistoriaLaboral.as_view(), name="agregar_laboral"),
     url(r'^(?P<id_persona>\d+)/academico/$', AgregarHistoriaAcademico.as_view(), name="agregar_academico"),
     url(r'^(?P<id_persona>\d+)/soporte/$', AgregarSoporteLaboral.as_view(), name="agregar_soporte"),
-    url(r'^(?P<id_persona>\d+)/academico_detalles/$', DetallesHistorialAcademico.as_view(), name="academico_detalles"),
-    url(r'^(?P<id_persona>\d+)/laboral_detalles/$', DetallesHistorialLaboral.as_view(), name="laboral_detalles"),
-    url(r'^(?P<id_persona>\d+)/soporte_detalles/$', DetallesHistorialSoporte.as_view(), name="soporte_detalles"),
+    url(r'^(?P<id_persona>\d+)/academico_detalles/$', DetallesHistorialAcademico.as_view(), name="academico_detalles"), #HTML POR REVISAR
+    url(r'^(?P<id_persona>\d+)/laboral_detalles/$', DetallesHistorialLaboral.as_view(), name="laboral_detalles"), #HTML POR REVISAR
+    url(r'^(?P<id_persona>\d+)/soporte_detalles/$', DetallesHistorialSoporte.as_view(), name="soporte_detalles"), 
 
 )
-
-
-
 
 urlpatterns = patterns ('',
 	url(r'^leader/', include(leader_urls)),
@@ -82,5 +79,5 @@ urlpatterns = patterns ('',
 	url(r'^admin/', include(admin_urls)),
 	url(r'^curso/', include(curso_urls)),
     url(r'^nivel_escolar/', include(nivel_escolar_urls)),
-    url(r'^historial/', include(historial_prueba))
+    url(r'^historial/', include(historial_prueba)) #pattern con problemas en html
 )
