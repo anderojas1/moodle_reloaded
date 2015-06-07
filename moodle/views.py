@@ -7,13 +7,10 @@ from .funciones import VerificaUsuario, BuscarDocentes, MatricularLeaderTeacherC
 from .forms import Buscar, NotasPorEstudiante, EstudiantesCurso, EstudiantesDepartamentoCurso, DatosDemograficosForm
 from .reportes import BuscarReportes
 from .funciones import CalculaNotaLeader
-<<<<<<< HEAD
 from .models import Actividad, Curso
 from .forms import ActividadForm, CursoForm, CohorteForm
-=======
 from .models import Actividad, Curso, DatosDemograficos
 from .forms import ActividadForm, CursoForm
->>>>>>> 698b48c6c0d429d79dff4c0c86ede157ebdd265c
 from .models import Actividad #NivelEscolar
 from .forms import ActividadForm #NivelEscolarForm
 from django.views.generic.edit import DeleteView, UpdateView

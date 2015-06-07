@@ -3,14 +3,10 @@ from django.contrib import admin
 from .views import LeaderDetalles, BuscarLeaderTeacher, TipoReportes, CursoDetalles, BuscarCursos, ListarNota, MatricularLeaderTeacher, MasterDetalles, CohortesCursos
 from .views import DetallesCohorte, ActividadDetalles, ActividadFormulario
 from .views import RegistrarCurso
-<<<<<<< HEAD
 from .views import DetallesCohorte, ActividadDetalles, ActividadFormulario
 from .views import BorrarCurso, UpdateDatosCurso, CohortesCursos, UpdateCohorte
-=======
 from .views import DetallesCohorte, ActividadDetalles, ActividadFormulario, RegistrarDemograficos
 from .views import BorrarCurso, UpdateDatosCurso, CohortesCursos
->>>>>>> 698b48c6c0d429d79dff4c0c86ede157ebdd265c
-
 
 leader_urls = patterns ('',
     url(r'^(?P<id_persona>\d+)/$', LeaderDetalles.as_view(), name="detalles_leader"),
