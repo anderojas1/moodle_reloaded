@@ -1,0 +1,67 @@
+{% extends "inicio/perfil.html" %}
+{% block title %}
+    Registro | Datos Demograficos
+{% endblock %}
+
+{% block demograficos %}
+
+<div class="registro">
+    	<h2>Registro de datos demograficos</h2>
+
+		<form action="" method="post" class="form-horizontal">
+			{%  csrf_token %}
+
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label"> Estrato Socio Economico </label>
+                <div class="col-sm-10">
+                    {{ form.estrato }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label"> Tipo de Vivienda </label>
+                <div class="col-sm-10">
+                    {{ form.tipo_vivienda }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label"> Caracter de la Vivienda </label>
+                <div class="col-sm-10">
+                    {{ form.caracter_vivienda }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label"> ¿Con Cuantas Personas Convive? </label>
+                <div class="col-sm-10">
+                    {{ form.personas_convive }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label"> Estado Civil </label>
+                <div class="col-sm-10">
+                    {{ form.estado_civil }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label"> Numero de Hijos </label>
+                <div class="col-sm-10">
+                    {{ form.numero_hijos }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label"> Ciudad de Nacimiento </label>
+                <div class="col-sm-10">
+                    {{ form.ciudad_nacimiento }}
+                </div>
+            </div>
+    			<button type="submit" class="boton_enviar">Registrar</button>
+    	</form>
+    
+</div>
+
+{% endblock %}

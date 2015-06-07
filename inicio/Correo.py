@@ -38,7 +38,7 @@ class Correo:
 
     def enviarMensaje(self, destinatario, nombreDestinatario):
         #Construccion del mensaje
-        mensaje = "El usuario " + nombreDestinatario + " ha sido registrado exitosamente"
+        mensaje = "¡¡¡ Felicitaciones !!! \n Usuario " + nombreDestinatario + " sus datos han sido registrado exitosamente."
         texto = MIMEText(mensaje)
         texto['From'] = self.__remitente
         texto['To'] = destinatario

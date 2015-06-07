@@ -2,7 +2,8 @@ from django.forms import ModelForm
 from django import forms
 from .models import LeaderTeacher, Curso, RegistroNotas, Actividad, Curso, Cohorte, MasterTeacher
 from .models import LeaderTeacher, RegistroNotas, Actividad
-
+from .models import LeaderTeacher, Curso, RegistroNotas, Actividad, Curso
+from .models import LeaderTeacher, RegistroNotas, Actividad, DatosDemograficos
 class LeaderTeacherForm(ModelForm):
 
 	class Meta:
@@ -192,3 +193,8 @@ class CohorteForm(ModelForm):
 	class Meta:
 		model = NivelEscolar
 		fields = ['nombre', 'soporte']"""
+
+class DatosDemograficosForm(ModelForm):
+	class Meta:
+		model = DatosDemograficos
+		fields = ['estrato', 'tipo_vivienda', 'caracter_vivienda', 'personas_convive', 'estado_civil', 'numero_hijos','ciudad_nacimiento']

@@ -3,12 +3,18 @@ from django.contrib import admin
 from .views import LeaderDetalles, BuscarLeaderTeacher, TipoReportes, CursoDetalles, BuscarCursos, ListarNota, MatricularLeaderTeacher, MasterDetalles, CohortesCursos
 from .views import DetallesCohorte, ActividadDetalles, ActividadFormulario
 from .views import RegistrarCurso
+<<<<<<< HEAD
 from .views import DetallesCohorte, ActividadDetalles, ActividadFormulario
 from .views import BorrarCurso, UpdateDatosCurso, CohortesCursos, UpdateCohorte
+=======
+from .views import DetallesCohorte, ActividadDetalles, ActividadFormulario, RegistrarDemograficos
+from .views import BorrarCurso, UpdateDatosCurso, CohortesCursos
+>>>>>>> 698b48c6c0d429d79dff4c0c86ede157ebdd265c
 
 
 leader_urls = patterns ('',
     url(r'^(?P<id_persona>\d+)/$', LeaderDetalles.as_view(), name="detalles_leader"),
+    url(r'^demograficos/(?P<id_persona>\d+)/$', RegistrarDemograficos.as_view(), name="demograficos_leader"), #Nuevo!
 )
 
 secretaria_urls = patterns ('',
@@ -44,7 +50,8 @@ master_urls = patterns ('',
     url(r'^(?P<id_persona>\d+)/cursos/$', CohortesCursos.as_view(), name="cursos"),
     url(r'^(?P<id_persona>\d+)/cursos/(?P<id_cohorte>\d+)/$', DetallesCohorte.as_view(), name="detalles_cohorte"),
     url(r'^actividad/(?P<id_actividad>\d+)/$', ActividadDetalles.as_view(), name="detalles_actividad"), #Nuevo!
-    url(r'^registrar_actividad$', ActividadFormulario.as_view(), name="registrar_actividad") #Nuevo!
+    url(r'^registrar_actividad$', ActividadFormulario.as_view(), name="registrar_actividad"), #Nuevo!
+    url(r'^demograficos/(?P<id_persona>\d+)/$', RegistrarDemograficos.as_view(), name="demograficos_master"), #Nuevo!
     #url(r'^buscar$', BuscarMaster.as_view(), name="master_cursos"),
 )
 

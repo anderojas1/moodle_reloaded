@@ -40,14 +40,16 @@ class SignupLeaderTeacher(TemplateView):
 			leader.save()
 
 			#print(user.email)
-			#print(user.first_name)
+			#print(user.username)
+			#print(user.username)
+			#print(user.password)
 
 			grupo = Group.objects.get(name='leader')
 			user.groups.add(grupo)
 
 			#Enviar Correo
-			#objMensaje = Correo("ciersurcolombia@gmail.com", "univalle", "ciersurcolombia@gmail.com")
-			#objMensaje.enviarMensaje(user.email, user.first_name)
+			objMensaje = Correo("ciersurcolombia@gmail.com", "univalle", "ciersurcolombia@gmail.com")
+			objMensaje.enviarMensaje(user.email, user.first_name)
 
 			# return reverse_lazy('index')
 		return render(request, self.template_name, self.get_context_data(**kwargs))
@@ -69,7 +71,7 @@ class Perfil(TemplateView):
 		self.usuario_actual = self.request.user
 		ver_grupo = VerificaUsuario()
 		grupo = ver_grupo.buscarGrupo(self.usuario_actual)
-		print (grupo)
+		#print (grupo)
 		persona = ''
 		secretaria = ''
 		usuario = None

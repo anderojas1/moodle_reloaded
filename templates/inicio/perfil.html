@@ -70,6 +70,10 @@
             </div>
             {% block buscar_cursos %}
             {% endblock %}
+            {% if leader or master %}
+                {% block demograficos %}
+                {% endblock %}
+            {% endif %}
             {% block info_curso %}
             {% endblock %}
             {% if admin or master %}
