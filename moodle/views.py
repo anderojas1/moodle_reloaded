@@ -9,8 +9,8 @@ from .reportes import BuscarReportes
 from .funciones import CalculaNotaLeader
 from .models import Actividad, Curso
 from .forms import ActividadForm, CursoForm
-from .models import Actividad, #NivelEscolar
-from .forms import ActividadForm, #NivelEscolarForm
+from .models import Actividad #NivelEscolar
+from .forms import ActividadForm#NivelEscolarForm
 from django.views.generic.edit import DeleteView, UpdateView
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import redirect
@@ -103,28 +103,32 @@ class CursoDetalles(TemplateView):
 
 	def post(self, request, *args, **kwargs):
 		context = super(CursoDetalles, self).get_context_data(**kwargs)
-		leader = self.ver_grupo.buscarLeaderTeacher(self.request.user)
-		self.curso = Curso.objects.get(id=context['id_curso'])
-		try:
-			verificar = Matricula.objects.get(identificacion_leader_teacher=leader.id, 
-				identificacion_curso=self.curso.id)
-			context['exito'] = 'Usted ya se matriculó a este curso'
-		except ObjectDoesNotExist:
-			matricula = Matricula(identificacion_leader_teacher=leader, identificacion_curso=self.curso,
-				estado_matricula=2)
-			matricula.save()
-			context['exito'] = 'Se ha realizado la matrícula exitosamente'
-		
-		self.usuario_actual = self.request.user
-		grupo = self.ver_grupo.buscarGrupo(self.usuario_actual)
-		context[grupo] = grupo
-
 		self.curso = Curso.objects.get(id=context['id_curso'])
 		context['curso'] = self.curso
 
+		self.usuario_actual = self.request.user
+		grupo = self.ver_grupo.buscarGrupo(self.usuario_actual)
+		context[grupo] = grupo
 		area = Area.objects.get(id=self.curso.area_id)
 		context['area'] = area
-		return render(request, self.template_name, context)
+
+		if grupo == 'leader':			
+			
+			leader = self.ver_grupo.buscarLeaderTeacher(self.request.user)
+			try:
+				verificar = Matricula.objects.get(identificacion_leader_teacher=leader.id, 
+					identificacion_curso=self.curso.id)
+				context['exito'] = 'Usted ya se inscribió a este curso'
+			except ObjectDoesNotExist:
+				matricula = Matricula(identificacion_leader_teacher=leader, identificacion_curso=self.curso,
+					estado_matricula=2)
+				matricula.save()
+				context['exito'] = 'Se ha realizado la inscripción exitosamente'
+				return render(request, self.template_name, context)
+
+		elif grupo == 'admin':
+			return redirect('/campus/curso/' + kwargs['id_curso'] + '/cohortes')
+
 
 class BuscarCursos(TemplateView):
 	template_name = 'moodle/buscar_cursos.html'
@@ -334,7 +338,7 @@ class CohortesCursos(TemplateView):
 			context['persona'] = persona#if master
 
 		elif grupo == 'admin':
-			self.cohortes = Cohorte.objects.all()
+			self.cohortes = Cohorte.objects.filter(curso=kwargs['id_curso'])
 			print(self.cohortes)
 
 		context['cohortes'] = self.cohortes
@@ -351,17 +355,29 @@ class CohortesCursos(TemplateView):
 
 		return context
 
-class MasterCohorte(TemplateView):
+class DetallesCohorte(TemplateView):
 
 	template_name = 'moodle/detalles_cohorte.html'
 
 	def get_context_data(self, **kwargs):
-		context = super(MasterCohorte, self).get_context_data(**kwargs)
+		context = super(DetallesCohorte, self).get_context_data(**kwargs)
 		usuario = self.request.user
-		persona = Persona.objects.get(id=kwargs['id_persona'])
-		master = MasterTeacher.objects.get(id=persona.id)
-		context['master'] = master
-		context['persona'] = persona
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.buscarGrupo(usuario)
+		print(kwargs)
+		curso = Curso.objects.get(id=kwargs['id_curso'])
+		context['curso'] = curso
+
+		context[grupo] = grupo		
+		if grupo == 'master':
+			persona = Persona.objects.get(id=kwargs['id_persona'])
+			master = MasterTeacher.objects.get(id=persona.id)
+			context['master'] = master
+			context['persona'] = persona
+
+		elif grupo == 'admin':
+			cohorte = Cohorte.objects.get(id=kwargs['id_cohorte'])
+			context['cohorte'] = cohorte
 
 		return context
 

@@ -29,11 +29,16 @@
 	{% if leader %}
 	<form method="POST">
 		{%  csrf_token %}
-		<button type="submit" formmethod="post">Matricularme</button>
+		<button type="submit" formmethod="post">Inscribirme</button>
 	</form>
-	{% endif %}
-	{% if exito %}
-		<p class="info_matricula">{{exito}}</p>
+		{% if exito %}
+			<p class="info_matricula">{{exito}}</p>		
+		{% endif %}
+	{% elif admin %}
+	<form method="POST">
+		{%  csrf_token %}
+		<button type="submit">Ver Cohortes</button>
+	</form>
 	{% endif %}
 </div>
 {% endblock %}

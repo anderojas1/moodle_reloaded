@@ -1,10 +1,10 @@
 from django.conf.urls import include, url, patterns
 from django.contrib import admin
 from .views import LeaderDetalles, BuscarLeaderTeacher, TipoReportes, CursoDetalles, BuscarCursos, ListarNota, MatricularLeaderTeacher, MasterDetalles, CohortesCursos
-from .views import MasterCohorte, ActividadDetalles, ActividadFormulario
+from .views import DetallesCohorte, ActividadDetalles, ActividadFormulario
 from .views import RegistrarCurso
-from .views import MasterCohorte, ActividadDetalles, ActividadFormulario, GuardarNivelEscolar
-from .views import BorrarCurso, UpdateDatosCurso
+from .views import DetallesCohorte, ActividadDetalles, ActividadFormulario
+from .views import BorrarCurso, UpdateDatosCurso, CohortesCursos
 
 
 leader_urls = patterns ('',
@@ -33,19 +33,21 @@ curso_urls = patterns ('',
     url(r'^buscar$', BuscarCursos.as_view(), name="buscar_cursos"),
     url(r'^(?P<id_curso>\d+)/delete$', BorrarCurso.as_view(), name="borrar_curso"),
     url(r'^(?P<pk>\d+)/update$', UpdateDatosCurso.as_view(), name="update_curso"),
+    url(r'^(?P<id_curso>\d+)/cohortes$', CohortesCursos.as_view(), name="cohortes_curso"),
+    url(r'^(?P<id_curso>\d+)/(?P<id_cohorte>\d+)$', DetallesCohorte.as_view(), name="detalles_cohorte"),
 )
 
 master_urls = patterns ('',
     url(r'^(?P<id_persona>\d+)/$', MasterDetalles.as_view(), name="detalles_master"),
     url(r'^(?P<id_persona>\d+)/cursos/$', CohortesCursos.as_view(), name="cursos"),
-    url(r'^(?P<id_persona>\d+)/cursos/(?P<id_cohorte>\d+)/$', MasterCohorte.as_view(), name="detalles_cohorte"),
+    url(r'^(?P<id_persona>\d+)/cursos/(?P<id_cohorte>\d+)/$', DetallesCohorte.as_view(), name="detalles_cohorte"),
     url(r'^actividad/(?P<id_actividad>\d+)/$', ActividadDetalles.as_view(), name="detalles_actividad"), #Nuevo!
     url(r'^registrar_actividad$', ActividadFormulario.as_view(), name="registrar_actividad") #Nuevo!
     #url(r'^buscar$', BuscarMaster.as_view(), name="master_cursos"),
 )
 
 nivel_escolar_urls = patterns ('',
-    url(r'^(?P<id_persona>\d+)/$', GuardarNivelEscolar.as_view(), name="guardar_nivel_escolar")
+    #url(r'^(?P<id_persona>\d+)/$', GuardarNivelEscolar.as_view(), name="guardar_nivel_escolar")
 
 )
 

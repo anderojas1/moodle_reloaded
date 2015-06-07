@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django import forms
 from .models import LeaderTeacher, Curso, RegistroNotas, Actividad, Curso
-from .models import LeaderTeacher, RegistroNotas, Actividad, NivelEscolar
+from .models import LeaderTeacher, RegistroNotas, Actividad
 
 class LeaderTeacherForm(ModelForm):
 
@@ -175,7 +175,7 @@ class CursoForm (ModelForm):
 		}
 
 
-class NivelEscolarForm(ModelForm):
+"""class NivelEscolarForm(ModelForm):
 	class Meta:
 		model = NivelEscolar
-		fields = ['nombre', 'soporte']
+		fields = ['nombre', 'soporte']"""

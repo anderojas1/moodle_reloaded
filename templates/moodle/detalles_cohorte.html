@@ -1,7 +1,48 @@
 {% extends "inicio/perfil.html" %}
 {% block title %}
-    cohorte | {{id_cohorte}}
+    {{id_curso}} cohorte {{id_cohorte}}
 {% endblock %}
 {% block cohortes %}
-	<p>algo {{id_cohorte}}</p>
+	{% if cohorte %}
+		<div class="table-responsive">
+			<table class="table table-hover">
+				<tr>
+					<th>
+						ID
+					</th>
+					<td>
+						{{cohorte.id}}
+					</td>
+				</tr>
+				<tr>
+					<th>
+						Semestre
+					</th>
+					<td>
+						{{cohorte.get_semestre}}
+					</td>
+				</tr>
+				<tr>
+					<th>
+						Inicio de clase
+					</th>
+					<td>
+						{{cohorte.fecha_inicio}}
+					</td>
+				</tr>
+				<tr>
+					<th>Fin de clase</th>
+					<td>{{cohorte.fecha_fin}}</td>
+				</tr>
+				<tr>
+					<th>Curso</th>
+					<td>{{curso}}</td>
+				</tr>
+				<tr>
+					<th>Docente asignado</th>
+					<td>{{cohorte.master}}</td>
+				</tr>
+			</table>
+		</div>
+	{% endif %}
 {% endblock %}

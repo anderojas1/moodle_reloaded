@@ -135,6 +135,14 @@ class Cohorte(models.Model):
     def get_absolute_url(self):
         return ("detalles_cohorte", [self.id])
 
+    def get_semestre(self):
+        if self.semestre == 0:
+            return 'Febrero-Junio'
+        elif self.semestre == 1:
+            return 'Agosto-Diciembre'
+        else:
+            return 'None'
+
 class RegistroNotas(models.Model):#antes se llamaba ternaria
     actividad = models.ForeignKey(Actividad)
     cohorte = models.ForeignKey(Cohorte)
