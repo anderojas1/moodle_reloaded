@@ -50,6 +50,9 @@
 				{% csrf_token %}
 				<button type="submit">Editar</button>
 			</form>
+		{% elif master %}
+			<br />
+			<a href="actividades">Ver actividades</a>
 		{% endif %}
 	{% endif %}
 {% endblock %}

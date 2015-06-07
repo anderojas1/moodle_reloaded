@@ -112,13 +112,8 @@ class ActividadForm(ModelForm):
 
 	class Meta:
 		model = Actividad
-		fields = ['id', 'descripcion', 'titulo', 'fecha_fin', 'fecha_inicio', 'porcentaje']
-		widgets = {
-			'id': forms.TextInput(attrs={
-				'class': 'campos_formularios',
-				'type': 'text',
-				'placeholder': 'Identificacion Actividad',
-				}),
+		fields = ['descripcion', 'titulo', 'fecha_fin', 'fecha_inicio', 'porcentaje']
+		"""widgets = {
 			'descripcion': forms.TextInput(attrs={
 				'class': 'campos_formularios',
 				'type': 'text',
@@ -144,7 +139,8 @@ class ActividadForm(ModelForm):
 				'type': 'text',
 				'placeholder': 'Porcentaje de la Actividad',
 				}),
-		}
+		}"""
+
 
 ################# CLASE CURSOFORM ###########################
 

@@ -84,7 +84,7 @@ class Curso(models.Model):
         return ("detalles_curso", [self.id])
 
 class Actividad(models.Model):
-    id = models.CharField(max_length=60, primary_key=True)#identificador unico de una actividad
+    id = models.AutoField(primary_key=True)#identificador unico de una actividad
     descripcion = models.TextField(max_length=200)
     titulo = models.CharField(max_length=60 )
     fecha_fin = models.DateField()
@@ -92,7 +92,7 @@ class Actividad(models.Model):
     porcentaje = models.CharField(max_length=60)
 
     def __str__(self):
-        return self.id
+        return self.titulo
 
 class MinMaxFloat(models.FloatField):
     def __init__(self, min_value=None, max_value=None, *args, **kwargs):
@@ -142,6 +142,14 @@ class Cohorte(models.Model):
             return 'Agosto-Diciembre'
         else:
             return 'None'
+
+class ActividadesCohorte(models.Model):
+    id = models.AutoField(primary_key=True)
+    cohorte = models.ForeignKey(Cohorte)
+    actividad = models.ForeignKey(Actividad)
+
+    def __str__(self):
+        return self.id
 
 class RegistroNotas(models.Model):#antes se llamaba ternaria
     actividad = models.ForeignKey(Actividad)

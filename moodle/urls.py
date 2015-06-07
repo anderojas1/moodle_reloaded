@@ -1,12 +1,10 @@
 from django.conf.urls import include, url, patterns
 from django.contrib import admin
-from .views import LeaderDetalles, BuscarLeaderTeacher, TipoReportes, CursoDetalles, BuscarCursos, ListarNota, MatricularLeaderTeacher, MasterDetalles, CohortesCursos
-from .views import DetallesCohorte, ActividadDetalles, ActividadFormulario
+from .views import LeaderDetalles, BuscarLeaderTeacher, TipoReportes, CursoDetalles
+from .views import BuscarCursos, ListarNota, MatricularLeaderTeacher, MasterDetalles, CohortesCursos
 from .views import RegistrarCurso
-from .views import DetallesCohorte, ActividadDetalles, ActividadFormulario
-from .views import BorrarCurso, UpdateDatosCurso, CohortesCursos, UpdateCohorte
+from .views import BorrarCurso, UpdateDatosCurso, CohortesCursos, UpdateCohorte, ActividadesCohortes
 from .views import DetallesCohorte, ActividadDetalles, ActividadFormulario, RegistrarDemograficos
-from .views import BorrarCurso, UpdateDatosCurso, CohortesCursos
 from .views import AgregarHistoriaAcademico, AgregarHistoriaLaboral, AgregarSoporteLaboral
 
 leader_urls = patterns ('',
@@ -45,9 +43,13 @@ curso_urls = patterns ('',
 master_urls = patterns ('',
     url(r'^(?P<id_persona>\d+)/$', MasterDetalles.as_view(), name="detalles_master"),
     url(r'^(?P<id_persona>\d+)/cursos/$', CohortesCursos.as_view(), name="cursos"),
-    url(r'^(?P<id_persona>\d+)/cursos/(?P<id_cohorte>\d+)/$', DetallesCohorte.as_view(), name="detalles_cohorte"),
+    url(r'^(?P<id_persona>\d+)/cursos/(?P<id_curso>\d+)/(?P<id_cohorte>\d+)/$', 
+        DetallesCohorte.as_view(), name="detalles_cohorte"),
+    url(r'^(?P<id_persona>\d+)/cursos/(?P<id_curso>\d+)/(?P<id_cohorte>\d+)/actividades$', 
+        ActividadesCohortes.as_view(), name="actividades_cohorte"),
     url(r'^actividad/(?P<id_actividad>\d+)/$', ActividadDetalles.as_view(), name="detalles_actividad"), #Nuevo!
-    url(r'^registrar_actividad$', ActividadFormulario.as_view(), name="registrar_actividad"), #Nuevo!
+    url(r'^(?P<id_persona>\d+)/cursos/(?P<id_curso>\d+)/(?P<id_cohorte>\d+)/actividades/registrar$', 
+        ActividadFormulario.as_view(), name="registrar_actividad"), #Nuevo!
     url(r'^demograficos/(?P<id_persona>\d+)/$', RegistrarDemograficos.as_view(), name="demograficos_master"), #Nuevo!
     #url(r'^buscar$', BuscarMaster.as_view(), name="master_cursos"),
 )

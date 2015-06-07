@@ -16,7 +16,11 @@
 			</tr>
 		{% for curso_cohorte in cursos_cohortes %}
 			<tr>
+				{% if admin %}
 				<td><a href="{{curso_cohorte.0.id}}">Cohorte {{curso_cohorte.0.id}}</a></td>
+				{% elif master %}
+				<td><a href="{{curso_cohorte.1.id}}/{{curso_cohorte.0.id}}">Cohorte {{curso_cohorte.0.id}}</a></td>
+				{% endif %}
 				<td>{{curso_cohorte.1.nombre}}</td>
 			</tr>
 		{% endfor %}

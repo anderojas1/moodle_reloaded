@@ -60,11 +60,13 @@
                 {% elif master %}
                     <ul class="list-inline">
                         <li><a href="/login/profile">Inicio</a></li>
-                        <li><a href="{{perfil.get_absolute_url}}">Mis Cursos</a></li>
+                        <li><a href="/campus/master/{{persona.id}}/cursos">Mis Cursos</a></li>
                     </ul>
                     {% block cohortes_busqueda %}
                     {% endblock %}
                     {% block actividades %}
+                    {% endblock %}
+                    {% block reg_actividad %}
                     {% endblock %}
                 {% endif %}
             </div>
@@ -78,6 +80,8 @@
             {% endblock %}
             {% if admin or master %}
                 {% block cohortes %}
+                {% endblock %}
+                {% block actividades_cohorte %}
                 {% endblock %}
             {% endif %}
         {% else %}

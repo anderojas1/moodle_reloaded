@@ -7,7 +7,7 @@ from .funciones import VerificaUsuario, BuscarDocentes, MatricularLeaderTeacherC
 from .forms import Buscar, NotasPorEstudiante, EstudiantesCurso, EstudiantesDepartamentoCurso, DatosDemograficosForm
 from .reportes import BuscarReportes
 from .funciones import CalculaNotaLeader
-from .models import Actividad, Curso
+from .models import Actividad, Curso, RegistroNotas, ActividadesCohorte
 from .forms import ActividadForm, CursoForm, CohorteForm
 from .models import Actividad, Curso, DatosDemograficos
 from .forms import ActividadForm, CursoForm
@@ -454,6 +454,26 @@ class UpdateCohorte(UpdateView):
 
 		return redirect('/campus/curso/' + kwargs['id_curso'] + '/' + kwargs['id_cohorte'])"""
 
+class ActividadesCohortes(TemplateView):
+	template_name = 'moodle/actividades_cohorte.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(ActividadesCohortes, self).get_context_data(**kwargs)
+		cohorte = Cohorte.objects.get(id=kwargs['id_cohorte'])
+		curso = Curso.objects.get(id=kwargs['id_curso'])
+		usuario_actual = self.request.user
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.buscarGrupo(usuario_actual)
+		context[grupo] = grupo
+
+		actividades = Actividad.objects.filter(id__in=(ActividadesCohorte.objects.filter(cohorte=cohorte.id)))
+		
+		if len(actividades) > 0:
+			context['actividades'] = actividades
+			print (actividades)
+
+		return context
+
 
 ############################################################################
 ##				Nuevo codigo
@@ -470,6 +490,7 @@ class ActividadDetalles(TemplateView):
 		self.actividad = Actividad.objects.get(id=self.kwargs['id_actividad'])
 		if 'actividad' not in context:
 			context['actividad'] = self.actividad
+			print(self.actividad.titulo)
 
 		ver_grupo = VerificaUsuario()
 
@@ -488,14 +509,34 @@ class ActividadFormulario(TemplateView):
 		context = super(ActividadFormulario, self).get_context_data(**kwargs)
 		if 'actividadForm' not in context:
 			context['actividadForm'] = self.actividadForm
+
+		usuario_actual = self.request.user
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.buscarGrupo(usuario_actual)
+		context[grupo] = grupo
+
+		if grupo == 'master':
+			persona = Persona.objects.get(id=kwargs['id_persona'])
+			context['persona'] = persona
 		return context
 
 	def post(self, request,*args,**kwargs):
 		actividadForm = ActividadForm(request.POST, prefix='actividad')
 		if actividadForm.is_valid():
-			actividad = actividadForm.save(commit=False)
+			titulo = actividadForm.cleaned_data.get('titulo')
+			descripcion = actividadForm.cleaned_data.get('descripcion')
+			fecha_inicio = actividadForm.cleaned_data.get('fecha_inicio')
+			fecha_fin = actividadForm.cleaned_data.get('fecha_fin')
+			porcentaje = actividadForm.cleaned_data.get('porcentaje')
+			actividad = Actividad(descripcion=descripcion, titulo=titulo, fecha_fin=fecha_fin,
+				fecha_inicio=fecha_inicio, porcentaje=porcentaje)
 			actividad.save()
-		return render(request, self.template_name, self.get_context_data(**kwargs))	
+			cohorte = Cohorte.objects.get(id=kwargs['id_cohorte'])
+			cohorte_actividad = ActividadesCohorte(cohorte=cohorte, actividad=actividad)
+			cohorte_actividad.save()
+
+		return redirect('/campus/master/' + kwargs['id_persona'] + '/cursos/' + kwargs['id_curso'] + '/' +
+			kwargs['id_cohorte'] + '/actividades')
 
 
 ##################### CLASE REGISTRAR CURSO #########################################

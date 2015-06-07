@@ -84,6 +84,7 @@ class Perfil(TemplateView):
 			persona = ver_grupo.buscarPersona(self.usuario_actual)
 			perfil = MasterTeacher.objects.get(id=persona.id)
 			context['perfil'] = perfil
+			context['persona'] =persona
 		elif grupo == 'secretaria':
 			secretaria = ver_grupo.buscarSecretaria(self.usuario_actual)
 			context['perfil'] = secretaria
