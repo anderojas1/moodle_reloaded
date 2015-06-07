@@ -41,8 +41,8 @@ class UserForm(ModelForm):
 
         usuario = self.cleaned_data.get('username')
         usuario_exist = User.objects.filter(username=usuario).exists()
-        print (usuario_exist)
-        print (usuario)
+        #print (usuario_exist)
+        #print (usuario)
 
         if usuario_exist:
             self.add_error('username', 'El usuario ya está registrado')

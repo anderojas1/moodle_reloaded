@@ -45,7 +45,9 @@
     </div class="herramientas">
     {% if editar %}
     <div>
-        <a href="#">Editar Perfil</a>
+        <a href="#"> Editar Informacion Personal </a>
+        <a href="#"> Editar Historial Academico </a>
+        <a href="/campus/leader/demograficos/{{persona.id}}"> Editar Informacion Demografica </a>
     </div>
     {% else %}
     {% block restricted %}

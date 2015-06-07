@@ -4,13 +4,13 @@ from .models import LeaderTeacher, Persona, InstitucionEducativa, Curso, Area, M
 from django.views.generic import TemplateView
 from django.core.exceptions import ObjectDoesNotExist
 from .funciones import VerificaUsuario, BuscarDocentes, MatricularLeaderTeacherCohorte, CohorteMasterTeacher
-from .forms import Buscar, NotasPorEstudiante, EstudiantesCurso, EstudiantesDepartamentoCurso
+from .forms import Buscar, NotasPorEstudiante, EstudiantesCurso, EstudiantesDepartamentoCurso, DatosDemograficosForm
 from .reportes import BuscarReportes
 from .funciones import CalculaNotaLeader
-from .models import Actividad, Curso
+from .models import Actividad, Curso, DatosDemograficos
 from .forms import ActividadForm, CursoForm
 from .models import Actividad #NivelEscolar
-from .forms import ActividadForm#NivelEscolarForm
+from .forms import ActividadForm #NivelEscolarForm
 from django.views.generic.edit import DeleteView, UpdateView
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import redirect
@@ -529,3 +529,48 @@ class GuardarNivelEscolar(TemplateView):
 		else:
 			return render(request, 'detalles_master')
 			'''
+
+class RegistrarDemograficos(TemplateView):
+	template_name = 'moodle/registro_demograficos.html'
+	demograficos_form = DatosDemograficosForm()
+
+	def get_context_data(self, **kwargs):
+		context = super(RegistrarDemograficos, self).get_context_data(**kwargs)
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.verGrupo(self.request.user)
+		context[grupo] = grupo
+
+		context['form'] = self.demograficos_form
+
+		return context
+
+	def post(self, request, *args, **kwargs):
+		context = super(RegistrarDemograficos, self).get_context_data(**kwargs)
+		demograficos_form = DatosDemograficosForm(request.POST)
+
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.verGrupo(self.request.user)
+		context[grupo] = grupo
+
+		persona = Persona.objects.get(id= kwargs['id_persona'])
+
+		if demograficos_form.is_valid():
+			idForm = demograficos_form.cleaned_data.get('id')
+			estratoForm = demograficos_form.cleaned_data.get('estrato')
+			tipo_viviendaForm = demograficos_form.cleaned_data.get('tipo_vivienda')
+			caracter_viviendaForm = demograficos_form.cleaned_data.get('caracter_vivienda')
+			personas_conviveForm = demograficos_form.cleaned_data.get('caracter_vivienda')
+			estado_civilForm = demograficos_form.cleaned_data.get('estado_civil')
+			numero_hijosForm = demograficos_form.cleaned_data.get('numero_hijos')
+			ciudad_nacimientoForm = demograficos_form.cleaned_data.get('ciudad_nacimiento')
+
+		historialDemografico = DatosDemograficos(id = persona, estrato = estratoForm, tipo_vivienda = tipo_viviendaForm, caracter_vivienda = caracter_viviendaForm, personas_convive = personas_conviveForm, estado_civil = estado_civilForm, numero_hijos = numero_hijosForm, ciudad_nacimiento = ciudad_nacimientoForm)
+		historialDemografico.save()
+
+		if context[grupo] == 'leader':
+			return redirect('/campus/leader/' + kwargs['id_persona'])
+
+		elif context[grupo] == 'master':
+			return redirect('/campus/master/' + kwargs['id_persona'])			
+		
+		#return render(request, 'profile', context)

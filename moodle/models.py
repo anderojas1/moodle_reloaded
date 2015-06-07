@@ -181,3 +181,16 @@ class HistorialLaboral(models.Model):
     tiempolaborado = models.CharField(max_length = 2)
     nivelEscolar = models.ForeignKey(NivelEscolar)
     '''
+
+class DatosDemograficos(models.Model):
+    opt_tipo_vivienda = ((0, 'Apartaestudio'), (1, 'Apartamento'), (2, 'Casa'))
+    opt_caracter_vivienda = ((0, 'Arrendada'), (1, 'Familiar'), (2, 'Propia'))
+    opt_estado_civil = ((0, 'Viudo'), (1, 'Soltero'), (2, 'Divorciado'), (3, 'Union Libre'), (4, 'Casado'))
+    id = models.OneToOneField(Persona, primary_key=True) #Cedula LT o MT
+    estrato = MinMaxFloat(min_value=0, max_value=6)
+    tipo_vivienda = models.PositiveSmallIntegerField(choices=opt_tipo_vivienda)
+    caracter_vivienda = models.PositiveSmallIntegerField(choices=opt_caracter_vivienda)
+    personas_convive = models.CharField(max_length=2)
+    estado_civil = models.PositiveSmallIntegerField(choices=opt_estado_civil)
+    numero_hijos = models.CharField(max_length=2)
+    ciudad_nacimiento = models.CharField(max_length=20)
