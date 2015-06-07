@@ -122,9 +122,9 @@ class MasterTeacher(Persona):
 class Cohorte(models.Model):
     opt_semestre = ((0, 'Febrero-Junio'), (1, 'Agosto-Diciembre'))
     id = models.CharField(max_length=60, primary_key=True) #identificador unico de cohorte
-    semestre = models.SmallIntegerField(choices  = opt_semestre, null=True)
-    fecha_inicio = models.DateField(null=True)
-    fecha_fin = models.DateField(null=True)
+    semestre = models.SmallIntegerField(choices  = opt_semestre, null=True, blank=True)
+    fecha_inicio = models.DateField(null=True, blank=True)
+    fecha_fin = models.DateField(null=True, blank=True)
     curso = models.ForeignKey(Curso)
     master = models.ForeignKey(MasterTeacher, null=True, blank=True)
 

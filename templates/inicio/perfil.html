@@ -44,7 +44,7 @@
                         <li><a href="/login/profile">Inicio</a></li>
                         <li><a href="/campus/curso/buscar">Cursos</a></li>
                         <li><a href="/campus/admin/reportes">Ver Reportes</a></li>
-                        <li><a href="/admin">Funciones Avanzadas</a></li>
+                        <li><a href="/admin" target="_blank">Funciones Avanzadas</a></li>
                         {% block registrar_curso %}
                         {% endblock %}
                         {% block reportes %}
@@ -52,6 +52,8 @@
                         {% block resultado_reporte %}
                         {% endblock %}
                         {% block edit_curso %}
+                        {% endblock %}
+                        {% block edit_cohorte %}
                         {% endblock %}
                 {% elif otro %}
                     <p>No tiene permisos para ver esta página</p>

@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from .models import LeaderTeacher, Curso, RegistroNotas, Actividad, Curso
+from .models import LeaderTeacher, Curso, RegistroNotas, Actividad, Curso, Cohorte, MasterTeacher
 from .models import LeaderTeacher, RegistroNotas, Actividad
 
 class LeaderTeacherForm(ModelForm):
@@ -173,6 +173,19 @@ class CursoForm (ModelForm):
 			}),
 			#'area': forms.SelectInput
 		}
+
+################################################################
+
+class CohorteForm(ModelForm):
+
+	class Meta:
+		model = Cohorte
+		fields = ['semestre', 'fecha_inicio', 'fecha_fin', 'master']
+
+	def clean(self):
+		cleaned_data = super(CohorteForm, self).clean()
+		return cleaned_data
+	
 
 
 """class NivelEscolarForm(ModelForm):

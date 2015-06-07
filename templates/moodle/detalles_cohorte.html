@@ -44,5 +44,12 @@
 				</tr>
 			</table>
 		</div>
+		{% if admin %}
+			<br />
+			<form method="POST">
+				{% csrf_token %}
+				<button type="submit">Editar</button>
+			</form>
+		{% endif %}
 	{% endif %}
 {% endblock %}

@@ -8,7 +8,7 @@ from .forms import Buscar, NotasPorEstudiante, EstudiantesCurso, EstudiantesDepa
 from .reportes import BuscarReportes
 from .funciones import CalculaNotaLeader
 from .models import Actividad, Curso
-from .forms import ActividadForm, CursoForm
+from .forms import ActividadForm, CursoForm, CohorteForm
 from .models import Actividad #NivelEscolar
 from .forms import ActividadForm#NivelEscolarForm
 from django.views.generic.edit import DeleteView, UpdateView
@@ -367,6 +367,8 @@ class DetallesCohorte(TemplateView):
 		print(kwargs)
 		curso = Curso.objects.get(id=kwargs['id_curso'])
 		context['curso'] = curso
+		cohorte = Cohorte.objects.get(id=kwargs['id_cohorte'])
+		context['cohorte'] = cohorte
 
 		context[grupo] = grupo		
 		if grupo == 'master':
@@ -374,12 +376,80 @@ class DetallesCohorte(TemplateView):
 			master = MasterTeacher.objects.get(id=persona.id)
 			context['master'] = master
 			context['persona'] = persona
-
-		elif grupo == 'admin':
-			cohorte = Cohorte.objects.get(id=kwargs['id_cohorte'])
-			context['cohorte'] = cohorte
+			
 
 		return context
+
+	def post(self, request, *args, **kwargs):
+		return redirect('/campus/curso/' + kwargs['id_curso'] + '/' + kwargs['id_cohorte'] + '/update')
+
+class UpdateCohorte(UpdateView):
+	model = Cohorte
+	fields = ['semestre', 'fecha_inicio', 'fecha_fin', 'master']
+	template_name_suffix = '_update_form'
+
+	
+	def get_context_data(self, **kwargs):
+		context = super(UpdateCohorte, self).get_context_data(**kwargs)
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.verGrupo(self.request.user)
+		context[grupo] = grupo
+
+		return context
+
+	def post (self, request, *args, ** kwargs):
+		form = CohorteForm(request.POST)
+		if form.is_valid():
+			semestre = form.cleaned_data.get('semestre')
+			fecha_inicio = form.cleaned_data.get('fecha_inicio')
+			fecha_fin = form.cleaned_data.get('fecha_fin')
+			master = form.cleaned_data.get('master')
+
+			cohorte = Cohorte.objects.get(id=kwargs['pk'])
+			cohorte.semestre = semestre
+			cohorte.fecha_inicio = fecha_inicio
+			cohorte.fecha_fin = fecha_fin
+			cohorte.master = master
+			cohorte.save(update_fields=['semestre', 'fecha_inicio', 'fecha_fin', 'master'])
+		return redirect('/campus/curso/' + kwargs['id_curso'] + '/' + kwargs['pk'])
+"""class UpdateCohorte(TemplateView):
+	template_name = 'moodle/cohorte_update_form.html'
+
+	def get_context_data(self, **kwargs):
+		context = super(UpdateCohorte, self).get_context_data(**kwargs)
+		form = CohorteForm()
+		cohorte = Cohorte.objects.get(id=kwargs['id_cohorte'])
+		context['cohorte'] = cohorte
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.verGrupo(self.request.user)
+		context[grupo] = grupo
+		context['form'] = form
+
+		return context
+
+	def post (self, request, *args, ** kwargs):		
+		context = super(UpdateCohorte, self).get_context_data(**kwargs)
+		form = CohorteForm(request.POST, empty_permitted=True)
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.verGrupo(self.request.user)
+		context[grupo] = grupo
+		print(kwargs)
+
+		if form.is_valid():
+			semestre = form.cleaned_data.get('semestre')
+			fecha_inicio = form.cleaned_data.get('fecha_inicio')
+			fecha_fin = form.cleaned_data.get('fecha_fin')
+			master = form.cleaned_data.get('master')
+
+			cohorte = Cohorte.objects.get(id=kwargs['id_cohorte'])
+			cohorte.semestre = semestre
+			cohorte.fecha_inicio = fecha_inicio
+			cohorte.fecha_fin = fecha_fin
+			cohorte.master = master
+			cohorte.save(update_fields=['semestre', 'fecha_inicio', 'fecha_fin', 'master'])
+
+		return redirect('/campus/curso/' + kwargs['id_curso'] + '/' + kwargs['id_cohorte'])"""
+
 
 ############################################################################
 ##				Nuevo codigo
@@ -493,7 +563,6 @@ class UpdateDatosCurso(UpdateView):
 		ver_grupo = VerificaUsuario()
 		grupo = ver_grupo.verGrupo(self.request.user)
 		context[grupo] = grupo
-		print (kwargs)
 
 		return context
 
