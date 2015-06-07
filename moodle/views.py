@@ -11,6 +11,8 @@ from .models import Actividad, Curso
 from .forms import ActividadForm, CursoForm, CohorteForm
 from .models import Actividad, Curso, DatosDemograficos
 from .forms import ActividadForm, CursoForm
+from .models import Actividad, Curso, HistorialAcademico, HistorialLaboral, SoporteLaboralNuevo
+from .forms import ActividadForm, CursoForm, HistorialAcademicoForm, HistorialLaboralForm, SoporteLaboralNuevoform
 from .models import Actividad #NivelEscolar
 from .forms import ActividadForm #NivelEscolarForm
 from django.views.generic.edit import DeleteView, UpdateView
@@ -645,3 +647,57 @@ class RegistrarDemograficos(TemplateView):
 			return redirect('/campus/master/' + kwargs['id_persona'])			
 		
 		#return render(request, 'profile', context)
+
+class AgregarHistoriaAcademico(TemplateView):
+	template_name = 'moodle/agregar_historial_academico.html'
+	historialAcademicoForm = HistorialAcademicoForm()
+
+	def get_context_data(self, **kwargs):
+		context = super(AgregarHistoriaAcademico, self).get_context_data(**kwargs)
+		if 'historialAcademicoForm' not in context:
+			context['historialAcademicoForm'] = self.historialAcademicoForm
+		return context
+
+	def post(self, request, *args, **kwargs):
+		historialAcademicoForm = HistorialAcademicoForm(request.POST)
+		if historialAcademicoForm.is_valid():
+			historialAcademicoForm.save()
+		return render(request, self.template_name, self.get_context_data(**kwargs))	
+
+class AgregarHistoriaLaboral(TemplateView):
+	template_name = 'moodle/agregar_historial_laboral.html'
+	historialLaboralForm = HistorialLaboralForm(prefix='laboral')
+
+	def get_context_data(self, **kwargs):
+		context = super(AgregarHistoriaLaboral, self).get_context_data(**kwargs)
+		if 'historialLaboralForm' not in context:
+			context['historialLaboralForm'] = self.historialLaboralForm
+		return context
+
+	def post(self, request, *args, **kwargs):
+		historialLaboralForm = HistorialLaboralForm(request.POST)
+		if historialLaboralForm.is_valid():
+			laboral = historialLaboralForm.save(commit=False)
+			laboral.save()
+		return render(request, self.template_name, self.get_context_data(**kwargs))
+
+
+
+class AgregarSoporteLaboral(TemplateView):
+	template_name = 'moodle/agregar_soporte_laboral.html'
+	soporteLaboralForm = SoporteLaboralNuevoform()
+
+	def get_context_data(self, **kwargs):
+		context = super(AgregarSoporteLaboral, self).get_context_data(**kwargs)
+		if 'soporteLaboralForm' not in context:
+			context['soporteLaboralForm'] = self.soporteLaboralForm
+		return context
+
+	def post(self, request, *args, **kwargs):
+		soporteLaboralForm = SoporteLaboralNuevoform(request.POST)
+		if soporteLaboralForm.is_valid():
+			soporteLaboralForm.save()
+		return render(request, self.template_name, self.get_context_data(**kwargs))	
+
+
+

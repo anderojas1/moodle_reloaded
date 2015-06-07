@@ -7,6 +7,7 @@ from .views import DetallesCohorte, ActividadDetalles, ActividadFormulario
 from .views import BorrarCurso, UpdateDatosCurso, CohortesCursos, UpdateCohorte
 from .views import DetallesCohorte, ActividadDetalles, ActividadFormulario, RegistrarDemograficos
 from .views import BorrarCurso, UpdateDatosCurso, CohortesCursos
+from .views import AgregarHistoriaAcademico, AgregarHistoriaLaboral, AgregarSoporteLaboral
 
 leader_urls = patterns ('',
     url(r'^(?P<id_persona>\d+)/$', LeaderDetalles.as_view(), name="detalles_leader"),
@@ -56,6 +57,12 @@ nivel_escolar_urls = patterns ('',
 
 )
 
+historial_prueba = patterns('',
+    url(r'^(?P<id_persona>\d+)/laboral/$', AgregarHistoriaLaboral.as_view(), name="agregar_laboral"),
+    url(r'^(?P<id_persona>\d+)/academico/$', AgregarHistoriaAcademico.as_view(), name="agregar_academico"),
+    url(r'^(?P<id_persona>\d+)/soporte/$', AgregarSoporteLaboral.as_view(), name="agregar_soporte"),
+)
+
 
 urlpatterns = patterns ('',
 	url(r'^leader/', include(leader_urls)),
@@ -63,5 +70,6 @@ urlpatterns = patterns ('',
 	url(r'^secretaria/', include(secretaria_urls)),
 	url(r'^admin/', include(admin_urls)),
 	url(r'^curso/', include(curso_urls)),
-    url(r'^nivel_escolar/', include(nivel_escolar_urls))
+    url(r'^nivel_escolar/', include(nivel_escolar_urls)),
+    url(r'^historial/', include(historial_prueba))
 )

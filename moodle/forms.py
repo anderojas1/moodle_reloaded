@@ -4,6 +4,7 @@ from .models import LeaderTeacher, Curso, RegistroNotas, Actividad, Curso, Cohor
 from .models import LeaderTeacher, RegistroNotas, Actividad
 from .models import LeaderTeacher, Curso, RegistroNotas, Actividad, Curso
 from .models import LeaderTeacher, RegistroNotas, Actividad, DatosDemograficos
+from .models import HistorialAcademico, HistorialLaboral, SoporteLaboralNuevo
 class LeaderTeacherForm(ModelForm):
 
 	class Meta:
@@ -198,3 +199,86 @@ class DatosDemograficosForm(ModelForm):
 	class Meta:
 		model = DatosDemograficos
 		fields = ['estrato', 'tipo_vivienda', 'caracter_vivienda', 'personas_convive', 'estado_civil', 'numero_hijos','ciudad_nacimiento']
+
+class HistorialAcademicoForm(ModelForm):
+    class Meta:
+        model = HistorialAcademico
+        fields = ['titulo', 'tipoEstudio', 'fechaRealizacion', 'institucionAcree', 'evidencia']
+        widgets = {
+			'titulo': forms.TextInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'text',
+				'placeholder': 'Titulo',
+			}),
+			'tipoEstudio': forms.TextInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'text',
+				'placeholder': 'Tipo de estudio',
+			}),
+			'fechaRealizacion': forms.TextInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'date',
+				'placeholder': 'Decba de realizacion',
+			}),
+			'institucionAcree': forms.TextInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'text',
+				'placeholder': 'Institucion Acree',
+			}),
+			'evidencia': forms.TextInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'text',
+				'placeholder': 'Evidencia',
+			}),
+			#'area': forms.SelectInput
+		}
+
+class HistorialLaboralForm(ModelForm):
+    class Meta:
+        model = HistorialLaboral
+        fields = ['tiempoLaborado','nivelesEscolares', 'areasDesempenio', 'gradosLaborales']
+        widgets = {
+			'tiempoLaborado': forms.TextInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'text',
+				'placeholder': 'Tiempo laborado',
+			}),
+			'nivelesEscolares': forms.TextInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'text',
+				'placeholder': 'Niveles escolares',
+			}),
+			'areasDesempenio': forms.TextInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'text',
+				'placeholder': 'Areas de desempeno',
+			}),
+			'gradosLaborales': forms.TextInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'text',
+				'placeholder': 'Grados laborales',
+			}),
+			#'area': forms.SelectInput
+		}
+
+class SoporteLaboralNuevoform(ModelForm):
+    class Meta:
+        model = SoporteLaboralNuevo
+        fields = ['tiempo', 'nombreInsti', 'docSoporte']
+        widgets = {
+        'tiempo': forms.TextInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'text',
+				'placeholder': 'Tiempo',
+			}),
+			'nombreInsti': forms.TextInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'text',
+				'placeholder': 'Nombre de la institucion',
+			}),
+			'docSoporte': forms.TextInput(attrs={
+				'class': 'campos_formularios',
+				'type': 'text',
+				'placeholder': 'documento de soporte',
+			})
+		}

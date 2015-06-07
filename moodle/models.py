@@ -194,3 +194,37 @@ class DatosDemograficos(models.Model):
     estado_civil = models.PositiveSmallIntegerField(choices=opt_estado_civil)
     numero_hijos = models.CharField(max_length=2)
     ciudad_nacimiento = models.CharField(max_length=20)
+
+class SoporteLaboralNuevo(models.Model):
+    id = models.AutoField(primary_key = True)
+    tiempo = models.CharField(max_length = 2)
+    nombreInsti = models.CharField(max_length = 60)
+    docSoporte = models.FileField(upload_to = 'DocumentosSoporte')
+
+
+class HistorialLaboral(models.Model):
+
+    id = models.AutoField(primary_key = True)
+    tiempoLaborado = models.CharField(max_length = 2)
+    nivelesEscolares = models.TextField(max_length = 300)
+    areasDesempenio = models.TextField(max_length = 300)
+    gradosLaborales = models.TextField(max_length = 300)
+    soporteLaboral = models.ManyToManyField(SoporteLaboralNuevo)
+    persona = models.OneToOneField(Persona)
+
+    def __str__(self):
+        return self.tiempoLaborado
+
+class HistorialAcademico(models.Model):
+    ESTUDIOS = ((0, 'Bachillerato'), (1, 'Pregrado'),(2, 'Posgrado'),(3, 'Especializacion'),(4, 'Maestria'),(5, 'Doctorado'))
+
+    id = models.AutoField(primary_key = True)
+    titulo = models.CharField(max_length = 60)
+    tipoEstudio = models.SmallIntegerField(choices = ESTUDIOS)
+    fechaRealizacion = models.DateField()
+    institucionAcree = models.CharField(max_length = 100)
+    evidencia = models.FileField(upload_to = 'Documentos_soporte')
+    persona = models.OneToOneField(Persona)
+
+    def __str__(self):
+        return self.titulo + "-" + self.fechaRealizacion
