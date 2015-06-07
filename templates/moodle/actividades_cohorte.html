@@ -3,6 +3,7 @@
 	Actividades {{id_cohorte}}-{{id_curso}}
 {% endblock %}
 {% block actividades_cohorte %}
+	<h2>Actividades para el curso {{curso}}</h2><br />
 	{% if actividades %}
 		<div class="table-responsive">
 			<table class="table table-hover">
@@ -15,7 +16,7 @@
 				</tr>
 				{% for actividad in actividades %}
 				<tr>
-					<td>{{actividad}}</td>
+					<td><a href="{{actividad.id}}">{{actividad}}</a></td>
 					<td>{{actividad.descripcion}}</td>
 					<td>{{actividad.fecha_inicio}}</td>
 					<td>{{actividad.fecha_fin}}</td>

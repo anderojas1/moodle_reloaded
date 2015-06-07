@@ -47,7 +47,9 @@ master_urls = patterns ('',
         DetallesCohorte.as_view(), name="detalles_cohorte"),
     url(r'^(?P<id_persona>\d+)/cursos/(?P<id_curso>\d+)/(?P<id_cohorte>\d+)/actividades$', 
         ActividadesCohortes.as_view(), name="actividades_cohorte"),
-    url(r'^actividad/(?P<id_actividad>\d+)/$', ActividadDetalles.as_view(), name="detalles_actividad"), #Nuevo!
+    url(r'^(?P<id_persona>\d+)/cursos/(?P<id_curso>\d+)/(?P<id_cohorte>\d+)/(?P<id_actividad>\d+)$', 
+        ActividadDetalles.as_view(), name="detalles_actividad"),
+    #url(r'^actividad/(?P<id_actividad>\d+)/$', ActividadDetalles.as_view(), name="detalles_actividad"), #Nuevo!
     url(r'^(?P<id_persona>\d+)/cursos/(?P<id_curso>\d+)/(?P<id_cohorte>\d+)/actividades/registrar$', 
         ActividadFormulario.as_view(), name="registrar_actividad"), #Nuevo!
     url(r'^demograficos/(?P<id_persona>\d+)/$', RegistrarDemograficos.as_view(), name="demograficos_master"), #Nuevo!

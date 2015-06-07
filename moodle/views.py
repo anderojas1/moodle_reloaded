@@ -461,10 +461,17 @@ class ActividadesCohortes(TemplateView):
 		context = super(ActividadesCohortes, self).get_context_data(**kwargs)
 		cohorte = Cohorte.objects.get(id=kwargs['id_cohorte'])
 		curso = Curso.objects.get(id=kwargs['id_curso'])
+		context['curso'] = curso
 		usuario_actual = self.request.user
 		ver_grupo = VerificaUsuario()
 		grupo = ver_grupo.buscarGrupo(usuario_actual)
 		context[grupo] = grupo
+
+		if grupo=='master':
+			persona = Persona.objects.get(id=kwargs['id_persona'])
+			master = MasterTeacher.objects.get(id=persona.id)
+			context['master'] = master
+			context['persona'] = persona
 
 		actividades = Actividad.objects.filter(id__in=(ActividadesCohorte.objects.filter(cohorte=cohorte.id)))
 		
@@ -493,12 +500,14 @@ class ActividadDetalles(TemplateView):
 			print(self.actividad.titulo)
 
 		ver_grupo = VerificaUsuario()
-
-		print(self.usuario_actual.username)
-
 		grupo = ver_grupo.buscarGrupo(self.usuario_actual)
-
 		context[grupo] = grupo
+
+		if grupo=='master':
+			persona = Persona.objects.get(id=kwargs['id_persona'])
+			master = MasterTeacher.objects.get(id=persona.id)
+			context['master'] = master
+			context['persona'] = persona
 		return context
 
 class ActividadFormulario(TemplateView):

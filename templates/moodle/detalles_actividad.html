@@ -3,43 +3,31 @@
     Información |  {{actividad.id}}
 {% endblock %}
 {% block actividades %}
-    <div class="informacion">
-        <table class="datos">
+    <div class="table-responsive">
+        <table class="table table-hover">
             <tr>
-                <th>Dato</th>
-                <th>Informacion</th>
-            </tr>
-            <tr>
-                <td>Titulo</td>
+                <th>Titulo</th>
                 <td>{{actividad.titulo}}</td>
             </tr>
             <tr>
-                <td>Descripcion</td>
+                <th>Descripcion</th>
                 <td>{{actividad.descripcion}}</td>
             </tr>
             <tr>
-                <td>Fecha de Inicio</td>
+                <th>Fecha de Inicio</th>
                 <td>{{actividad.fecha_inicio}}</td>
             </tr>
             <tr>
-                <td>Fecha de Entrega</td>
+                <th>Fecha de Entrega</th>
                 <td>{{actividad.fecha_fin}}</td>
             </tr>
             <tr>
-                <td>Porcentaje</td>
+                <th>Porcentaje</th>
                 <td>{{actividad.porcentaje}}</td>
             </tr>
         </table>
-    </div class="herramientas">
-    {% if editar %}
-    <div>
-        <a href="#">Editar Perfil</a>
     </div>
-    {% else %}
-    {% block restricted %}
-    <div>
-        <p>Usted no tiene permisos para ver esta página. <a href="/login/profile/"> Regresar </a></p>
-    </div>
-    {% endblock %}
+    {% if master %}
+    <a href="#">Cambiar información de la actividad</a>
     {% endif %}
 {% endblock %}
