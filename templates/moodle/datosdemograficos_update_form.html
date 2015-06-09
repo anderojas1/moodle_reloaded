@@ -1,15 +1,15 @@
 {% extends "inicio/perfil.html" %}
 {% block title %}
-    Registro | Datos Demograficos
+	Datos Demograficos | {{persona.nombre}}
 {% endblock %}
 
-{% block registrar_demograficos %}
+{% block actualizar_demograficos %}
 
 <div class="registro">
-    	<h2>Registro de Datos Demograficos</h2>
+        <h2>Edicion de datos demograficos</h2>
 
-		<form action="" method="post" class="form-horizontal">
-			{%  csrf_token %}
+        <form action="" method="post" class="form-horizontal">
+            {%  csrf_token %}
 
             <div class="form-group">
                 <label for="inputName3" class="col-sm-2 control-label"> Estrato Socio Economico </label>
@@ -59,8 +59,8 @@
                     {{ form.ciudad_nacimiento }}
                 </div>
             </div>
-    			<button type="submit" class="boton_enviar">Registrar</button>
-    	</form>
+                <button type="submit" class="boton_enviar">Registrar</button>
+        </form>
     
 </div>
 

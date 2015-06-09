@@ -189,21 +189,27 @@ class DatosDemograficos(models.Model):
 
 class HistorialLaboral(models.Model):
     id = models.AutoField(primary_key=True)
-    persona_asociada = models.ForeignKey(Persona)
-    nombre_institucion = models.CharField(max_length = 60, default='Nombre Institucion')
+    persona_asociada = models.ManyToManyField(Persona)
+    nombre_institucion = models.CharField(max_length = 60, default=True)
     tiempo_laborado = models.CharField(max_length = 2)
     niveles_escolares = models.TextField(max_length = 300)
     areas_desempenio = models.TextField(max_length = 300)
     grados_laborales = models.TextField(max_length = 300)
-    evidencia = models.FileField(upload_to = 'Documentos_soporte')
+    evidencia = models.FileField(upload_to = 'Documentos_soporte', default=True)
+
+    def __str__(self):
+        return self.persona_asociada + "-" + self.nombre_institucion
 
 
 class HistorialAcademico(models.Model):
     opt_estudios = ((0, 'Bachillerato'), (1, 'Pregrado'), (2, 'Posgrado'), (3, 'Especializacion'), (4, 'Maestria'), (5, 'Doctorado'))
     id = models.AutoField(primary_key=True)
-    persona_asociada = models.ForeignKey(Persona)
+    persona_asociada = models.ManyToManyField(Persona)
     titulo = models.CharField(max_length = 60)
     tipo_estudio = models.PositiveSmallIntegerField(choices=opt_estudios)
     fecha_realizacion = models.DateField()
     institucion_acrededora = models.CharField(max_length = 100)
-    evidencia = models.FileField(upload_to = 'Documentos_soporte')
+    evidencia = models.FileField(upload_to = 'Documentos_soporte', default=True)
+
+    def __str__(self):
+        return self.titulo + "-" + str(self.fecha_realizacion)

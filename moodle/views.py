@@ -11,10 +11,10 @@ from .models import Actividad, Curso, RegistroNotas, ActividadesCohorte
 from .forms import ActividadForm, CursoForm, CohorteForm
 from .models import Actividad, Curso, DatosDemograficos
 from .forms import ActividadForm, CursoForm
-from .models import Actividad, Curso, HistorialAcademico, HistorialLaboral, SoporteLaboralNuevo
-from .forms import ActividadForm, CursoForm, HistorialAcademicoForm, HistorialLaboralForm, SoporteLaboralNuevoform
-from .models import Actividad #NivelEscolar
-from .forms import ActividadForm #NivelEscolarForm
+from .models import Actividad, Curso, HistorialAcademico, HistorialLaboral
+from .forms import ActividadForm, CursoForm, HistorialAcademicoForm, HistorialLaboralForm
+from .models import Actividad
+from .forms import ActividadForm, RegistroNotasForm
 from django.views.generic.edit import DeleteView, UpdateView
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import redirect
@@ -408,7 +408,7 @@ class UpdateCohorte(UpdateView):
 			fecha_fin = form.cleaned_data.get('fecha_fin')
 			master = form.cleaned_data.get('master')
 
-			cohorte = Cohorte.objects.get(id=kwargs['pk'])
+			cohorte = Cohorte.objects.get(id=kwargs['pk']) #<-->
 			cohorte.semestre = semestre
 			cohorte.fecha_inicio = fecha_inicio
 			cohorte.fecha_fin = fecha_fin
@@ -614,38 +614,41 @@ class UpdateDatosCurso(UpdateView):
 
 		return context
 
-''' EN REVISION
-class GuardarNivelEscolar(TemplateView):
-
-	template_name = 'moodle/guardar_nivel_escolar.html'
-	nivelEscolarForm = NivelEscolarForm(prefix='nivel_escolar')
+class RegistrarNotas(TemplateView):
+	template_name = 'moodle/registro_notas.html'
+	notas_form = RegistroNotasForm()
 
 	def get_context_data(self, **kwargs):
-		context = super(GuardarNivelEscolar, self).get_context_data(**kwargs)
-		if 'nivelEscolarForm' not in context:
-			context['nivelEscolarForm'] = self.nivelEscolarForm
+		context = super(RegistrarNotas, self).get_context_data(**kwargs)
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.verGrupo(self.request.user)
+		context[grupo] = grupo
+
+		context['form'] = self.notas_form
+
 		return context
 
 	def post(self, request, *args, **kwargs):
-		nivelEscolarForm = NivelEscolarForm(request.POST)
-		if nivelEscolarForm.is_valid():
-			obj = NivelEscolar.get_objects(nombre = nivelEscolarForm.cleaned_data.get("nombre")).exists()
-
-			if obj == False:
-				nivelEscolarForm.save()
-			else:
-				pass
+		context = super(RegistrarNotas, self).get_context_data(**kwargs)
+		notas_form = RegistroNotasForm(request.POST)
 
 		ver_grupo = VerificaUsuario()
-		grupo = ver_grupo.buscarGrupo(request.user)
-		context = super(GuardarNivelEscolar, self).get_context_data(**kwargs)
+		grupo = ver_grupo.verGrupo(self.request.user)
 		context[grupo] = grupo
 
-		if grupo == 'leader':
-			return render(request, 'detalles_leader')
-		else:
-			return render(request, 'detalles_master')
-			'''
+		persona = Persona.objects.get(id= kwargs['id_persona'])
+
+		if notas_form.is_valid():
+			actividad = notas_form.cleaned_data.get('actividad')
+			cohorte = notas_form.cleaned_data.get('cohorte')
+			leader_teacher = notas_form.cleaned_data.get('leader_teacher')
+			nota = notas_form.cleaned_data.get('nota')
+
+			regNota = RegistroNotas(actividad = actividad, cohorte = cohorte, leader_teacher = leader_teacher, nota = nota)
+			regNota.save()
+
+			return redirect('/campus/master/' + kwargs['id_persona'])
+
 
 class RegistrarDemograficos(TemplateView):
 	template_name = 'moodle/registro_demograficos.html'
@@ -681,8 +684,8 @@ class RegistrarDemograficos(TemplateView):
 			numero_hijosForm = demograficos_form.cleaned_data.get('numero_hijos')
 			ciudad_nacimientoForm = demograficos_form.cleaned_data.get('ciudad_nacimiento')
 
-		historialDemografico = DatosDemograficos(id = persona, estrato = estratoForm, tipo_vivienda = tipo_viviendaForm, caracter_vivienda = caracter_viviendaForm, personas_convive = personas_conviveForm, estado_civil = estado_civilForm, numero_hijos = numero_hijosForm, ciudad_nacimiento = ciudad_nacimientoForm)
-		historialDemografico.save()
+			historialDemografico = DatosDemograficos(id = persona, estrato = estratoForm, tipo_vivienda = tipo_viviendaForm, caracter_vivienda = caracter_viviendaForm, personas_convive = personas_conviveForm, estado_civil = estado_civilForm, numero_hijos = numero_hijosForm, ciudad_nacimiento = ciudad_nacimientoForm)
+			historialDemografico.save()
 
 		if context[grupo] == 'leader':
 			return redirect('/campus/leader/' + kwargs['id_persona'])
@@ -692,61 +695,268 @@ class RegistrarDemograficos(TemplateView):
 		
 		#return render(request, 'profile', context)
 
-class AgregarHistoriaAcademico(TemplateView):
-	template_name = 'moodle/agregar_historial_academico.html'
-	historialAcademicoForm = HistorialAcademicoForm()
+class UpdateDemograficos(UpdateView):
+	model = DatosDemograficos
+	fields = ['estrato', 'tipo_vivienda', 'caracter_vivienda', 'personas_convive', 'estado_civil', 'numero_hijos','ciudad_nacimiento']
+	template_name_suffix = '_update_form'
 
 	def get_context_data(self, **kwargs):
-		context = super(AgregarHistoriaAcademico, self).get_context_data(**kwargs)
-		if 'historialAcademicoForm' not in context:
-			context['historialAcademicoForm'] = self.historialAcademicoForm
+		context = super(UpdateDemograficos, self).get_context_data(**kwargs)
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.verGrupo(self.request.user)
+		context[grupo] = grupo
+
 		return context
 
 	def post(self, request, *args, **kwargs):
-		historialAcademicoForm = HistorialAcademicoForm(request.POST)
-		if historialAcademicoForm.is_valid():
-			historialAcademicoForm.save()
-		return render(request, self.template_name, self.get_context_data(**kwargs))	
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.verGrupo(self.request.user)
+
+		demograficos = DatosDemograficos.objects.get(id=kwargs['pk'])
+		form = DatosDemograficosForm(request.POST)
+
+		if form.is_valid():
+			estrato = form.cleaned_data.get('estrato')
+			tipo_vivienda = form.cleaned_data.get('tipo_vivienda')
+			caracter_vivienda = form.cleaned_data.get('caracter_vivienda')
+			personas_convive = form.cleaned_data.get('caracter_vivienda')
+			estado_civil = form.cleaned_data.get('estado_civil')
+			numero_hijos = form.cleaned_data.get('numero_hijos')
+			ciudad_nacimiento = form.cleaned_data.get('ciudad_nacimiento')
+
+			demograficos.estrato = estrato
+			demograficos.tipo_vivienda = tipo_vivienda
+			demograficos.caracter_vivienda = caracter_vivienda
+			demograficos.personas_convive = personas_convive
+			demograficos.estado_civil = estado_civil
+			demograficos.numero_hijos = numero_hijos
+			demograficos.ciudad_nacimiento = ciudad_nacimiento
+
+			demograficos.save(update_fields=['estrato', 'tipo_vivienda', 'caracter_vivienda', 'personas_convive', 'estado_civil', 'numero_hijos','ciudad_nacimiento'])
+
+		if grupo == 'leader':
+			return redirect('/campus/leader/' + kwargs['pk'])
+
+		elif grupo == 'master':
+			return redirect('/campus/master/' + kwargs['pk'])
+
 
 class AgregarHistoriaLaboral(TemplateView):
 	template_name = 'moodle/agregar_historial_laboral.html'
-	historialLaboralForm = HistorialLaboralForm(prefix='laboral')
+	historial_laboral_form = HistorialLaboralForm()
 
 	def get_context_data(self, **kwargs):
 		context = super(AgregarHistoriaLaboral, self).get_context_data(**kwargs)
-		if 'historialLaboralForm' not in context:
-			context['historialLaboralForm'] = self.historialLaboralForm
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.verGrupo(self.request.user)
+		context[grupo] = grupo
+
+		context['form'] = self.historial_laboral_form
+
+		return context		
+
+	def post(self, request, *args, **kwargs):
+		context = super(AgregarHistoriaLaboral, self).get_context_data(**kwargs)
+		historial_laboral_form = HistorialLaboralForm(request.POST)
+
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.verGrupo(self.request.user)
+		context[grupo] = grupo
+
+		persona = Persona.objects.get(id= kwargs['id_persona'])
+
+		if historial_laboral_form.is_valid():
+			persona_asociadaForm = historial_laboral_form.cleaned_data.get('persona_asociada')
+			nombre_institucionForm = historial_laboral_form.cleaned_data.get('nombre_institucion')
+			tiempo_laboradoForm = historial_laboral_form.cleaned_data.get('tiempo_laborado')
+			niveles_escolaresForm = historial_laboral_form.cleaned_data.get('niveles_escolares')
+			areas_desempenioForm = historial_laboral_form.cleaned_data.get('areas_desempenio')
+			grados_laboralesForm = historial_laboral_form.cleaned_data.get('grados_laborales')
+			evidenciaForm = historial_laboral_form.cleaned_data.get('evidencia')
+
+			historialLaboral = HistorialLaboral(persona_asociada = persona, nombre_institucion = nombre_institucionForm, tiempo_laborado = tiempo_laboradoForm, niveles_escolares = niveles_escolaresForm, areas_desempenio = areas_desempenioForm, grados_laborales = grados_laboralesForm, evidencia = evidenciaForm)
+			historialLaboral.save()
+
+		if context[grupo] == 'leader':
+			return redirect('/campus/leader/' + kwargs['id_persona'])
+
+		elif context[grupo] == 'master':
+			return redirect('/campus/master/' + kwargs['id_persona'])
+
+
+class UpdateHistorialLaboral(UpdateView):
+	model = HistorialLaboral
+	fields = ['nombre_institucion', 'tiempo_laborado', 'niveles_escolares', 'areas_desempenio', 'grados_laborales', 'evidencia']
+	template_name_suffix = '_update_form'
+
+	def get_context_data(self, **kwargs):
+		context = super(UpdateHistorialLaboral, self).get_context_data(**kwargs)
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.verGrupo(self.request.user)
+		context[grupo] = grupo
+
 		return context
 
 	def post(self, request, *args, **kwargs):
-		historialLaboralForm = HistorialLaboralForm(request.POST)
-		if historialLaboralForm.is_valid():
-			laboral = historialLaboralForm.save(commit=False)
-			laboral.save()
-		return render(request, self.template_name, self.get_context_data(**kwargs))
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.verGrupo(self.request.user)
+
+		historial_laboral = HistorialLaboral.objects.get(id=kwargs['pk']) #¿?
+		form = HistorialLaboralForm(request.POST)
+
+		if form.is_valid():
+			nombre_institucion = form.cleaned_data.get('nombre_institucion')
+			tiempo_laborado = form.cleaned_data.get('tiempo_laborado')
+			niveles_escolares = form.cleaned_data.get('niveles_escolares')
+			areas_desempenio = form.cleaned_data.get('areas_desempenio')
+			grados_laborales = form.cleaned_data.get('grados_laborales')
+			evidencia = form.cleaned_data.get('evidencia')
+
+			historial_laboral.nombre_institucion = nombre_institucion
+			historial_laboral.tiempo_laborado = tiempo_laborado
+			historial_laboral.niveles_escolares = niveles_escolares
+			historial_laboral.areas_desempenio = areas_desempenio
+			historial_laboral.grados_laborales = grados_laborales
+			historial_laboral.evidencia = evidencia
+
+			historial_laboral.save(update_fields=['nombre_institucion', 'tiempo_laborado', 'niveles_escolares', 'areas_desempenio', 'grados_laborales', 'evidencia'])
+
+		if grupo == 'leader':
+			return redirect('/campus/leader/' + kwargs['pk'])
+
+		elif grupo == 'master':
+			return redirect('/campus/master/' + kwargs['pk'])
 
 
+class AgregarHistoriaAcademico(TemplateView):
+	template_name = 'moodle/agregar_historial_academico.html'
+	historial_academico_form = HistorialAcademicoForm()
 
+	def get_context_data(self, **kwargs):
+		context = super(AgregarHistoriaAcademico, self).get_context_data(**kwargs)
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.verGrupo(self.request.user)
+		context[grupo] = grupo
+
+		context['form'] = self.historial_academico_form
+
+		return context
+
+	def post(self, request, *args, **kwargs):
+		context = super(AgregarHistoriaAcademico, self).get_context_data(**kwargs)
+		historial_academico_form = HistorialAcademicoForm(request.POST)
+
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.verGrupo(self.request.user)
+		context[grupo] = grupo
+
+		persona = Persona.objects.get(id= kwargs['id_persona'])
+
+		if historial_academico_form.is_valid():
+			persona_asociadaForm = historial_academico_form.cleaned_data.get('persona_asociada')
+			tituloForm = historial_academico_form.cleaned_data.get('titulo')
+			tipo_estudioForm = historial_academico_form.cleaned_data.get('tipo_estudio')
+			fecha_realizacionForm = historial_academico_form.cleaned_data.get('fecha_realizacion')
+			institucion_acrededoraForm = historial_academico_form.cleaned_data.get('institucion_acrededora')
+			evidenciaForm = historial_academico_form.cleaned_data.get('evidencia')
+
+			historialAcademico = HistorialAcademico(persona_asociada = persona, titulo = tituloForm, tipo_estudio = tipo_estudioForm, fecha_realizacion = fecha_realizacionForm, institucion_acrededora = institucion_acrededoraForm, evidencia = evidenciaForm)
+			historialAcademico.save()
+
+		if context[grupo] == 'leader':
+			return redirect('/campus/leader/' + kwargs['id_persona'])
+
+		elif context[grupo] == 'master':
+			return redirect('/campus/master/' + kwargs['id_persona'])
+
+
+class UpdateHistorialAcademico(UpdateView):
+	model = HistorialAcademico
+	fields = ['titulo', 'tipo_estudio', 'fecha_realizacion', 'institucion_acrededora', 'evidencia']
+	template_name_suffix = '_update_form'
+
+	def get_context_data(self, **kwargs):
+		context = super(UpdateHistorialAcademico, self).get_context_data(**kwargs)
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.verGrupo(self.request.user)
+		context[grupo] = grupo
+
+		return context
+
+	def post(self, request, *args, **kwargs):
+		ver_grupo = VerificaUsuario()
+		grupo = ver_grupo.verGrupo(self.request.user)
+
+		historial_academico = HistorialAcademico.objects.get(id=kwargs['pk']) #¿?
+		form = HistorialAcademicoForm(request.POST)
+
+		if form.is_valid():
+			titulo = form.cleaned_data.get('titulo')
+			tipo_estudio = form.cleaned_data.get('tipo_estudio')
+			fecha_realizacion = form.cleaned_data.get('fecha_realizacion')
+			institucion_acrededora = form.cleaned_data.get('institucion_acrededora')
+			evidencia = form.cleaned_data.get('evidencia')
+
+			historial_academico.titulo = titulo
+			historial_academico.tipo_estudio = tipo_estudio
+			historial_academico.fecha_realizacion = fecha_realizacion
+			historial_academico.institucion_acrededora = institucion_acrededora
+			historial_academico.evidencia = evidencia
+
+			historial_academico.save(update_fields=['titulo', 'tipo_estudio', 'fecha_realizacion', 'institucion_acrededora', 'evidencia'])
+
+		if grupo == 'leader':
+			return redirect('/campus/leader/' + kwargs['pk'])
+
+		elif grupo == 'master':
+			return redirect('/campus/master/' + kwargs['pk'])
+
+
+class UpdateDatosLeaderTeacher(UpdateView):
+	model = Persona
+	fields = ['Email', 'sexo', 'fecha_nacimiento', 'Celular', 'fijo']
+	template_name_suffix = '_update_form'
+
+	def get_context_data(self, **kwargs):
+
+	def post(self, request, *args, **kwargs):
+			return redirect('/campus/leader/' + kwargs['pk'])
+
+
+class UpdateDatosMasterTeacher(UpdateView)
+	model = Persona
+	fields = ['Email', 'sexo', 'fecha_nacimiento', 'Celular', 'fijo']
+	template_name_suffix = '_update_form'
+
+	def get_context_data(self, **kwargs):
+
+	def post(self, request, *args, **kwargs):
+			return redirect('/campus/master/' + kwargs['pk'])
+'''
 class AgregarSoporteLaboral(TemplateView):
 	template_name = 'moodle/agregar_soporte_laboral.html'
 	soporteLaboralForm = SoporteLaboralNuevoform()
 
 	def get_context_data(self, **kwargs):
+		"""
 		context = super(AgregarSoporteLaboral, self).get_context_data(**kwargs)
 		if 'soporteLaboralForm' not in context:
 			context['soporteLaboralForm'] = self.soporteLaboralForm
 		return context
+		"""
 
 	def post(self, request, *args, **kwargs):
+		"""
 		soporteLaboralForm = SoporteLaboralNuevoform(request.POST)
 		if soporteLaboralForm.is_valid():
 			soporteLaboralForm.save()
 		return render(request, self.template_name, self.get_context_data(**kwargs))
-
+		"""
+'''
 #############################################################################################
 ##				Vistas en detalles por revisar (errores en los htmls correspondientes)
 #############################################################################################
-
+"""
 class DetallesHistorialAcademico(TemplateView):
 	template_name = 'moodle/detalles_academico.html'
 	academicos = None
@@ -814,7 +1024,9 @@ class DetallesHistorialLaboral(TemplateView):
 			context['leader'] = leader
 			context['persona'] = persona
 		return context
+"""
 
+'''
 class DetallesHistorialSoporte(TemplateView):
 	template_name = 'moodle/detalles_soporte.html' 
 	laborales = None
@@ -852,3 +1064,4 @@ class DetallesHistorialSoporte(TemplateView):
 			context['leader'] = leader
 			context['persona'] = persona
 		return context
+'''

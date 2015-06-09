@@ -4,7 +4,8 @@ from .models import LeaderTeacher, Curso, RegistroNotas, Actividad, Curso, Cohor
 from .models import LeaderTeacher, RegistroNotas, Actividad
 from .models import LeaderTeacher, Curso, RegistroNotas, Actividad, Curso
 from .models import LeaderTeacher, RegistroNotas, Actividad, DatosDemograficos
-from .models import HistorialAcademico, HistorialLaboral, SoporteLaboralNuevo
+from .models import HistorialAcademico, HistorialLaboral
+
 class LeaderTeacherForm(ModelForm):
 
 	class Meta:
@@ -34,17 +35,18 @@ class LeaderTeacherForm(ModelForm):
 		}"""
 
 	def clean(self):
-
 		cedula = self.cleaned_data.get('id')
 		cedula_exist = LeaderTeacher.objects.filter(id=cedula).exists()
 
 		if cedula_exist:
 			self.add_error('id', 'La cédula ' + cedula + ' ya se encuentra registrada')
 
+
 class Buscar(forms.Form):
 	opciones = (('Amazonas', 'Amazonas'), ('Caqueta', 'Caqueta'), ('Cauca', 'Cauca'), ('Huila', 'Huila'),
 		('Nariño', 'Nariño'),('Putumayo', 'Putumayo'), ('Tolima', 'Tolima'),('Valle del Cauca', 'Valle del Cauca'))
 	departamento = forms.ChoiceField(label='departamento', choices=opciones)
+
 
 """class CursosMayorAsistentes(forms.Form):
 	cursos = Curso.objects.all()
@@ -56,11 +58,14 @@ class Buscar(forms.Form):
 	print (todos)
 	cursos = form.ChoiceField(label='cursos', choices=todos)"""
 
+
 class NotasPorEstudiante(forms.Form):
 	cedula = forms.CharField(label= 'cedula', max_length=15)
 
+
 class EstudiantesCurso(forms.Form):
 	curso = forms.CharField(label= 'curso', max_length=100)
+
 
 class EstudiantesDepartamentoCurso(forms.Form):
 	curso = forms.CharField(label= 'curso', max_length=100)
@@ -81,28 +86,6 @@ class RegistroNotasForm(ModelForm):
 	class Meta:
 		model = RegistroNotas
 		fields = ['actividad', 'cohorte', 'leader_teacher', 'nota']
-		widgets = {
-			'actividad': forms.TextInput(attrs={
-				'class': 'campos_formularios',
-				'type': 'text',
-				'placeholder': 'Actividad',
-				}),
-			'cohorte': forms.TextInput(attrs={
-				'class': 'campos_formularios',
-				'type': 'text',
-				'placeholder': 'Cohorte',
-				}),
-			'leader_teacher': forms.DateInput(attrs={
-				'class': 'campos_formularios',
-				'type': 'date',
-				'placeholder': 'Leader Teacher',
-				}),
-			'nota': forms.DateInput(attrs={
-				'class': 'campos_formularios',
-				'type': 'date',
-				'placeholder': 'Nota',
-				})
-		}
 		
 #+------------------------------------------+
 #+				ACTIVIDAD					+
@@ -150,6 +133,7 @@ class CursoForm (ModelForm):
 	 	
 	 	model = Curso
 	 	fields = ['id', 'nombre', 'area', 'descripcion']
+	 	"""
 	 	widgets = {
 			'id': forms.TextInput(attrs={
 				'id': 'inputName3',
@@ -171,6 +155,7 @@ class CursoForm (ModelForm):
 			}),
 			#'area': forms.SelectInput
 		}
+		"""
 
 ################################################################
 
@@ -183,98 +168,21 @@ class CohorteForm(ModelForm):
 	def clean(self):
 		cleaned_data = super(CohorteForm, self).clean()
 		return cleaned_data
-	
 
-
-"""class NivelEscolarForm(ModelForm):
-	class Meta:
-		model = NivelEscolar
-		fields = ['nombre', 'soporte']"""
 
 class DatosDemograficosForm(ModelForm):
 	class Meta:
 		model = DatosDemograficos
 		fields = ['estrato', 'tipo_vivienda', 'caracter_vivienda', 'personas_convive', 'estado_civil', 'numero_hijos','ciudad_nacimiento']
 
-class HistorialAcademicoForm(ModelForm):
-    class Meta:
-        model = HistorialAcademico
-        fields = ['titulo', 'tipoEstudio', 'fechaRealizacion', 'institucionAcree', 'evidencia']
-        widgets = {
-			'titulo': forms.TextInput(attrs={
-				'class': 'campos_formularios',
-				'type': 'text',
-				'placeholder': 'Titulo',
-			}),
-			'tipoEstudio': forms.TextInput(attrs={
-				'class': 'campos_formularios',
-				'type': 'text',
-				'placeholder': 'Tipo de estudio',
-			}),
-			'fechaRealizacion': forms.TextInput(attrs={
-				'class': 'campos_formularios',
-				'type': 'date',
-				'placeholder': 'Decba de realizacion',
-			}),
-			'institucionAcree': forms.TextInput(attrs={
-				'class': 'campos_formularios',
-				'type': 'text',
-				'placeholder': 'Institucion Acree',
-			}),
-			'evidencia': forms.TextInput(attrs={
-				'class': 'campos_formularios',
-				'type': 'text',
-				'placeholder': 'Evidencia',
-			}),
-			#'area': forms.SelectInput
-		}
 
 class HistorialLaboralForm(ModelForm):
     class Meta:
         model = HistorialLaboral
-        fields = ['tiempoLaborado','nivelesEscolares', 'areasDesempenio', 'gradosLaborales']
-        widgets = {
-			'tiempoLaborado': forms.TextInput(attrs={
-				'class': 'campos_formularios',
-				'type': 'text',
-				'placeholder': 'Tiempo laborado',
-			}),
-			'nivelesEscolares': forms.TextInput(attrs={
-				'class': 'campos_formularios',
-				'type': 'text',
-				'placeholder': 'Niveles escolares',
-			}),
-			'areasDesempenio': forms.TextInput(attrs={
-				'class': 'campos_formularios',
-				'type': 'text',
-				'placeholder': 'Areas de desempeno',
-			}),
-			'gradosLaborales': forms.TextInput(attrs={
-				'class': 'campos_formularios',
-				'type': 'text',
-				'placeholder': 'Grados laborales',
-			}),
-			#'area': forms.SelectInput
-		}
+        fields = ['nombre_institucion', 'tiempo_laborado', 'niveles_escolares', 'areas_desempenio', 'grados_laborales', 'evidencia']
 
-class SoporteLaboralNuevoform(ModelForm):
+
+class HistorialAcademicoForm(ModelForm):
     class Meta:
-        model = SoporteLaboralNuevo
-        fields = ['tiempo', 'nombreInsti', 'docSoporte']
-        widgets = {
-        'tiempo': forms.TextInput(attrs={
-				'class': 'campos_formularios',
-				'type': 'text',
-				'placeholder': 'Tiempo',
-			}),
-			'nombreInsti': forms.TextInput(attrs={
-				'class': 'campos_formularios',
-				'type': 'text',
-				'placeholder': 'Nombre de la institucion',
-			}),
-			'docSoporte': forms.TextInput(attrs={
-				'class': 'campos_formularios',
-				'type': 'text',
-				'placeholder': 'documento de soporte',
-			})
-		}
+        model = HistorialAcademico
+        fields = ['titulo', 'tipo_estudio', 'fecha_realizacion', 'institucion_acrededora', 'evidencia']

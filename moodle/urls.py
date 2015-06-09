@@ -4,13 +4,18 @@ from .views import LeaderDetalles, BuscarLeaderTeacher, TipoReportes, CursoDetal
 from .views import BuscarCursos, ListarNota, MatricularLeaderTeacher, MasterDetalles, CohortesCursos
 from .views import RegistrarCurso
 from .views import BorrarCurso, UpdateDatosCurso, CohortesCursos, UpdateCohorte, ActividadesCohortes
-from .views import DetallesCohorte, ActividadDetalles, ActividadFormulario, RegistrarDemograficos
-from .views import AgregarHistoriaAcademico, AgregarHistoriaLaboral, AgregarSoporteLaboral
-from .views import DetallesHistorialAcademico, DetallesHistorialLaboral, DetallesHistorialSoporte
+from .views import DetallesCohorte, ActividadDetalles, ActividadFormulario, RegistrarDemograficos, UpdateDemograficos, UpdateHistorialAcademico, UpdateHistorialLaboral
+from .views import AgregarHistoriaAcademico, AgregarHistoriaLaboral, RegistrarNotas
+#from .views import DetallesHistorialAcademico, DetallesHistorialLaboral
 
 leader_urls = patterns ('',
     url(r'^(?P<id_persona>\d+)/$', LeaderDetalles.as_view(), name="detalles_leader"),
-    url(r'^demograficos/(?P<id_persona>\d+)/$', RegistrarDemograficos.as_view(), name="demograficos_leader"), #Nuevo!
+    url(r'^(?P<id_persona>\d+)/registrar_demograficos/$', RegistrarDemograficos.as_view(), name="demograficos_leader"), #Nuevo!
+    url(r'^(?P<pk>\d+)/actualizar_demograficos/$', UpdateDemograficos.as_view(), name="actualizar_demograficos_leader"), #Nuevo!
+    url(r'^(?P<id_persona>\d+)/laboral/$', AgregarHistoriaLaboral.as_view(), name="agregar_laboral_leader"),
+    url(r'^(?P<id_persona>\d+)/academico/$', AgregarHistoriaAcademico.as_view(), name="agregar_academico_leader"),
+    url(r'^(?P<pk>\d+)/actualizar_laboral/$', UpdateHistorialLaboral.as_view(), name="actualizar_laboral_leader"),
+    url(r'^(?P<pk>\d+)/actualizar_academicos/$', UpdateHistorialAcademico.as_view(), name="actualizar_academicos_leader"),
 )
 
 secretaria_urls = patterns ('',
@@ -48,12 +53,16 @@ master_urls = patterns ('',
         DetallesCohorte.as_view(), name="detalles_cohorte"),
     url(r'^(?P<id_persona>\d+)/cursos/(?P<id_curso>\d+)/(?P<id_cohorte>\d+)/actividades$', 
         ActividadesCohortes.as_view(), name="actividades_cohorte"),
-    url(r'^(?P<id_persona>\d+)/cursos/(?P<id_curso>\d+)/(?P<id_cohorte>\d+)/(?P<id_actividad>\d+)$', 
-        ActividadDetalles.as_view(), name="detalles_actividad"),
+    url(r'^(?P<id_persona>\d+)/cursos/(?P<id_curso>\d+)/(?P<id_cohorte>\d+)/(?P<id_actividad>\d+)$', ActividadDetalles.as_view(), name="detalles_actividad"),
     #url(r'^actividad/(?P<id_actividad>\d+)/$', ActividadDetalles.as_view(), name="detalles_actividad"), #Nuevo!
-    url(r'^(?P<id_persona>\d+)/cursos/(?P<id_curso>\d+)/(?P<id_cohorte>\d+)/actividades/registrar$', 
-        ActividadFormulario.as_view(), name="registrar_actividad"), #Nuevo!
-    url(r'^demograficos/(?P<id_persona>\d+)/$', RegistrarDemograficos.as_view(), name="demograficos_master"), #Nuevo!
+    url(r'^(?P<id_persona>\d+)/cursos/(?P<id_curso>\d+)/(?P<id_cohorte>\d+)/actividades/registrar$', ActividadFormulario.as_view(), name="registrar_actividad"), #Nuevo!
+    url(r'^(?P<id_persona>\d+)/registrar_demograficos/$', RegistrarDemograficos.as_view(), name="demograficos_master"), #Nuevo!
+    url(r'^(?P<pk>\d+)/actualizar_demograficos/$', UpdateDemograficos.as_view(), name="actualizar_demograficos_master"), #Nuevo!
+    url(r'^(?P<id_persona>\d+)/registrar_nota/$', RegistrarNotas.as_view(), name="registrar_notas"), #Nuevo!
+    url(r'^(?P<id_persona>\d+)/laboral/$', AgregarHistoriaLaboral.as_view(), name="agregar_laboral_master"),
+    url(r'^(?P<id_persona>\d+)/academico/$', AgregarHistoriaAcademico.as_view(), name="agregar_academico_master"),
+    url(r'^(?P<pk>\d+)/actualizar_laboral/$', UpdateHistorialLaboral.as_view(), name="actualizar_laboral_master"),
+    url(r'^(?P<pk>\d+)/actualizar_academicos/$', UpdateHistorialAcademico.as_view(), name="actualizar_academicos_master"),
     #url(r'^buscar$', BuscarMaster.as_view(), name="master_cursos"),
 )
 
@@ -63,12 +72,11 @@ nivel_escolar_urls = patterns ('',
 )
 
 historial_prueba = patterns('',
-    url(r'^(?P<id_persona>\d+)/laboral/$', AgregarHistoriaLaboral.as_view(), name="agregar_laboral"),
-    url(r'^(?P<id_persona>\d+)/academico/$', AgregarHistoriaAcademico.as_view(), name="agregar_academico"),
-    url(r'^(?P<id_persona>\d+)/soporte/$', AgregarSoporteLaboral.as_view(), name="agregar_soporte"),
-    url(r'^(?P<id_persona>\d+)/academico_detalles/$', DetallesHistorialAcademico.as_view(), name="academico_detalles"), #HTML POR REVISAR
-    url(r'^(?P<id_persona>\d+)/laboral_detalles/$', DetallesHistorialLaboral.as_view(), name="laboral_detalles"), #HTML POR REVISAR
-    url(r'^(?P<id_persona>\d+)/soporte_detalles/$', DetallesHistorialSoporte.as_view(), name="soporte_detalles"), 
+
+    #url(r'^(?P<id_persona>\d+)/soporte/$', AgregarSoporteLaboral.as_view(), name="agregar_soporte"),
+    #url(r'^(?P<id_persona>\d+)/academico_detalles/$', DetallesHistorialAcademico.as_view(), name="academico_detalles"), #HTML POR REVISAR
+    #url(r'^(?P<id_persona>\d+)/laboral_detalles/$', DetallesHistorialLaboral.as_view(), name="laboral_detalles"), #HTML POR REVISAR
+    #url(r'^(?P<id_persona>\d+)/soporte_detalles/$', DetallesHistorialSoporte.as_view(), name="soporte_detalles"), 
 
 )
 

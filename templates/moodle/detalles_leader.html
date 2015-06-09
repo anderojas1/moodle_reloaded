@@ -49,9 +49,16 @@
     </div class="herramientas">
     {% if editar %}
     <div>
-        <a href="#"> Editar Informacion Personal </a>
-        <a href="#"> Editar Historial Academico </a>
-        <a href="/campus/leader/demograficos/{{persona.id}}"> Editar Informacion Demografica </a>
+        <!--<a href="#"> Registrar Informacion Personal </a>-->
+        <a href="/campus/leader/{{persona.id}}/registrar_demograficos"> | Registrar Informacion Demografica | </a>
+        <a href="/campus/leader/{{persona.id}}/academico"> | Registrar Historial Academico | </a> <!--campus/historial/1143855734/academico/-->
+        <a href="/campus/leader/{{persona.id}}/laboral"> | Registrar Historial Laboral | </a>
+    </div>
+    <div>
+        <a href="#"> | Editar Informacion Personal | </a>
+        <a href="/campus/leader/{{persona.id}}/actualizar_demograficos"> | Editar Informacion Demografica | </a>
+        <a href="/campus/leader/{{persona.id}}/actualizar_academicos"> | Editar Historial Academico | </a>
+        <a href="/campus/leader/{{persona.id}}/actualizar_laboral"> | Editar Historial Laboral | </a>
     </div>
     {% else %}
     {% block restricted %}

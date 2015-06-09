@@ -1,41 +1,48 @@
 {% extends "inicio/perfil.html" %}
 {% block title %}
-    Registro | Historial Academico
+    Registro | Historial Laboral
 {% endblock %}
 
-{% block registrar_academicos %}
+{% block actualizar_laborales %}
 
 <div class="registro">
-        <h2>Registro de Datos Academicos</h2>
+        <h2>Edicion de Datos Laborales</h2>
 
         <form action="" method="post" class="form-horizontal">
             {%  csrf_token %}
 
             <div class="form-group">
-                <label for="inputName3" class="col-sm-2 control-label"> Titulo Obtenido </label>
+                <label for="inputName3" class="col-sm-2 control-label"> Nombre de la Institucion donde Laboro </label>
                 <div class="col-sm-10">
-                    {{ form.titulo }}
+                    {{ form.nombre_institucion }}
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="inputName3" class="col-sm-2 control-label"> Tipo de Estudio </label>
+                <label for="inputName3" class="col-sm-2 control-label"> Tiempo Laborado </label>
                 <div class="col-sm-10">
-                    {{ form.tipo_estudio }}
+                    {{ form.tiempo_laborado }}
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="inputName3" class="col-sm-2 control-label"> Fecha de Realizacion del Estudio </label>
+                <label for="inputName3" class="col-sm-2 control-label"> Niveles Escolares </label>
                 <div class="col-sm-10">
-                    {{ form.fecha_realizacion }}
+                    {{ form.niveles_escolares }}
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="inputName3" class="col-sm-2 control-label"> Institucion Acrededora </label>
+                <label for="inputName3" class="col-sm-2 control-label"> Areas de Desempeño </label>
                 <div class="col-sm-10">
-                    {{ form.institucion_acrededora }}
+                    {{ form.areas_desempenio }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label"> Grados en los que Laboro </label>
+                <div class="col-sm-10">
+                    {{ form.grados_laborales }}
                 </div>
             </div>
 
@@ -45,7 +52,7 @@
                     {{ form.evidencia }}
                 </div>
             </div>
-
+            
     			<button type="submit" class="boton_enviar">Registrar</button>
         </form>
     

@@ -1,24 +1,60 @@
-{% extends "base.html" %}
+{% extends "inicio/perfil.html" %}
 {% block title %}
-    Registro | Historial_Laboral
+    Registro | Historial Laboral
 {% endblock %}
 
-{% block content %}
-<!--*************************************** Inicio Index *************************************** -->
-<div class="registro">
+{% block registrar_laborales %}
 
-    	<h2>Registro para historial laboral</h2>
-		<form method="POST">
-			{%  csrf_token %}
-    			{{historialLaboralForm.id}}<br />
-    			{{historialLaboralForm.tiempoLaborado}}<br />
-    			{{historialLaboralForm.nivelesEscolares}}<br />
-    			{{historialLaboralForm.areasDesempenio}}<br />
-    			{{historialLaboralForm.soporteLaboral}}<br />
-    			{{historialLaboralForm.persona}}<br />
-    			{{historialLaboralForm.gradosLaborales}}
-    			<button type="submit" class="boton_enviar">Registrarse</button>
-    	</form>
+<div class="registro">
+        <h2>Registro de Datos Laborales</h2>
+
+        <form action="" method="post" class="form-horizontal">
+            {%  csrf_token %}
+
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label"> Nombre de la Institucion donde Laboro </label>
+                <div class="col-sm-10">
+                    {{ form.nombre_institucion }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label"> Tiempo Laborado </label>
+                <div class="col-sm-10">
+                    {{ form.tiempo_laborado }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label"> Niveles Escolares </label>
+                <div class="col-sm-10">
+                    {{ form.niveles_escolares }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label"> Areas de Desempeño </label>
+                <div class="col-sm-10">
+                    {{ form.areas_desempenio }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label"> Grados en los que Laboro </label>
+                <div class="col-sm-10">
+                    {{ form.grados_laborales }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputName3" class="col-sm-2 control-label"> Documento de Evidencia </label>
+                <div class="col-sm-10">
+                    {{ form.evidencia }}
+                </div>
+            </div>
+            
+    			<button type="submit" class="boton_enviar">Registrar</button>
+        </form>
     
 </div>
 {% endblock %}

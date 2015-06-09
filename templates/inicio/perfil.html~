@@ -55,22 +55,18 @@
                         {% endblock %}
                         {% block edit_cohorte %}
                         {% endblock %}
-                    </ul>
                 {% elif otro %}
                     <p>No tiene permisos para ver esta página</p>
                 {% elif master %}
                     <ul class="list-inline">
                         <li><a href="/login/profile">Inicio</a></li>
                         <li><a href="/campus/master/{{persona.id}}/cursos">Mis Cursos</a></li>
-                        <li><a href="/campus/master/{{persona.id}}/registrar_nota">Registrar Notas</a></li>
                     </ul>
                     {% block cohortes_busqueda %}
                     {% endblock %}
                     {% block actividades %}
                     {% endblock %}
                     {% block reg_actividad %}
-                    {% endblock %}
-                    {% block reg_nota %}
                     {% endblock %}
                 {% endif %}
             </div>
@@ -79,15 +75,7 @@
             {% if leader or master %}
                 {% block registrar_demograficos %}
                 {% endblock %}
-                {% block actualizar_demograficos %}
-                {% endblock %}
-                {% block registrar_laborales %}
-                {% endblock %}
-                {% block actualizar_laborales %}
-                {% endblock %}
-                {% block registrar_academicos %}
-                {% endblock %}
-                {% block actualizar_academicos %}
+		{% block actualizar_demograficos %}
                 {% endblock %}
             {% endif %}
             {% block info_curso %}
